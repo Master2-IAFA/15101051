@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -17,11 +19,12 @@ typedef struct  {
 
 class PointSet {
 public:
-  PointSet (vector<point> _points) { m_points = _points; }
-  inline vector<point> getPoints () const& { return m_points; }
-  void readPly (string filename);
-  vector<point> getBoundingBox ();
+    PointSet () {}
+    PointSet (vector<point> _points) { m_points = _points; }
+    inline vector<point> getPoints () const& { return m_points; }
+    void readPly (string filename);
+    vector<point> getBoundingBox ();
 
 private:
   vector<point> m_points;
-}
+};
