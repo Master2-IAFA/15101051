@@ -1,4 +1,5 @@
 #include "Octree.hpp"
+#include <"cmath">
 
 template class Octree<int>;
 
@@ -9,6 +10,7 @@ Octree<Data>::Octree(int depth, glm::vec3 min, glm::vec3 max){
     _max = max;
 }
 
+<<<<<<< Updated upstream
 template<class Data>
 Octree<Data>::~Octree(){
     _father = nullptr;
@@ -41,4 +43,22 @@ void Octree<Data>::subDivide(){
     _children[5]->setFather(this);
     _children[6]->setFather(this);
     _children[7]->setFather(this);
+=======
+bool isPointIn(glm::vec3 p)
+{
+  glm::vec3 min = glm::vec3(0.0, 0.0, 0.0) ;
+  glm::vec3 max = glm::vec3(3.0, 3.0, 3.0) ;
+  len_body_diag = (min-max).length ;
+  a = len_body_diag/sqrt(3) ;
+  /*
+  TOP_FRONT_LEFT    (min, min + a, min )
+  #define TOP_FRONT_RIGHT (min + a, min + a, min)
+  #define TOP_BACK_LEFT  (min, min + a, min + a )
+  #define TOP_BACK_RIGHT  (min)
+  #define BOTTOM_FRONT_LEFT  4 // 0b100
+  #define BOTTOM_FRONT_RIGHT 5 // 0b101
+  #define BOTTOM_BACK_LEFT   6 // 0b110
+  #define BOTTOM_BACK_RIGHT  7 // 0b111
+  */
+>>>>>>> Stashed changes
 }

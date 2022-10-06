@@ -14,6 +14,7 @@ float max(float x, float y)
   else return y ;
 }
 
+
 //function that returns bounding box of point set
 std::vector<point> PointSet::getBoundingBox() {
     std::vector<point> bb(2);
@@ -53,10 +54,19 @@ std::vector<point> PointSet::getBoundingBox() {
     bb[0].pos.y = min_y ;
     bb[0].pos.z = min_z ;
 
+<<<<<<< Updated upstream
     bb[1].pos.x = (max_x - min_x)? max : (-1) * max;
     bb[1].pos.y = (max_y - min_y)? max : (-1) * max;
     bb[1].pos.z = (max_z - min_z)? max : (-1) * max;
     
+=======
+    bb[1].pos.x = max_x ;
+    bb[1].pos.y = max_y ;
+    bb[1].pos.z = max_z ;
+
+    //a diagonal is generated, but it might not be a cube. In this cas, we have to augment it
+    bb = augment(bb);
+>>>>>>> Stashed changes
     return bb ;
 }
 

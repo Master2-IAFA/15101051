@@ -33,7 +33,6 @@ public:
    *
    */
   std::vector<Octree<Data>*> getAtDepth(int depth);
-
   bool isPointIn(glm::vec3 p);
 
   /***** setters ******/

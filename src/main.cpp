@@ -5,9 +5,7 @@
 #include "polyscope/polyscope.h"
 
 #include "glm/gtx/string_cast.hpp"
-
-#include "Octree.hpp"
-#include "PointSet.hpp"
+#include "utils.hpp"
 
 //function to vizualise bounding box of point cloud (Lou)
 void test_debug_bounding_box(std::vector<glm::vec3> points);
@@ -16,10 +14,13 @@ float kernelSize = 1.0f;
 polyscope::PointCloud* psCloud;
 std::vector<glm::vec3> points;
 std::vector<glm::vec3> colors;
+<<<<<<< Updated upstream
 int prev = -1;
 int depth = 0;
 int tepth = 0;
 
+=======
+>>>>>>> Stashed changes
 
 
 int main(int argc, char **argv){
