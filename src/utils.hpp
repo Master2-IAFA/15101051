@@ -1,18 +1,12 @@
+#pragma once
+
 #include "Octree.hpp"
+#include "PointSet.hpp"
 
-typedef struct  {
-  glm::vec3 pos;
-  glm::vec3 norm;
-} point;
 
-typedef struct  {
-  glm::vec3 position;
-  glm::vec3 normal;
-  double norm;
-  double area;
-  double pdn;
-} statistics;
+template class Octree<statistics>;
+typedef Octree<statistics> InputOctree;
 
-typedef InputOctree Octree<statistics>;
+InputOctree* generateOctree(int max_depth, PointSet *pc);
 
-InputOctree* generateOctree (int max_depth, PointSet pc);
+void fitOctree( int max_depth, InputOctree *octree, PointSet *pc );

@@ -1,0 +1,537 @@
+[
+{
+  "directory": "/home/antoine/Desktop/15101051/build",
+  "command": "/usr/bin/g++  -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -o CMakeFiles/PointCloud.dir/src/Octree.cpp.o -c /home/antoine/Desktop/15101051/src/Octree.cpp",
+  "file": "/home/antoine/Desktop/15101051/src/Octree.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build",
+  "command": "/usr/bin/g++  -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -o CMakeFiles/PointCloud.dir/src/PointSet.cpp.o -c /home/antoine/Desktop/15101051/src/PointSet.cpp",
+  "file": "/home/antoine/Desktop/15101051/src/PointSet.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build",
+  "command": "/usr/bin/g++  -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -o CMakeFiles/PointCloud.dir/src/main.cpp.o -c /home/antoine/Desktop/15101051/src/main.cpp",
+  "file": "/home/antoine/Desktop/15101051/src/main.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build",
+  "command": "/usr/bin/g++  -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -o CMakeFiles/PointCloud.dir/src/utils.cpp.o -c /home/antoine/Desktop/15101051/src/utils.cpp",
+  "file": "/home/antoine/Desktop/15101051/src/utils.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/glad/src",
+  "command": "/usr/bin/gcc  -I/home/antoine/Desktop/15101051/external/polyscope/deps/glad/src/../include -g -fPIC -o CMakeFiles/glad.dir/glad.c.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/glad/src/glad.c",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/glad/src/glad.c"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/gcc -D_GLFW_USE_CONFIG_H -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src -I/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src -g -fPIC -Wall -std=gnu99 -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/context.c.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/context.c",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/context.c"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/gcc -D_GLFW_USE_CONFIG_H -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src -I/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src -g -fPIC -Wall -std=gnu99 -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/init.c.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/init.c",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/init.c"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/gcc -D_GLFW_USE_CONFIG_H -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src -I/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src -g -fPIC -Wall -std=gnu99 -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/input.c.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/input.c",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/input.c"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/gcc -D_GLFW_USE_CONFIG_H -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src -I/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src -g -fPIC -Wall -std=gnu99 -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/monitor.c.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/monitor.c",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/monitor.c"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/gcc -D_GLFW_USE_CONFIG_H -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src -I/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src -g -fPIC -Wall -std=gnu99 -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/vulkan.c.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/vulkan.c",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/vulkan.c"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/gcc -D_GLFW_USE_CONFIG_H -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src -I/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src -g -fPIC -Wall -std=gnu99 -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/window.c.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/window.c",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/window.c"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/gcc -D_GLFW_USE_CONFIG_H -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src -I/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src -g -fPIC -Wall -std=gnu99 -o CMakeFiles/glfw.dir/x11_init.c.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/x11_init.c",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/x11_init.c"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/gcc -D_GLFW_USE_CONFIG_H -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src -I/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src -g -fPIC -Wall -std=gnu99 -o CMakeFiles/glfw.dir/x11_monitor.c.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/x11_monitor.c",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/x11_monitor.c"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/gcc -D_GLFW_USE_CONFIG_H -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src -I/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src -g -fPIC -Wall -std=gnu99 -o CMakeFiles/glfw.dir/x11_window.c.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/x11_window.c",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/x11_window.c"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/gcc -D_GLFW_USE_CONFIG_H -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src -I/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src -g -fPIC -Wall -std=gnu99 -o CMakeFiles/glfw.dir/xkb_unicode.c.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/xkb_unicode.c",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/xkb_unicode.c"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/gcc -D_GLFW_USE_CONFIG_H -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src -I/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src -g -fPIC -Wall -std=gnu99 -o CMakeFiles/glfw.dir/posix_time.c.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/posix_time.c",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/posix_time.c"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/gcc -D_GLFW_USE_CONFIG_H -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src -I/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src -g -fPIC -Wall -std=gnu99 -o CMakeFiles/glfw.dir/posix_thread.c.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/posix_thread.c",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/posix_thread.c"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/gcc -D_GLFW_USE_CONFIG_H -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src -I/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src -g -fPIC -Wall -std=gnu99 -o CMakeFiles/glfw.dir/glx_context.c.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/glx_context.c",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/glx_context.c"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/gcc -D_GLFW_USE_CONFIG_H -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src -I/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src -g -fPIC -Wall -std=gnu99 -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/egl_context.c.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/egl_context.c",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/egl_context.c"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/gcc -D_GLFW_USE_CONFIG_H -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src -I/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src -g -fPIC -Wall -std=gnu99 -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/osmesa_context.c.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/osmesa_context.c",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/osmesa_context.c"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/gcc -D_GLFW_USE_CONFIG_H -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src -I/home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src -g -fPIC -Wall -std=gnu99 -o CMakeFiles/glfw.dir/linux_joystick.c.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/linux_joystick.c",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/linux_joystick.c"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/imgui",
+  "command": "/usr/bin/g++ -DIMGUI_IMPL_OPENGL_LOADER_GLAD -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/../glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/../glad/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include  -Wno-error -g -fPIC -o CMakeFiles/imgui.dir/imgui/imgui.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui/imgui.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui/imgui.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/imgui",
+  "command": "/usr/bin/g++ -DIMGUI_IMPL_OPENGL_LOADER_GLAD -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/../glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/../glad/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include  -Wno-error -g -fPIC -o CMakeFiles/imgui.dir/imgui/imgui_draw.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui/imgui_draw.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui/imgui_draw.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/imgui",
+  "command": "/usr/bin/g++ -DIMGUI_IMPL_OPENGL_LOADER_GLAD -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/../glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/../glad/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include  -Wno-error -g -fPIC -o CMakeFiles/imgui.dir/imgui/imgui_tables.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui/imgui_tables.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui/imgui_tables.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/imgui",
+  "command": "/usr/bin/g++ -DIMGUI_IMPL_OPENGL_LOADER_GLAD -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/../glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/../glad/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include  -Wno-error -g -fPIC -o CMakeFiles/imgui.dir/imgui/imgui_widgets.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui/imgui_widgets.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui/imgui_widgets.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/imgui",
+  "command": "/usr/bin/g++ -DIMGUI_IMPL_OPENGL_LOADER_GLAD -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/../glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/../glad/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include  -Wno-error -g -fPIC -o CMakeFiles/imgui.dir/imgui/imgui_demo.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui/imgui_demo.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui/imgui_demo.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/imgui",
+  "command": "/usr/bin/g++ -DIMGUI_IMPL_OPENGL_LOADER_GLAD -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/../glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/../glad/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include  -Wno-error -g -fPIC -o CMakeFiles/imgui.dir/imgui/backends/imgui_impl_glfw.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui/backends/imgui_impl_glfw.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui/backends/imgui_impl_glfw.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/imgui",
+  "command": "/usr/bin/g++ -DIMGUI_IMPL_OPENGL_LOADER_GLAD -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/../glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/../glad/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include  -Wno-error -g -fPIC -o CMakeFiles/imgui.dir/imgui/backends/imgui_impl_opengl3.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui/backends/imgui_impl_opengl3.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui/backends/imgui_impl_opengl3.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/deps/stb",
+  "command": "/usr/bin/g++  -I/home/antoine/Desktop/15101051/external/polyscope/deps/stb/../include -g -fPIC -o CMakeFiles/stb.dir/stb_impl.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/deps/stb/stb_impl.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/deps/stb/stb_impl.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/polyscope.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/polyscope.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/polyscope.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/options.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/options.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/options.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/internal.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/internal.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/internal.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/state.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/state.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/state.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/structure.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/structure.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/structure.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/utilities.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/utilities.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/utilities.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/view.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/view.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/view.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/screenshot.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/screenshot.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/screenshot.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/messages.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/messages.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/messages.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/pick.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/pick.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/pick.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/widget.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/widget.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/widget.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/engine.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/engine.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/engine.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/color_maps.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/color_maps.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/color_maps.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/ground_plane.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/ground_plane.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/ground_plane.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/materials.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/materials.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/materials.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/initialize_backend.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/initialize_backend.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/initialize_backend.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/shader_builder.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/shader_builder.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/shader_builder.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/disjoint_sets.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/disjoint_sets.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/disjoint_sets.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/file_helpers.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/file_helpers.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/file_helpers.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/camera_parameters.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/camera_parameters.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/camera_parameters.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/histogram.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/histogram.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/histogram.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/persistent_value.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/persistent_value.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/persistent_value.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/color_management.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/color_management.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/color_management.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/transformation_gizmo.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/transformation_gizmo.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/transformation_gizmo.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/slice_plane.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/slice_plane.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/slice_plane.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/point_cloud.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/point_cloud.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/point_cloud.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/point_cloud_color_quantity.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/point_cloud_color_quantity.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/point_cloud_color_quantity.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/point_cloud_scalar_quantity.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/point_cloud_scalar_quantity.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/point_cloud_scalar_quantity.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/point_cloud_vector_quantity.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/point_cloud_vector_quantity.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/point_cloud_vector_quantity.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/point_cloud_parameterization_quantity.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/point_cloud_parameterization_quantity.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/point_cloud_parameterization_quantity.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/surface_mesh.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/surface_mesh.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/surface_mesh.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/surface_mesh_io.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/surface_mesh_io.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/surface_mesh_io.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/surface_scalar_quantity.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/surface_scalar_quantity.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/surface_scalar_quantity.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/surface_color_quantity.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/surface_color_quantity.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/surface_color_quantity.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/surface_distance_quantity.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/surface_distance_quantity.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/surface_distance_quantity.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/surface_parameterization_quantity.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/surface_parameterization_quantity.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/surface_parameterization_quantity.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/surface_vector_quantity.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/surface_vector_quantity.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/surface_vector_quantity.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/surface_count_quantity.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/surface_count_quantity.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/surface_count_quantity.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/surface_graph_quantity.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/surface_graph_quantity.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/surface_graph_quantity.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/curve_network.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/curve_network.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/curve_network.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/curve_network_scalar_quantity.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/curve_network_scalar_quantity.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/curve_network_scalar_quantity.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/curve_network_color_quantity.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/curve_network_color_quantity.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/curve_network_color_quantity.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/curve_network_vector_quantity.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/curve_network_vector_quantity.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/curve_network_vector_quantity.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/volume_mesh.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/volume_mesh.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/volume_mesh.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/volume_mesh_color_quantity.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/volume_mesh_color_quantity.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/volume_mesh_color_quantity.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/volume_mesh_scalar_quantity.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/volume_mesh_scalar_quantity.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/volume_mesh_scalar_quantity.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/volume_mesh_vector_quantity.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/volume_mesh_vector_quantity.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/volume_mesh_vector_quantity.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/imgui_config.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/imgui_config.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/imgui_config.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/vector_artist.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/vector_artist.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/vector_artist.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/trace_vector_field.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/trace_vector_field.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/trace_vector_field.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/ribbon_artist.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/ribbon_artist.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/ribbon_artist.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/image_scalar_artist.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/image_scalar_artist.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/image_scalar_artist.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_font_lato_regular.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_font_lato_regular.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_font_lato_regular.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_font_cousine_regular.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_font_cousine_regular.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_font_cousine_regular.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/bindata/concrete_seamless.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/concrete_seamless.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/concrete_seamless.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_clay.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_clay.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_clay.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_wax.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_wax.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_wax.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_candy.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_candy.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_candy.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_flat.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_flat.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_flat.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_mud.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_mud.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_mud.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_ceramic.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_ceramic.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_ceramic.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_jade.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_jade.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_jade.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_normal.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_normal.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/bindata/bindata_normal.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/opengl/gl_engine.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/gl_engine.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/gl_engine.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/mock_opengl/mock_gl_engine.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/mock_opengl/mock_gl_engine.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/mock_opengl/mock_gl_engine.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/texture_draw_shaders.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/texture_draw_shaders.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/texture_draw_shaders.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/lighting_shaders.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/lighting_shaders.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/lighting_shaders.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/ground_plane_shaders.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/ground_plane_shaders.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/ground_plane_shaders.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/gizmo_shaders.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/gizmo_shaders.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/gizmo_shaders.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/histogram_shaders.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/histogram_shaders.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/histogram_shaders.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/surface_mesh_shaders.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/surface_mesh_shaders.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/surface_mesh_shaders.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/volume_mesh_shaders.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/volume_mesh_shaders.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/volume_mesh_shaders.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/vector_shaders.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/vector_shaders.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/vector_shaders.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/sphere_shaders.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/sphere_shaders.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/sphere_shaders.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/ribbon_shaders.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/ribbon_shaders.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/ribbon_shaders.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/cylinder_shaders.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/cylinder_shaders.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/cylinder_shaders.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/rules.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/rules.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/rules.cpp"
+},
+{
+  "directory": "/home/antoine/Desktop/15101051/build/external/polyscope/src",
+  "command": "/usr/bin/g++ -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/antoine/Desktop/15101051/external/polyscope/src/../include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/happly -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/json/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/stb -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glad/include -I/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glfw/include -I/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui -I/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include -g -fPIC -std=gnu++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/common.cpp.o -c /home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/common.cpp",
+  "file": "/home/antoine/Desktop/15101051/external/polyscope/src/render/opengl/shaders/common.cpp"
+}
+]

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <polyscope/polyscope.h>
 
@@ -28,7 +30,7 @@ public:
 
   /**
    * @brief get all the octrees at the given depth
-   * 
+   *
    */
   std::vector<Octree<Data>*> getAtDepth(int depth);
 
