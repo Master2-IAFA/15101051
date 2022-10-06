@@ -43,6 +43,8 @@ int main(int argc, char **argv){
         }
     }
     test_debug_bounding_box(points);
+    test_debug_subdivide();
+    
     polyscope::registerPointCloud("gauss", points);
     polyscope::show();
 
@@ -79,4 +81,17 @@ void test_debug_bounding_box(std::vector<glm::vec3> points)
   polyscope::registerPointCloud("bounding box", points_bb);
   auto f = polyscope::getPointCloud("bounding box");
   f->setEnabled(true);
+}
+
+void test_debug_subdivide () {
+	Octree<Data> tree (0, glm::vec3(0, 0, 0), glm::vec3(100, 100, 100));
+	
+	tree.subdivide();
+	
+	tree.getChildren[0]->subdivide();
+	tree.getChildren[1]->subdivide();
+	tree.getChildren[3]->subdivide();
+	
+	tree.getChildren[0]->getChildren[2]->subdivide();
+	tree.getChildren[0]->getChildren[4]->subdivide();
 }
