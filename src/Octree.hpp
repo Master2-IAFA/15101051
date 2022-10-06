@@ -24,7 +24,7 @@ public:
   /**
   * @brief split the octree into 8 childrens, and link this as their father.
   */
-  void subDivise();
+  void subDivide();
 
   /**
    * @brief get all the octrees at the given depth
