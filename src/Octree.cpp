@@ -3,10 +3,10 @@
 template class Octree<int>;
 
 template<class Data>
-Octree<Data>::Octree(int depth, double half_dimension, glm::vec3 center){
-  _center = center;
+Octree<Data>::Octree(int depth, glm::vec3 min, glm::vec3 max){
+  _min = min;
   _depth = depth;
-  _half_dimension = half_dimension;
+  _max = max;
 }
 
 template<class Data>
@@ -18,8 +18,8 @@ Octree<Data>::~Octree(){
   }
 }
 
-template<class Data>
-void Octree<Data>::subDivise(){
+//template<class Data>
+/*void Octree<Data>::subDivise(){
   double children_half_dimension = _half_dimension / 2;
   for(int i = 0; i < 8; i++){
     int right = (0b001 & i) && 0? +1 : -1; //left c'est 0
@@ -30,4 +30,4 @@ void Octree<Data>::subDivise(){
     children->setFather(this);
     _children[i] = children;
   }
-}
+}*/

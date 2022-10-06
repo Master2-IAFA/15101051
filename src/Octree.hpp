@@ -18,7 +18,7 @@ template<typename Data>
 class Octree{
 
 public:
-  Octree(int depth, double half_dimension, glm::vec3 center);
+  Octree(int depth, glm::vec3 min, glm::vec3 max);
   ~Octree();
 
   /**
@@ -32,8 +32,8 @@ public:
 
   /***** getters ******/
   inline const Data getData(){ return _data; }
-  inline glm::vec3 getCenter(){ return _center; }
-  inline double getHalfDimension(){ return _half_dimension; }
+  inline glm::vec3 getMin(){ return _min; }
+  inline glm::vec3 getMax(){ return _max; }
   inline int getDepth(){ return _depth; }
 
 
@@ -42,8 +42,8 @@ private:
   Octree<Data> *_father = nullptr;
   Octree<Data> *_children[8];
   int _depth;
-  double _half_dimension;
-  glm::vec3 _center;
+  glm::vec3 _min ;
+  glm::vec3 _max ;
   Data _data;
 
 };
