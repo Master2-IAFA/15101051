@@ -1,6 +1,6 @@
 #include <iostream>
 #include <polyscope/polyscope.h>
-                             //
+
 #define TOP_FRONT_LEFT     0 // 0b000
 #define TOP_FRONT_RIGHT    1 // 0b001
 #define TOP_BACK_LEFT      2 // 0b010
