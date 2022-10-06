@@ -1,5 +1,5 @@
 #include <iostream>
-#include <polyscope/polyscope.h>>
+#include <polyscope/polyscope.h>
                              //
 #define TOP_FRONT_LEFT     0 // 0b000
 #define TOP_FRONT_RIGHT    1 // 0b001
@@ -22,7 +22,7 @@ public:
   ~Octree();
 
   /**
-  * @brief split the octree into 8 childrens, and link this as their father. 
+  * @brief split the octree into 8 childrens, and link this as their father.
   */
   void subDivise();
 

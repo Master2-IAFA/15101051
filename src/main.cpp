@@ -5,13 +5,10 @@
 #include "polyscope/polyscope.h"
 
 #include "Octree.hpp"
+#include "PointSet.hpp"
 
-
-//
-void reconstruct(){
-
-}
-
+//function to vizualise bounding box of point cloud (Lou)
+void test_debug_bounding_box(std::vector<glm::vec3> points);
 
 float kernelSize = 1.0f;
 polyscope::PointCloud* psCloud;
@@ -19,33 +16,9 @@ std::vector<glm::vec3> points;
 std::vector<glm::vec3> colors;
 int prev = -1;
 
-void callback() {
-
-    ImGui::PushItemWidth(100);
-    ImGui::Text("custom window");
-
-    ImGui::SliderFloat("Kernel size", &kernelSize, 0.0f, 1.0f, "%.3f");
-    ImGui::Button("Surface");
-
-    ImGui::PopItemWidth();
-
-    if(polyscope::pick::haveSelection()){
-        std::pair<polyscope::Structure*, size_t> t = polyscope::pick::getSelection();
-        if( t.second != prev ){
-            std::cout << t.second << std::endl;
-            prev = t.second;
-            colors[prev] = glm::vec3( 1, 0, 0 );
-            polyscope::getPointCloud("really great points")->addColorQuantity("random color", colors);
-        }
-        
-    }
-}
-
-
-
 int main(int argc, char **argv){
-    
     polyscope::init();
+
     std::vector<glm::vec3> points;
 
     // generate points
@@ -57,26 +30,41 @@ int main(int argc, char **argv){
             colors.push_back( glm::vec3(0.0f, 0.0f, 0.0f) );
         }
     }
-
-    // visualize!
-    psCloud = polyscope::registerPointCloud("really great points", points);
-    
-
-    // set some options
-    psCloud->setPointRadius(0.02);
-    psCloud->setPointRenderMode(polyscope::PointRenderMode::Sphere);
-    //psCloud->buildPickUI(0);
-
-    
-
-    // visualize
-    auto e = polyscope::getPointCloud("really great points")->addColorQuantity("random color", colors);
-    e->setEnabled(true);
-
-    polyscope::state::userCallback = callback;
-
-    // show
+    test_debug_bounding_box(points);
+    polyscope::registerPointCloud("gauss", points);
     polyscope::show();
 
     return 0;
+}
+
+//-----------------------------VIZUALISE BB OF POINT CLOUD----------------------
+void test_debug_bounding_box(std::vector<glm::vec3> points)
+{
+  //------------------test getBoundingBox (Lou)
+  vector<point> my_points ;
+  std::vector<glm::vec3> colors;
+  //glm::vec3 useless_norm = (0.0, 0.0, 0.0);
+  for (int i = 0 ; i < points.size() ; ++i)
+  {
+    point p;
+    p.pos = points[i] ;
+    p.norm = glm::vec3(0.0, 0.0, 0.0) ;
+    my_points.push_back(p);
+  }
+
+  PointSet * ps = new PointSet(my_points) ;
+  vector<point> bb_example ;
+
+  bb_example = ps->getBoundingBox();
+  std::cout << "bb_example : min = " << bb_example[0].pos.x << "," << bb_example[0].pos.y << "," << bb_example[0].pos.z ;
+  std::cout << "bb_example : max = " << bb_example[1].pos.x << "," << bb_example[1].pos.y << "," << bb_example[1].pos.z ;
+
+  std::vector<glm::vec3> points_bb;
+  for (int i = 0 ; i < bb_example.size() ; ++i)
+  {
+    points_bb.push_back(bb_example[i].pos) ;
+  }
+  polyscope::registerPointCloud("bounding box", points_bb);
+  auto f = polyscope::getPointCloud("bounding box");
+  f->setEnabled(true);
 }

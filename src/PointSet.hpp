@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <polyscope/polyscope.h>
+#include <glm/glm.hpp>
 
 using std::vector;
 using std::string;
@@ -20,8 +21,8 @@ public:
   PointSet (vector<point> _points) { m_points = _points; }
   inline vector<point> getPoints () const& { return m_points; }
   void readPly (string filename);
-  vector<point> getBoundingBox ();
+  vector<point> getBoundingBox();
 
 private:
   vector<point> m_points;
-}
+};

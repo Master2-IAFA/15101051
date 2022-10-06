@@ -8,7 +8,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/external/polyscope")
 
 FILE(GLOB_RECURSE folder_source ${CMAKE_SOURCE_DIR}/src/*.cpp)
-FILE(GLOB_RECURSE folder_header ${CMAKE_SOURCE_DIR}/test/*.hpp)
+FILE(GLOB_RECURSE folder_header ${CMAKE_SOURCE_DIR}/src/*.hpp)
 
 add_executable(PointCloud ${folder_source} ${folder_header})
 
