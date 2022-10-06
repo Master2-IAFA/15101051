@@ -1,5 +1,7 @@
 #include "PointSet.hpp"
 
+#include <stdlib.h> 
+
 float min(float x, float y)
 {
   if (x < y) return x ;
@@ -25,6 +27,7 @@ std::vector<point> PointSet::getBoundingBox() {
     float max_z ;
 
     int i ;
+    //iterate on points to find max/min value on each coordinate
     for (i = 0 ; i < this->m_points.size() ; ++i)
     {
       point p = this->m_points[i] ;
@@ -38,15 +41,23 @@ std::vector<point> PointSet::getBoundingBox() {
       max_z = max(max_z, p.pos.z) ;
 
     }
+    
+    //find max value between coordinates
+    float x = abs(max_x - min_x);
+    float y = abs(max_y - min_y);
+    float z = abs(max_z - min_z);
+    
+    float max = (x > y && x > z)? x : ((y > z)? y : z);
+    
     bb[0].pos.x = min_x ;
     bb[0].pos.y = min_y ;
     bb[0].pos.z = min_z ;
 
-    bb[1].pos.x = max_x ;
-    bb[1].pos.y = max_y ;
-    bb[1].pos.z = max_z ;
+    bb[1].pos.x = (max_x - min_x)? max : (-1) * max;
+    bb[1].pos.y = (max_y - min_y)? max : (-1) * max;
+    bb[1].pos.z = (max_z - min_z)? max : (-1) * max;
+    
     return bb ;
-
 }
 
 
