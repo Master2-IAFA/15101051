@@ -47,7 +47,7 @@ std::vector<point> PointSet::getBoundingBox() {
     bb[1].pos.z = max_z ;
     return bb ;
 
-}*/
+}
 
 
 /**
