@@ -4,7 +4,6 @@
 #include "PointSet.hpp"
 #include "glm/gtx/norm.hpp"
 
-
 template class Octree<statistics>;
 typedef Octree<statistics> InputOctree;
 
