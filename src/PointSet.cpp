@@ -25,6 +25,7 @@ void PointSet::readPly (string filename) {
         throw std::runtime_error("line reading error");
         return;
     }
+    std::cout << line;
 
     if ( line.compare( "ply" ) != 0) {
         std::cout << "this file is not a ply file";
@@ -33,16 +34,18 @@ void PointSet::readPly (string filename) {
 
     //format line
     std::getline( file, line );
+    std::cout << line;
 
     //skip comments
     while ( std::getline( file, line ) ) {
+        std::cout << line;
         if ( line.find( "comment" ) == string::npos ) {
             break;
         }
     }
 
     //get number of vertices
-    int size = std::stoi(line.substr(16));
+    int size = std::stoi(line.substr(15));
     m_points.clear();
     m_points.reserve(size);
 
@@ -50,6 +53,7 @@ void PointSet::readPly (string filename) {
     int acount = 0;
     int xpos = -1, ypos = -1, zpos = -1, nxpos = -1, nypos = -1, nzpos = -1;
     while ( std::getline( file, line ) ) {
+        std::cout << line;
         if ( line.find( "property" ) == string::npos ) {
             break;
         }
@@ -86,11 +90,14 @@ void PointSet::readPly (string filename) {
     }
 
     //skip remaining header lines
-    while ( std::getline( file, line ) ) {
+    do {
+        std::cout << line;
         if ( line.find( "end_header" ) != string::npos ) {
             break;
         }
-    }
+    } while ( std::getline( file, line ) );
+
+    std::cout << line;
 
     //read point records
     double num;
