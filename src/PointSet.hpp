@@ -15,7 +15,11 @@ typedef struct  {
 } point;
 
 typedef struct  {
-//eq 4 TODO
+  glm::vec3 position;
+  glm::vec3 normal;
+  double area;
+  double norm;
+  double pdn;
 } statistics;
 
 class PointSet {

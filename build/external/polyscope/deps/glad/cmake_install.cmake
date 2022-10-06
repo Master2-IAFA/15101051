@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 # Install script for directory: /home/olivierd/Documents/15101051/external/polyscope/deps/glad
+=======
+# Install script for directory: /home/antoine/Desktop/15101051/external/polyscope/deps/glad
+>>>>>>> Stashed changes
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -12,7 +16,11 @@ if(NOT DEFINED CMAKE_INSTALL_CONFIG_NAME)
     string(REGEX REPLACE "^[^A-Za-z0-9_]+" ""
            CMAKE_INSTALL_CONFIG_NAME "${BUILD_TYPE}")
   else()
+<<<<<<< Updated upstream
     set(CMAKE_INSTALL_CONFIG_NAME "")
+=======
+    set(CMAKE_INSTALL_CONFIG_NAME "Debug")
+>>>>>>> Stashed changes
   endif()
   message(STATUS "Install configuration: \"${CMAKE_INSTALL_CONFIG_NAME}\"")
 endif()
@@ -44,6 +52,10 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
+<<<<<<< Updated upstream
   include("/home/olivierd/Documents/15101051/build/external/polyscope/deps/glad/src/cmake_install.cmake")
+=======
+  include("/home/antoine/Desktop/15101051/build/external/polyscope/deps/glad/src/cmake_install.cmake")
+>>>>>>> Stashed changes
 endif()
 

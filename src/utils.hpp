@@ -6,7 +6,11 @@ typedef struct  {
 } point;
 
 typedef struct  {
-
+  glm::vec3 position;
+  glm::vec3 normal;
+  double norm;
+  double area;
+  double pdn;
 } statistics;
 
 typedef InputOctree Octree<statistics>;

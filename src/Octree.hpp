@@ -26,6 +26,14 @@ public:
   */
   void subDivise();
 
+  /**
+   * @brief get all the octrees at the given depth
+   * 
+   */
+  std::vector<Octree<Data>*> getAtDepth(int depth);
+
+  bool isPointIn(glm::vec3 p);
+
   /***** setters ******/
   inline void setFather( Octree<Data> *father ){ _father = father; }
   inline void setData( Data data ){ _data = data; }
@@ -35,11 +43,14 @@ public:
   inline glm::vec3 getMin(){ return _min; }
   inline glm::vec3 getMax(){ return _max; }
   inline int getDepth(){ return _depth; }
+  inline Octree<Data> **getChildren(){ return _children; }
 
 
 private:
 
-  Octree<Data> *_father = nullptr;
+  std::vector<Octree<Data>*> pGetAtDepth(int depth, std::vector<Octree<Data>*> vector);
+
+  Octree<Data> *_father{nullptr};
   Octree<Data> *_children[8];
   int _depth;
   glm::vec3 _min ;

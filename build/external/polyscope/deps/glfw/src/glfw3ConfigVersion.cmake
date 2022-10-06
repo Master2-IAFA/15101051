@@ -17,6 +17,12 @@ else()
 
   if("3.3.6" MATCHES "^([0-9]+)\\.")
     set(CVF_VERSION_MAJOR "${CMAKE_MATCH_1}")
+<<<<<<< Updated upstream
+=======
+    if(NOT CVF_VERSION_MAJOR VERSION_EQUAL 0)
+      string(REGEX REPLACE "^0+" "" CVF_VERSION_MAJOR "${CVF_VERSION_MAJOR}")
+    endif()
+>>>>>>> Stashed changes
   else()
     set(CVF_VERSION_MAJOR "3.3.6")
   endif()

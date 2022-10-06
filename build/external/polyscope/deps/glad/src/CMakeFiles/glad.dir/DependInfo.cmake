@@ -8,7 +8,11 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+<<<<<<< Updated upstream
   "/home/olivierd/Documents/15101051/external/polyscope/deps/glad/src/glad.c" "external/polyscope/deps/glad/src/CMakeFiles/glad.dir/glad.c.o" "gcc" "external/polyscope/deps/glad/src/CMakeFiles/glad.dir/glad.c.o.d"
+=======
+  "/home/antoine/Desktop/15101051/external/polyscope/deps/glad/src/glad.c" "external/polyscope/deps/glad/src/CMakeFiles/glad.dir/glad.c.o" "gcc" "external/polyscope/deps/glad/src/CMakeFiles/glad.dir/glad.c.o.d"
+>>>>>>> Stashed changes
   )
 
 # Targets to which this target links.

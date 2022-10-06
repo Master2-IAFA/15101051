@@ -4,6 +4,8 @@
 #include "polyscope/pick.h"
 #include "polyscope/polyscope.h"
 
+#include "glm/gtx/string_cast.hpp"
+
 #include "Octree.hpp"
 #include "PointSet.hpp"
 
@@ -15,11 +17,21 @@ polyscope::PointCloud* psCloud;
 std::vector<glm::vec3> points;
 std::vector<glm::vec3> colors;
 int prev = -1;
+int depth = 0;
+int tepth = 0;
+void pointcloudinit(){
+    
+    octree.subDivise();
 
 int main(int argc, char **argv){
     polyscope::init();
 
     std::vector<glm::vec3> points;
+
+    pointcloudinit();
+
+    polyscope::registerPointCloud("octree", points);
+    
 
     // generate points
     for(float i = 0; i < 50; i++){

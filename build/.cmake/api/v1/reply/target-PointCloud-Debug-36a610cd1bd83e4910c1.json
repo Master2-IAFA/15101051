@@ -1,0 +1,201 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "/home/antoine/Desktop/15101051/bin/PointCloud"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"target_link_libraries"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 13,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 15,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 2,
+					"path" : "/home/antoine/Desktop/15101051/external/polyscope/src/../include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/antoine/Desktop/15101051/external/polyscope/src/../deps/glm"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/antoine/Desktop/15101051/external/polyscope/deps/imgui/imgui"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/antoine/Desktop/15101051/external/polyscope/deps/glfw/include"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "glad::@3cfb586451dd839c6eee"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "glfw::@c28a1ca474cef961497d"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "imgui::@a1a38aec2d3090b4a37a"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "stb::@065eed76b442b1f09ba7"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "polyscope::@f26ccdd3c143c662c6ce"
+		}
+	],
+	"id" : "PointCloud::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-rdynamic",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "external/polyscope/src/libpolyscope.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "external/polyscope/deps/imgui/libimgui.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "external/polyscope/deps/glfw/src/libglfw3.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-Wl,-Bstatic",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lrt",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-Wl,-Bdynamic",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lm",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-ldl",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lX11",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "external/polyscope/deps/glad/src/libglad.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "external/polyscope/deps/stb/libstb.a",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "PointCloud",
+	"nameOnDisk" : "PointCloud",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/Octree.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/PointSet.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/main.cpp",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}

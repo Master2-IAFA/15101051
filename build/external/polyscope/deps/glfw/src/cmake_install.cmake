@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 # Install script for directory: /home/olivierd/Documents/15101051/external/polyscope/deps/glfw/src
+=======
+# Install script for directory: /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src
+>>>>>>> Stashed changes
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -12,7 +16,11 @@ if(NOT DEFINED CMAKE_INSTALL_CONFIG_NAME)
     string(REGEX REPLACE "^[^A-Za-z0-9_]+" ""
            CMAKE_INSTALL_CONFIG_NAME "${BUILD_TYPE}")
   else()
+<<<<<<< Updated upstream
     set(CMAKE_INSTALL_CONFIG_NAME "")
+=======
+    set(CMAKE_INSTALL_CONFIG_NAME "Debug")
+>>>>>>> Stashed changes
   endif()
   message(STATUS "Install configuration: \"${CMAKE_INSTALL_CONFIG_NAME}\"")
 endif()

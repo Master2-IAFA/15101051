@@ -1,4 +1,5 @@
 external/polyscope/deps/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o: \
+<<<<<<< Updated upstream
  /home/olivierd/Documents/15101051/external/polyscope/deps/glfw/src/osmesa_context.c \
  /usr/include/stdc-predef.h /usr/include/stdlib.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
@@ -8,13 +9,29 @@ external/polyscope/deps/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o: \
  /usr/include/x86_64-linux-gnu/gnu/stubs.h \
  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
  /usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h \
+=======
+ /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/osmesa_context.c \
+ /usr/include/stdc-predef.h /usr/include/stdlib.h \
+ /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
+ /usr/include/features.h /usr/include/features-time64.h \
+ /usr/include/x86_64-linux-gnu/bits/wordsize.h \
+ /usr/include/x86_64-linux-gnu/bits/timesize.h \
+ /usr/include/x86_64-linux-gnu/sys/cdefs.h \
+ /usr/include/x86_64-linux-gnu/bits/long-double.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h \
+>>>>>>> Stashed changes
  /usr/include/x86_64-linux-gnu/bits/waitflags.h \
  /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
  /usr/include/x86_64-linux-gnu/bits/floatn.h \
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
  /usr/include/x86_64-linux-gnu/sys/types.h \
  /usr/include/x86_64-linux-gnu/bits/types.h \
+<<<<<<< Updated upstream
  /usr/include/x86_64-linux-gnu/bits/timesize.h \
+=======
+>>>>>>> Stashed changes
  /usr/include/x86_64-linux-gnu/bits/typesizes.h \
  /usr/include/x86_64-linux-gnu/bits/time64.h \
  /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
@@ -35,12 +52,17 @@ external/polyscope/deps/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o: \
  /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
  /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
  /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
+<<<<<<< Updated upstream
+=======
+ /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
+>>>>>>> Stashed changes
  /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
  /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /usr/include/alloca.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h /usr/include/string.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /usr/include/strings.h /usr/include/assert.h \
+<<<<<<< Updated upstream
  /home/olivierd/Documents/15101051/external/polyscope/deps/glfw/src/internal.h \
  /home/olivierd/Documents/15101051/build/external/polyscope/deps/glfw/src/glfw_config.h \
  /home/olivierd/Documents/15101051/external/polyscope/deps/glfw/src/../include/GLFW/glfw3.h \
@@ -48,14 +70,28 @@ external/polyscope/deps/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o: \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
  /home/olivierd/Documents/15101051/external/polyscope/deps/glfw/src/x11_platform.h \
+=======
+ /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/internal.h \
+ /home/antoine/Desktop/15101051/build/external/polyscope/deps/glfw/src/glfw_config.h \
+ /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/../include/GLFW/glfw3.h \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h /usr/include/stdint.h \
+ /usr/include/x86_64-linux-gnu/bits/wchar.h \
+ /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+ /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/x11_platform.h \
+>>>>>>> Stashed changes
  /usr/include/unistd.h /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
  /usr/include/x86_64-linux-gnu/bits/environments.h \
  /usr/include/x86_64-linux-gnu/bits/confname.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h /usr/include/signal.h \
+<<<<<<< Updated upstream
  /usr/include/x86_64-linux-gnu/bits/signum.h \
  /usr/include/x86_64-linux-gnu/bits/signum-generic.h \
+=======
+ /usr/include/x86_64-linux-gnu/bits/signum-generic.h \
+ /usr/include/x86_64-linux-gnu/bits/signum-arch.h \
+>>>>>>> Stashed changes
  /usr/include/x86_64-linux-gnu/bits/types/sig_atomic_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/siginfo_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__sigval_t.h \
@@ -69,6 +105,10 @@ external/polyscope/deps/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o: \
  /usr/include/x86_64-linux-gnu/bits/types/stack_t.h \
  /usr/include/x86_64-linux-gnu/sys/ucontext.h \
  /usr/include/x86_64-linux-gnu/bits/sigstack.h \
+<<<<<<< Updated upstream
+=======
+ /usr/include/x86_64-linux-gnu/bits/sigstksz.h \
+>>>>>>> Stashed changes
  /usr/include/x86_64-linux-gnu/bits/ss_flags.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_sigstack.h \
  /usr/include/x86_64-linux-gnu/bits/sigthread.h \
@@ -78,7 +118,11 @@ external/polyscope/deps/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o: \
  /usr/include/X11/Xosdefs.h /usr/include/X11/keysym.h \
  /usr/include/X11/keysymdef.h /usr/include/X11/Xatom.h \
  /usr/include/X11/Xcursor/Xcursor.h /usr/include/stdio.h \
+<<<<<<< Updated upstream
  /usr/lib/gcc/x86_64-linux-gnu/9/include/stdarg.h \
+=======
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h \
+>>>>>>> Stashed changes
  /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h \
@@ -86,7 +130,10 @@ external/polyscope/deps/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o: \
  /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+<<<<<<< Updated upstream
  /usr/include/x86_64-linux-gnu/bits/sys_errlist.h \
+=======
+>>>>>>> Stashed changes
  /usr/include/X11/extensions/Xrandr.h /usr/include/X11/extensions/randr.h \
  /usr/include/X11/extensions/Xrender.h /usr/include/X11/Xutil.h \
  /usr/include/X11/extensions/render.h /usr/include/X11/Xdefs.h \
@@ -95,7 +142,11 @@ external/polyscope/deps/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o: \
  /usr/include/X11/extensions/XInput2.h /usr/include/X11/extensions/XI2.h \
  /usr/include/X11/extensions/Xge.h /usr/include/X11/extensions/Xfixes.h \
  /usr/include/X11/extensions/xfixeswire.h \
+<<<<<<< Updated upstream
  /home/olivierd/Documents/15101051/external/polyscope/deps/glfw/src/posix_thread.h \
+=======
+ /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/posix_thread.h \
+>>>>>>> Stashed changes
  /usr/include/pthread.h /usr/include/sched.h \
  /usr/include/x86_64-linux-gnu/bits/sched.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h \
@@ -104,12 +155,24 @@ external/polyscope/deps/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o: \
  /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
  /usr/include/x86_64-linux-gnu/bits/setjmp.h \
+<<<<<<< Updated upstream
  /home/olivierd/Documents/15101051/external/polyscope/deps/glfw/src/posix_time.h \
  /home/olivierd/Documents/15101051/external/polyscope/deps/glfw/src/xkb_unicode.h \
  /home/olivierd/Documents/15101051/external/polyscope/deps/glfw/src/glx_context.h \
  /home/olivierd/Documents/15101051/external/polyscope/deps/glfw/src/egl_context.h \
  /home/olivierd/Documents/15101051/external/polyscope/deps/glfw/src/osmesa_context.h \
  /home/olivierd/Documents/15101051/external/polyscope/deps/glfw/src/linux_joystick.h \
+=======
+ /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h \
+ /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h \
+ /usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h \
+ /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/posix_time.h \
+ /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/xkb_unicode.h \
+ /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/glx_context.h \
+ /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/egl_context.h \
+ /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/osmesa_context.h \
+ /home/antoine/Desktop/15101051/external/polyscope/deps/glfw/src/linux_joystick.h \
+>>>>>>> Stashed changes
  /usr/include/linux/input.h /usr/include/x86_64-linux-gnu/sys/time.h \
  /usr/include/x86_64-linux-gnu/sys/ioctl.h \
  /usr/include/x86_64-linux-gnu/bits/ioctls.h \
