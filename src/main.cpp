@@ -7,6 +7,7 @@
 #include "glm/gtx/string_cast.hpp"
 #include "utils.hpp"
 
+
 //function to vizualise bounding box of point cloud (Lou)
 void test_debug_bounding_box(std::vector<glm::vec3> points);
 
@@ -14,22 +15,22 @@ float kernelSize = 1.0f;
 polyscope::PointCloud* psCloud;
 std::vector<glm::vec3> points;
 std::vector<glm::vec3> colors;
-<<<<<<< Updated upstream
-int prev = -1;
-int depth = 0;
-int tepth = 0;
 
-=======
->>>>>>> Stashed changes
 
 
 int main(int argc, char **argv){
+
+    //TEST IS POINT IN
+    //Octree * octree = new Octree()
+
     polyscope::init();
 
-    std::vector<glm::vec3> points;
+    //std::vector<glm::vec3> points;
 
-    polyscope::registerPointCloud("octree", points);
-
+    //polyscope::registerPointCloud("octree", cube);
+    Octree<glm::vec3> * octree ;
+    octree = new Octree<glm::vec3>(10, glm::vec3(0.0, 0.0, 0.0), glm::vec3(3.0, 3.0, 3.0));
+    bool is_inside = octree->isPointIn(glm::vec3(1.0, 1.0, 1.0));
 
     // generate points
     for(float i = 0; i < 50; i++){
@@ -40,7 +41,7 @@ int main(int argc, char **argv){
             colors.push_back( glm::vec3(0.0f, 0.0f, 0.0f) );
         }
     }
-    test_debug_bounding_box(points);
+    //test_debug_bounding_box(points);
     //test_debug_subdivide();
 
     polyscope::registerPointCloud("gauss", points);
@@ -80,16 +81,3 @@ void test_debug_bounding_box(std::vector<glm::vec3> points)
   auto f = polyscope::getPointCloud("bounding box");
   f->setEnabled(true);
 }
-
-/*void test_debug_subdivide () {
-	Octree<Data> tree (0, glm::vec3(0, 0, 0), glm::vec3(100, 100, 100));
-
-	tree.subdivide();
-
-	tree.getChildren[0]->subdivide();
-	tree.getChildren[1]->subdivide();
-	tree.getChildren[3]->subdivide();
-
-	tree.getChildren[0]->getChildren[2]->subdivide();
-	tree.getChildren[0]->getChildren[4]->subdivide();
-}*/

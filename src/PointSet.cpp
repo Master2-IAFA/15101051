@@ -1,6 +1,6 @@
 #include "PointSet.hpp"
 
-#include <stdlib.h> 
+#include <stdlib.h>
 
 float min(float x, float y)
 {
@@ -42,32 +42,22 @@ std::vector<point> PointSet::getBoundingBox() {
       max_z = max(max_z, p.pos.z) ;
 
     }
-    
+
     //find max value between coordinates
     float x = abs(max_x - min_x);
     float y = abs(max_y - min_y);
     float z = abs(max_z - min_z);
-    
+
     float max = (x > y && x > z)? x : ((y > z)? y : z);
-    
+
     bb[0].pos.x = min_x ;
     bb[0].pos.y = min_y ;
     bb[0].pos.z = min_z ;
 
-<<<<<<< Updated upstream
     bb[1].pos.x = (max_x - min_x)? max : (-1) * max;
     bb[1].pos.y = (max_y - min_y)? max : (-1) * max;
     bb[1].pos.z = (max_z - min_z)? max : (-1) * max;
-    
-=======
-    bb[1].pos.x = max_x ;
-    bb[1].pos.y = max_y ;
-    bb[1].pos.z = max_z ;
 
-    //a diagonal is generated, but it might not be a cube. In this cas, we have to augment it
-    bb = augment(bb);
->>>>>>> Stashed changes
-    return bb ;
 }
 
 
