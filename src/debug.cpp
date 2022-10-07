@@ -24,14 +24,14 @@ std::vector<glm::vec3> build_cube_from_minmax(glm::vec3 min, glm::vec3 max)
   //float len_body_diag = (max-min).length() ;
   //float a = len_body_diag/sqrt(3) ;
 
-  glm::vec3 tfl = glm::vec3(min.x, min.y + max.y, min.z ) ;
-  glm::vec3 tfr = glm::vec3(min.x + max.x, min.y + max.y, min.z) ;
-  glm::vec3 tbl = glm::vec3(min.x, min.y + max.y, min.z + max.z ) ;
-  glm::vec3 tbr = glm::vec3(min.x + max.x, min.y + max.y, min.z + max.z) ;
+  glm::vec3 tfl = glm::vec3(min.x, max.y, min.z ) ;
+  glm::vec3 tfr = glm::vec3(max.x, max.y, min.z) ;
+  glm::vec3 tbl = glm::vec3(min.x, max.y, max.z ) ;
+  glm::vec3 tbr = glm::vec3(max.x, max.y, max.z) ;
   glm::vec3 bfl = glm::vec3(min.x, min.y, min.z) ;
-  glm::vec3 bfr =glm::vec3(min.x + max.x, min.y, min.z) ;
-  glm::vec3 bbl  = glm::vec3(min.x, min.y, min.z + max.z) ;
-  glm::vec3 bbr = glm::vec3(min.x + max.x, min.y, min.z + max.z) ;
+  glm::vec3 bfr =glm::vec3(max.x, min.y, min.z) ;
+  glm::vec3 bbl  = glm::vec3(min.x, min.y, max.z) ;
+  glm::vec3 bbr = glm::vec3(max.x, min.y, max.z) ;
 
   std::vector<glm::vec3> cube ;
   cube.push_back(tfl);
