@@ -7,11 +7,13 @@
 #include "glm/gtx/string_cast.hpp"
 #include "utils.hpp"
 
-
 #include "debug.hpp"
 
 
-int main(){
-  drawCube(glm::vec3(0.0, 0.0, 0.0), glm::vec3(3.0, 3.0, 3.0));
-  return 0;
+int main(int argc, char **argv){
+    //test_basic_polyscope();
+    test_debug_readPly();
+    drawCube(glm::vec3(0.0, 0.0, 0.0), glm::vec3(3.0, 3.0, 3.0));
+
+    return 0;
 }
