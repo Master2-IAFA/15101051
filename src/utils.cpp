@@ -15,8 +15,7 @@ void fitInputOctree( int max_depth, InputOctree *octree, std::vector<point> poin
 
   
   bool hasPoint = false;
-  for( int i = 0; i < 8; i++ ){
-    
+  for( int i = 0; i < 8; i++ ){ 
     statistics stat;
     hasPoint = false;
     for( int j = 0; j < points.size(); j++ ){
