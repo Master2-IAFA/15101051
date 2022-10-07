@@ -1,7 +1,5 @@
 #include "utils.hpp"
 
-
-
 InputOctree *generateInputOctree( int max_depth, PointSet *pc ){
   std::vector<point> aabb = pc->getBoundingBox();
   InputOctree *octree = new InputOctree(0, aabb[0].pos, aabb[1].pos);
