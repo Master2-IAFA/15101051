@@ -1,7 +1,5 @@
 #include "Octree.hpp"
 
-template class Octree<int>;
-
 template<class Data>
 Octree<Data>::Octree(int depth, glm::vec3 min, glm::vec3 max){
     _min = min;
@@ -44,35 +42,6 @@ void Octree<Data>::subDivide(){
 
 }
 
-
-//function that takes minmax of a cube a returns 8 coordinates of cube
-std::vector<glm::vec3> build_cube_from_minmax(glm::vec3 min, glm::vec3 max)
-{
-  //float len_body_diag = (max-min).length() ;
-  //float a = len_body_diag/sqrt(3) ;
-
-  glm::vec3 tfl = glm::vec3(min.x, min.y + max.y, min.z ) ;
-  glm::vec3 tfr = glm::vec3(min.x + max.x, min.y + max.y, min.z) ;
-  glm::vec3 tbl = glm::vec3(min.x, min.y + max.y, min.z + max.z ) ;
-  glm::vec3 tbr = glm::vec3(min.x + max.x, min.y + max.y, min.z + max.z) ;
-  glm::vec3 bfl = glm::vec3(min.x, min.y, min.z) ;
-  glm::vec3 bfr =glm::vec3(min.x + max.x, min.y, min.z) ;
-  glm::vec3 bbl  = glm::vec3(min.x, min.y, min.z + max.z) ;
-  glm::vec3 bbr = glm::vec3(min.x + max.x, min.y, min.z + max.z) ;
-
-  std::vector<glm::vec3> cube ;
-  cube.push_back(tfl);
-  cube.push_back(tfr);
-  cube.push_back(tbl);
-  cube.push_back(tbr);
-  cube.push_back(bfl);
-  cube.push_back(bfr);
-  cube.push_back(bbl);
-  cube.push_back(bbr);
-  return cube ;
-
-}
-
 template<class Data>
 bool Octree<Data>::isPointIn(glm::vec3 p)
 {
@@ -92,6 +61,3 @@ bool Octree<Data>::isPointIn(glm::vec3 p)
     std::cout << "point is outside \n" ;
     return false ;
 }
-
-//TO DELETE (Lou en a besoin pour déclarer un octree dans le main)
-template class Octree<glm::vec3>;

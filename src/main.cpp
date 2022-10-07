@@ -8,6 +8,9 @@
 #include "utils.hpp"
 
 
+#include "debug.hpp"
+
+/*
 //function to vizualise bounding box of point cloud (Lou)
 void test_debug_bounding_box(std::vector<glm::vec3> points);
 
@@ -83,6 +86,7 @@ void test_debug_bounding_box(std::vector<glm::vec3> points)
 }
 
 void test_debug_subdivide () {
+<<<<<<< Updated upstream
 	Octree<int> tree (0, glm::vec3(0, 0, 0), glm::vec3(100, 100, 100));
 
 	tree.subDivide();
@@ -90,4 +94,20 @@ void test_debug_subdivide () {
 	auto children = tree.getChildren();
 	children[0]->subDivide();
 	//TODO display tree
+=======
+	Octree<Data> tree (0, glm::vec3(0, 0, 0), glm::vec3(100, 100, 100));
+	
+	tree.subdivide();
+	
+	tree.getChildren[0]->subdivide();
+	tree.getChildren[1]->subdivide();
+	tree.getChildren[3]->subdivide();
+	
+	tree.getChildren[0]->getChildren[2]->subdivide();
+	tree.getChildren[0]->getChildren[4]->subdivide();
+}*/
+
+
+int main(int argc, char **argv){
+  return 0;
 }
