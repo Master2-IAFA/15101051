@@ -168,3 +168,16 @@ void drawCube(std::string name, glm::vec3 min, glm::vec3 max)
   // visualize!
   //polyscope::show();
 }
+
+void draw_diagonal(glm::vec3 min, glm::vec3 max)
+{
+  std::vector<std::array<size_t, 2>> edges ;
+  std::vector<glm::vec3> nodes ;
+
+  nodes.push_back(min) ;
+  nodes.push_back(max) ;
+
+  edges.push_back({0, 1});
+
+  polyscope::registerCurveNetwork(name, nodes, edges);
+}

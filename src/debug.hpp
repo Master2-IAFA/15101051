@@ -44,3 +44,5 @@ void test_basic_polyscope ();
  * @param max : max point of cube
  */
 void drawCube(std::string name, glm::vec3 min, glm::vec3 max);
+
+void draw_diagonal(glm::vec3 min, glm::vec3 max);
