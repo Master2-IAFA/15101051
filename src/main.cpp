@@ -21,15 +21,17 @@ int main(int argc, char **argv){
     PointSet *ps = new PointSet();
     ps->readPly("../assets/gaussian_spike_norm.ply");
 
-    InputOctree *octree = generateInputOctree(5, ps);
+    InputOctree *octree = generateInputOctree(8, ps);
 
-    auto children = octree->getChildren();
-    for(int i = 0; i < 8; i++){
-      drawCube(std::to_string(i), children[i]->getMin(), children[i]->getMax());
+    drawCube("racine", octree->getMin(), octree->getMax());
+
+    auto o = octree->getAtDepth(8);
+    for(int i = 0; i < o.size(); i++){
+      drawCube(std::to_string(i), o[i]->getMin(), o[i]->getMax());
     }
 
     pointSetToPolyscope("gaussian", ps);
-
+    
 
     polyscope::show();
 
