@@ -31,7 +31,7 @@ void Octree<Data>::subDivide(){
     //bottom front right
     _children[1] = new Octree<Data>(_depth + 1,
                                     glm::vec3((_min[0] + _max[0]) / 2, _min[1], _min[2]),
-                                    glm::vec3(_max[0], (_min[1] + _max[1]) / 2, (_min[2], _max[2]) / 2));
+                                    glm::vec3(_max[0], (_min[1] + _max[1]) / 2, (_min[2] + _max[2]) / 2));
 
     //bottom back left
     _children[2] = new Octree<Data>(_depth + 1,
@@ -40,7 +40,7 @@ void Octree<Data>::subDivide(){
 
     //bottom back right
     _children[3] = new Octree<Data>(_depth + 1,
-                                    glm::vec3((_min[0], _max[0]) / 2, (_min[1] + _max[1]) / 2, _min[2]),
+                                    glm::vec3((_min[0] + _max[0]) / 2, (_min[1] + _max[1]) / 2, _min[2]),
                                     glm::vec3(_max[0], _max[1], (_min[2] + _max[2]) / 2));
 
     //top front left
@@ -50,7 +50,7 @@ void Octree<Data>::subDivide(){
 
     //top front right
     _children[5] = new Octree<Data>(_depth + 1,
-                                    glm::vec3((_min[0], _max[0]) / 2, _min[1], (_min[2] + _max[2]) / 2),
+                                    glm::vec3((_min[0] + _max[0]) / 2, _min[1], (_min[2] + _max[2]) / 2),
                                     glm::vec3(_max[0], (_min[1] + _max[1]) / 2, _max[2]));
 
     //top back left
