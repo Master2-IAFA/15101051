@@ -138,3 +138,33 @@ void test_basic_polyscope () {
     polyscope::registerPointCloud("gauss", points);
     polyscope::show();
 }
+
+void drawCube(glm::vec3 min, glm::vec3 max)
+{
+  std::vector<std::array<size_t, 2>> edges ;
+
+  std::vector<glm::vec3> nodes = build_cube_from_minmax(min, max);
+
+  edges.push_back({0, 1});
+  edges.push_back({2, 3});
+  edges.push_back({4, 5});
+  edges.push_back({6, 7});
+
+  edges.push_back({0, 2});
+  edges.push_back({1, 3});
+  edges.push_back({4, 6});
+  edges.push_back({5, 7});
+
+  edges.push_back({0, 4});
+  edges.push_back({1, 5});
+  edges.push_back({2, 6});
+  edges.push_back({3, 7});
+
+  polyscope::init();
+
+  // Add the curve network
+  polyscope::registerCurveNetwork("cube", nodes, edges);
+
+  // visualize!
+  polyscope::show();
+}

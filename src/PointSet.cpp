@@ -58,7 +58,7 @@ std::vector<point> PointSet::getBoundingBox() {
     bb[1].pos.y = (max_y - min_y)? max : (-1) * max;
     bb[1].pos.z = (max_z - min_z)? max : (-1) * max;
 
-    return bb;
+    return bb ;
 
 }
 
