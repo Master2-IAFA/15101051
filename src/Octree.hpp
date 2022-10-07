@@ -14,10 +14,13 @@
 #define BOTTOM_BACK_LEFT   6 // 0b110
 #define BOTTOM_BACK_RIGHT  7 // 0b111
 
-/*
-*
-*
-*/
+/**
+ * @brief class that represent an octree define by an aabb box.
+ *        an octree can contain other octrees (8)
+ *        an octree can also contain arbitrary data
+ * 
+ * @tparam Data: the type of data the octree can take.
+ */
 template<typename Data>
 class Octree{
 
@@ -27,16 +30,26 @@ public:
   ~Octree();
 
   /**
-  * @brief split the octree into 8 childrens, and link this as their father.
+  * @brief split the octree into 8 childrens, and link it as their father.
   */
   void subDivide();
 
   /**
    * @brief get all the octrees at the given depth
-   *
    */
   std::vector<Octree<Data>*> getAtDepth(int depth);
+
+  /**
+  * @brief check if the given point is inside the octree using it's min/max points
+  */
   bool isPointIn(glm::vec3 p);
+
+  /**
+   * @brief return if the octree has children
+   * 
+   * @return true 
+   * @return false 
+   */
   bool hasChildren(){ return !(_children[0] == nullptr);}
 
   /***** setters ******/
