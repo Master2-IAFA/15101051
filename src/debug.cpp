@@ -169,7 +169,7 @@ void drawCube(std::string name, glm::vec3 min, glm::vec3 max)
   //polyscope::show();
 }
 
-void draw_diagonal(glm::vec3 min, glm::vec3 max)
+void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max)
 {
   std::vector<std::array<size_t, 2>> edges ;
   std::vector<glm::vec3> nodes ;

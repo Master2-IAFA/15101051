@@ -45,4 +45,4 @@ void test_basic_polyscope ();
  */
 void drawCube(std::string name, glm::vec3 min, glm::vec3 max);
 
-void draw_diagonal(glm::vec3 min, glm::vec3 max);
+void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max);
