@@ -23,7 +23,7 @@ template<class Data>
 void Octree<Data>::subDivide(){
     glm::vec3 center ((_min[0] + _max[0]) / 2,
     	(_min[1] + _max[1]) / 2,
-    	(_min[0] + _max[0]) / 2);
+        (_min[2] + _max[2]) / 2);
 
     //bottom front left
     _children[0] = new Octree<Data>(_depth + 1, _min, center);
