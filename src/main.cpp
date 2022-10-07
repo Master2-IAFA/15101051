@@ -81,3 +81,13 @@ void test_debug_bounding_box(std::vector<glm::vec3> points)
   auto f = polyscope::getPointCloud("bounding box");
   f->setEnabled(true);
 }
+
+void test_debug_subdivide () {
+	Octree<int> tree (0, glm::vec3(0, 0, 0), glm::vec3(100, 100, 100));
+
+	tree.subDivide();
+
+	auto children = tree.getChildren();
+	children[0]->subDivide();
+	//TODO display tree
+}
