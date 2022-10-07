@@ -96,18 +96,33 @@ void test_debug_subdivide () {
 	//TODO display tree
 =======
 	Octree<Data> tree (0, glm::vec3(0, 0, 0), glm::vec3(100, 100, 100));
-	
+
 	tree.subdivide();
-	
+
 	tree.getChildren[0]->subdivide();
 	tree.getChildren[1]->subdivide();
 	tree.getChildren[3]->subdivide();
-	
+
 	tree.getChildren[0]->getChildren[2]->subdivide();
 	tree.getChildren[0]->getChildren[4]->subdivide();
 }*/
 
 
 int main(int argc, char **argv){
+
+  vector<point> my_points ;
+  std::vector<glm::vec3> colors;
+
+  // generate points
+  for(float i = 0; i < 50; i++){
+      for( float j = 0; j < 50; j++){
+          float x = (i - 25) / 25.0f;
+          float y = (j - 25) / 25.0f;
+          points.push_back( glm::vec3( i/50.0f, exp( -(x*x) - (y*y)) , j/50.0f));
+          colors.push_back( glm::vec3(0.0f, 0.0f, 0.0f) );
+          my_points.pos.push_back(glm::vec3( i/50.0f, exp( -(x*x) - (y*y)) , j/50.0f));
+          my_points.norm.push_back(glm::vec3(1.0, 1.0, 1.0));
+      }
+  }
   return 0;
 }
