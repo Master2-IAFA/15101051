@@ -139,7 +139,7 @@ void test_basic_polyscope () {
     polyscope::show();
 }
 
-void drawCube(glm::vec3 min, glm::vec3 max)
+void drawCube(std::string name, glm::vec3 min, glm::vec3 max)
 {
   std::vector<std::array<size_t, 2>> edges ;
 
@@ -160,11 +160,11 @@ void drawCube(glm::vec3 min, glm::vec3 max)
   edges.push_back({2, 6});
   edges.push_back({3, 7});
 
-  polyscope::init();
+  //polyscope::init();
 
   // Add the curve network
-  polyscope::registerCurveNetwork("cube", nodes, edges);
+  polyscope::registerCurveNetwork(name, nodes, edges);
 
   // visualize!
-  polyscope::show();
+  //polyscope::show();
 }
