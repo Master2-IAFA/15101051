@@ -68,7 +68,7 @@ std::vector<point> PointSet::getBoundingBox() {
 */
 void PointSet::readPly (string filename) {
     //file opening
-    std::ifstream file (filename);
+    std::ifstream file (filename, std::ios::binary);
     if (!file) {
         throw std::runtime_error("cannot open ifstream " + filename);
         return;
@@ -81,7 +81,7 @@ void PointSet::readPly (string filename) {
         throw std::runtime_error("line reading error");
         return;
     }
-    std::cout << line;
+    std::cout << line << std::endl;
 
     if ( line.compare( "ply" ) != 0) {
         std::cout << "this file is not a ply file";
@@ -90,11 +90,11 @@ void PointSet::readPly (string filename) {
 
     //format line
     std::getline( file, line );
-    std::cout << line;
+    std::cout << line << std::endl;
 
     //skip comments
     while ( std::getline( file, line ) ) {
-        std::cout << line;
+        std::cout << line << std::endl;
         if ( line.find( "comment" ) == string::npos ) {
             break;
         }
@@ -109,7 +109,7 @@ void PointSet::readPly (string filename) {
     int acount = 0;
     int xpos = -1, ypos = -1, zpos = -1, nxpos = -1, nypos = -1, nzpos = -1;
     while ( std::getline( file, line ) ) {
-        std::cout << line;
+        std::cout << line << std::endl;
         if ( line.find( "property" ) == string::npos ) {
             break;
         }
@@ -147,13 +147,13 @@ void PointSet::readPly (string filename) {
 
     //skip remaining header lines
     do {
-        std::cout << line;
+        std::cout << line << std::endl;
         if ( line.find( "end_header" ) != string::npos ) {
             break;
         }
     } while ( std::getline( file, line ) );
 
-    std::cout << line;
+    std::cout << line << std::endl;
 
     //read point records
     double num;
