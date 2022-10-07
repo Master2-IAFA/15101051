@@ -83,12 +83,9 @@ void test_debug_bounding_box(std::vector<glm::vec3> points)
 void test_debug_subdivide () {
 	Octree<Data> tree (0, glm::vec3(0, 0, 0), glm::vec3(100, 100, 100));
 	
-	tree.subdivide();
+	tree.subDivide();
 	
-	tree.getChildren[0]->subdivide();
-	tree.getChildren[1]->subdivide();
-	tree.getChildren[3]->subdivide();
-	
-	tree.getChildren[0]->getChildren[2]->subdivide();
-	tree.getChildren[0]->getChildren[4]->subdivide();
+	auto children = tree.getChildren();
+	children[0]->subDivide();
+	//TODO display tree
 }
