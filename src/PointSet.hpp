@@ -21,6 +21,7 @@ public:
     inline vector<point> getPoints () const& { return m_points; }
     void readPly (string filename);
     vector<point> getBoundingBox ();
+    void addPoint(point point){ m_points.push_back(point); }
 
 private:
   vector<point> m_points;

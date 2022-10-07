@@ -13,8 +13,10 @@ void fitInputOctree( int max_depth, InputOctree *octree, std::vector<point> poin
   octree->subDivide();
   auto children = octree->getChildren();
 
+  
   bool hasPoint = false;
   for( int i = 0; i < 8; i++ ){
+    
     statistics stat;
     hasPoint = false;
     for( int j = 0; j < points.size(); j++ ){
@@ -22,11 +24,12 @@ void fitInputOctree( int max_depth, InputOctree *octree, std::vector<point> poin
         statisticsAdd( &stat, points[j] );
         hasPoint = true;
       }
+
     }
 
     if(hasPoint){
         children[i]->setData( stat );
-        fitInputOctree( max_depth - 1, children[i], points);
+        fitInputOctree( max_depth - 1, children[i], points );
     }
   }
 

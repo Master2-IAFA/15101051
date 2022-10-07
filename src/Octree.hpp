@@ -37,6 +37,7 @@ public:
    */
   std::vector<Octree<Data>*> getAtDepth(int depth);
   bool isPointIn(glm::vec3 p);
+  bool hasChildren(){ return !(_children[0] == nullptr);}
 
   /***** setters ******/
   inline void setFather( Octree<Data> *father ){ _father = father; }
@@ -54,9 +55,9 @@ private:
 
   std::vector<Octree<Data>*> pGetAtDepth(int depth, std::vector<Octree<Data>*> vector);
 
-  Octree<Data> *_father{nullptr};
+  Octree<Data> *_father{ nullptr };
   Octree<Data> *_children[8];
-  int _depth;
+  int _depth{ 0 };
   glm::vec3 _min ;
   glm::vec3 _max ;
   Data _data;

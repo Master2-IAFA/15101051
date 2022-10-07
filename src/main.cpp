@@ -1,3 +1,4 @@
+#include <iostream>
 
 #include "polyscope/messages.h"
 #include "polyscope/point_cloud.h"
@@ -109,6 +110,11 @@ void test_debug_subdivide () {
 
 
 int main(int argc, char **argv){
+  std::cout << "Demarrage " << std::endl;
+  std::cout <<  "\n Size " << bunny->getPoints().size() << std::endl;
+
+  polyscope::init();
+  polyscope::show();
 
   vector<point> my_points ;
   std::vector<glm::vec3> colors;

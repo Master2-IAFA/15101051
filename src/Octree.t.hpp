@@ -2,6 +2,9 @@
 
 template<class Data>
 Octree<Data>::Octree(int depth, glm::vec3 min, glm::vec3 max){
+    for(int i = 0; i < 8; i++){
+        _children[i] = nullptr;
+    }
     _min = min;
     _depth = depth;
     _max = max;
@@ -55,9 +58,34 @@ bool Octree<Data>::isPointIn(glm::vec3 p)
     (p.y > min.y) && (p.y < max.y) &&
     (p.z > min.z) && (p.z < max.z))
     {
-      std::cout << "point is inside \n" ;
+      //std::cout << "point is inside \n" ;
       return true ;
     }
-    std::cout << "point is outside \n" ;
+    //std::cout << "point is outside \n" ;
     return false ;
+}
+
+template<class Data>
+std::vector<Octree<Data>*> Octree<Data>::getAtDepth(int depth){
+    std::vector<Octree<Data>*> octree;
+    std::vector<Octree<Data>*> stack;
+    stack.push_back( this );
+
+    while( !stack.empty() ){
+        Octree<Data>* current = stack.back();
+        stack.pop_back();
+
+        if( current->hasChildren() ){
+            auto children = current->getChildren();
+            for(int i = 0; i < 8; i++){
+                if( children[i]->getDepth() == depth ){
+                    octree.push_back( children[i] );
+                }else{ 
+                    stack.push_back( children[i] );
+                }
+            }
+        }
+    }
+
+    return octree;
 }
