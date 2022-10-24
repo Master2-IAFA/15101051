@@ -2,6 +2,9 @@
 
 #include <stdlib.h>
 
+#include <OpenMesh/Core/IO/MeshIO.hh>
+#include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
+
 float min(float x, float y)
 {
   if (x < y) return x ;
@@ -62,12 +65,34 @@ std::vector<point> PointSet::getBoundingBox() {
 
 }
 
+void PointSet::readOpenMesh (string filename) {
+    OpenMesh::PolyMesh_ArrayKernelT<> mesh;
 
-/**
-* reads a point set from a ply file
-*
-* erases former data if any and replaces with read point set
-*/
+    if (!OpenMesh::IO::read_mesh(mesh, filename)) {
+        return;
+    }
+
+    for (auto v = mesh.vertices_sbegin(); v != mesh.vertices_end(); ++v) {
+        auto current_point = mesh.point(*v);
+        point p;
+        p.pos[0] = current_point[0];
+        p.pos[1] = current_point[1];
+        p.pos[2] = current_point[2];
+
+        if (mesh.has_vertex_normals()) {
+            auto n = mesh.normal(*v);
+            p.norm[0] = n[0];
+            p.norm[1] = n[1];
+            p.norm[2] = n[2];
+        }
+        else {
+            p.norm = glm::vec3(1, 0, 0);
+        }
+
+        this->m_points.emplace_back(p);
+    }
+}
+
 void PointSet::readPly (string filename) {
     //file opening
     std::ifstream file (filename, std::ios::binary);

@@ -5,6 +5,8 @@ cmake_policy(SET CMP0043 NEW)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 
+find_package(OpenMesh REQUIRED)
+
 find_package(Doxygen)
 
 if (DOXYGEN_FOUND)
@@ -33,4 +35,6 @@ FILE(GLOB_RECURSE folder_header ${CMAKE_SOURCE_DIR}/src/*.hpp)
 
 add_executable(PointCloud ${folder_source} ${folder_header})
 
-target_link_libraries(PointCloud polyscope)
+target_link_libraries(PointCloud polyscope
+    OpenMeshCore
+    OpenMeshTools)
