@@ -39,77 +39,93 @@
  *                                                                           *
  * ========================================================================= */
 
-/*===========================================================================*\
- *                                                                           *             
- *   $Revision$                                                         *
- *   $Date$                   *
- *                                                                           *
-\*===========================================================================*/
+
+
 
 //=============================================================================
 //
-//  CLASS newClass
+//  Helper Functions for binary reading / writing
 //
 //=============================================================================
-#ifndef DOXY_IGNORE_THIS
-#ifndef OPENMESH_NEWCLASST_HH
-#define OPENMESH_NEWCLASST_HH
+
+#ifndef OPENMESH_SR_BINARY_HH
+#define OPENMESH_SR_BINARY_HH
 
 
 //== INCLUDES =================================================================
 
-
-//== FORWARDDECLARATIONS ======================================================
+#include <OpenMesh/Core/System/config.h>
+// -------------------- STL
+#include <typeinfo>
+#include <stdexcept>
+#include <sstream>
+#include <numeric>   // accumulate
+// -------------------- OpenMesh
 
 
 //== NAMESPACES ===============================================================
 
 namespace OpenMesh {
+namespace IO {
 
 
-//== CLASS DEFINITION =========================================================
+//=============================================================================
 
 
+//-----------------------------------------------------------------------------
 
-	      
-/** \class newClassT newClassT.hh <OpenMesh/.../newClassT.hh>
+  const static size_t UnknownSize(size_t(-1));
 
-    Brief Description.
-  
-    A more elaborate description follows.
-*/
 
-template <>
-class newClassT
+//-----------------------------------------------------------------------------
+// struct binary, helper for storing/restoring
+
+#define X \
+   std::ostringstream msg; \
+   msg << "Type not supported: " << typeid(value_type).name(); \
+   throw std::logic_error(msg.str())
+
+/// \struct binary SR_binary.hh <OpenMesh/Core/IO/SR_binary.hh>
+///
+/// The struct defines how to store and restore the type T.
+/// It's used by the OM reader/writer modules.
+///
+/// The following specialization are provided:
+/// - Fundamental types except \c long \c double
+/// - %OpenMesh vector types
+/// - %OpenMesh::StatusInfo
+/// - std::string (max. length 65535)
+///
+/// \todo Complete documentation of members
+template < typename T > struct binary
 {
-public:
-   
-  /// Default constructor
-  newClassT() {}
- 
-  /// Destructor
-  ~newClassT() {}
+  typedef T     value_type;
 
-  
-private:
+  static const bool is_streamable = false;
 
-  /// Copy constructor (not used)
-  newClassT(const newClassT& _rhs);
+  static size_t size_of(void) { return UnknownSize; }
+  static size_t size_of(const value_type&) { return UnknownSize; }
 
-  /// Assignment operator (not used)
-  newClassT& operator=(const newClassT& _rhs);
-  
+  static 
+  size_t store( std::ostream& /* _os */,
+		const value_type& /* _v */,
+		bool /* _swap=false */)
+  { X; return 0; }
+
+  static 
+  size_t restore( std::istream& /* _is */,
+		  value_type& /* _v */,
+		  bool /* _swap=false */)
+  { X; return 0; }
 };
 
+#undef X
+
 
 //=============================================================================
+} // namespace IO
 } // namespace OpenMesh
 //=============================================================================
-#if defined(OM_INCLUDE_TEMPLATES) && !defined(OPENMESH_NEWCLASS_C)
-#define OPENMESH_NEWCLASS_TEMPLATES
-#include "newClass.cc"
-#endif
+#endif // OPENMESH_SR_RBO_HH defined
 //=============================================================================
-#endif // OPENMESH_NEWCLASST_HH defined
-#endif // DOXY_IGNORE_THIS
-//=============================================================================
+

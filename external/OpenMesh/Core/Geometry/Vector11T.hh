@@ -169,6 +169,11 @@ class VectorT {
             std::copy_n(it, DIM, values_.begin());
         }
 
+        /// construct from an array
+        explicit VectorT(container&& _array) {
+            values_ = _array;
+        }
+
         /// copy & cast constructor (explicit)
         template<typename otherScalarType,
             typename = typename std::enable_if<
@@ -364,7 +369,7 @@ class VectorT {
         }
 
         /// cross product: only defined for Vec3* as specialization
-        /// \see OpenMesh::cross
+        /// \see OpenMesh::cross and .cross()
         template<typename OtherScalar>
         auto operator% (const VectorT<OtherScalar, DIM> &_rhs) const ->
             typename std::enable_if<DIM == 3,
@@ -377,14 +382,33 @@ class VectorT {
             };
         }
 
+        /// cross product: only defined for Vec3* as specialization
+        /// \see OpenMesh::cross and .operator%
+        template<typename OtherScalar>
+        auto cross (const VectorT<OtherScalar, DIM> &_rhs) const ->
+            decltype(*this % _rhs)
+        {
+            return *this % _rhs;
+        }
+
+
         /// compute scalar product
-        /// \see OpenMesh::dot
+        /// \see OpenMesh::dot and .dot()
         template<typename OtherScalar>
         auto operator|(const VectorT<OtherScalar, DIM>& _rhs) const ->
             decltype(*this->data() * *_rhs.data()) {
 
             return std::inner_product(begin() + 1, begin() + DIM, _rhs.begin() + 1,
                     *begin() * *_rhs.begin());
+        }
+
+        /// compute scalar product
+        /// \see OpenMesh::dot and .operator|
+        template<typename OtherScalar>
+        auto dot(const VectorT<OtherScalar, DIM>& _rhs) const ->
+            decltype(*this | _rhs)
+        {
+            return *this | _rhs;
         }
 
         //------------------------------------------------------------ euclidean norm
@@ -758,6 +782,21 @@ template<typename Scalar, int DIM>
 VectorT<Scalar, DIM>& minimize(VectorT<Scalar, DIM>& _v1, VectorT<Scalar, DIM>& _v2) {
     return _v1.minimize(_v2);
 }
+
+/// \relates OpenMesh::VectorT
+/// non-member max
+template<typename Scalar, int DIM>
+VectorT<Scalar, DIM> max(const VectorT<Scalar, DIM>& _v1, const VectorT<Scalar, DIM>& _v2) {
+    return _v1.max(_v2);
+}
+
+/// \relates OpenMesh::VectorT
+/// non-member min
+template<typename Scalar, int DIM>
+VectorT<Scalar, DIM> min(const VectorT<Scalar, DIM>& _v1, const VectorT<Scalar, DIM>& _v2) {
+  return _v1.min(_v2);
+}
+
 
 //== TYPEDEFS =================================================================
 

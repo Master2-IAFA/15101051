@@ -39,12 +39,7 @@
  *                                                                           *
  * ========================================================================= */
 
-/*===========================================================================*\
- *                                                                           *             
- *   $Revision$                                                         *
- *   $Date$                   *
- *                                                                           *
-\*===========================================================================*/
+
 
 
 //=============================================================================
@@ -140,7 +135,7 @@ namespace OMFormat {
       default:
 	std::clog << "as_string(Chunk::Entity): Invalid value!";
     }
-    return NULL;
+    return nullptr;
   }
 
 
@@ -158,7 +153,7 @@ namespace OMFormat {
       case Chunk::Type_Custom:   return "Custom";
       case Chunk::Type_Topology: return "Topology";
     }
-    return NULL;
+    return nullptr;
   }
 
 
@@ -177,7 +172,7 @@ namespace OMFormat {
       case Chunk::Dim_7D: return "7D";
       case Chunk::Dim_8D: return "8D";
     }
-    return NULL;
+    return nullptr;
   }
 
 
@@ -192,7 +187,7 @@ namespace OMFormat {
       case Chunk::Integer_32 : return "32";
       case Chunk::Integer_64 : return "64";
     }
-    return NULL;
+    return nullptr;
   }
 
   const char *as_string(Chunk::Float_Size d)
@@ -203,7 +198,7 @@ namespace OMFormat {
       case Chunk::Float_64 : return "64";
       case Chunk::Float_128: return "128";
     }
-    return NULL;
+    return nullptr;
   }
 
 
@@ -249,6 +244,9 @@ namespace OMFormat {
 	<< "#E      = " << _h.n_edges_;
     return _os;
   }
+
+
+ //-----------------------------------------------------------------------------
 
 
 } // namespace OMFormat

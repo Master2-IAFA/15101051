@@ -39,12 +39,7 @@
  *                                                                           *
  * ========================================================================= */
 
-/*===========================================================================*\
- *                                                                           *
- *   $Revision$                                                         *
- *   $Date$                   *
- *                                                                           *
-\*===========================================================================*/
+
 
 
 //== INCLUDES =================================================================
@@ -105,24 +100,24 @@ write(const std::string& _filename, BaseExporter& _be, Options _opt, std::stream
 
   {
 #if defined(WIN32)
-    std::string::size_type dot = _filename.find_last_of("\\/");
+    std::string::size_type dotposition = _filename.find_last_of("\\/");
 #else
-    std::string::size_type dot = _filename.rfind("/");
+    std::string::size_type dotposition = _filename.rfind("/");
 #endif
 
-    if (dot == std::string::npos){
+    if (dotposition == std::string::npos){
       path_ = "./";
       objName_ = _filename;
     }else{
-      path_ = _filename.substr(0,dot+1);
-      objName_ = _filename.substr(dot+1);
+      path_ = _filename.substr(0,dotposition+1);
+      objName_ = _filename.substr(dotposition+1);
     }
 
     //remove the file extension
-    dot = objName_.find_last_of(".");
+    dotposition = objName_.find_last_of(".");
 
-    if(dot != std::string::npos)
-      objName_ = objName_.substr(0,dot);
+    if(dotposition != std::string::npos)
+      objName_ = objName_.substr(0,dotposition);
   }
 
   bool result = write(out, _be, _opt, _precision);
@@ -211,7 +206,6 @@ _OBJWriter_::
 write(std::ostream& _out, BaseExporter& _be, Options _opt, std::streamsize _precision) const
 {
   unsigned int idx;
-  size_t i, j,nV, nF;
   Vec3f v, n;
   Vec2f t;
   VertexHandle vh;
@@ -278,7 +272,7 @@ write(std::ostream& _out, BaseExporter& _be, Options _opt, std::streamsize _prec
     std::vector<Vec2f> texCoords;
     //add all texCoords to map
     unsigned int num = _be.get_face_texcoords(texCoords);
-    for(unsigned int i = 0; i < num ; ++i)
+    for(size_t i = 0; i < num ; ++i)
     {
       texMap[texCoords[i]] = i;
     }
@@ -308,7 +302,7 @@ write(std::ostream& _out, BaseExporter& _be, Options _opt, std::streamsize _prec
   }
 
   // vertex data (point, normals, texcoords)
-  for (i=0, nV=_be.n_vertices(); i<nV; ++i)
+  for (size_t i=0, nV=_be.n_vertices(); i<nV; ++i)
   {
     vh = VertexHandle(int(i));
     v  = _be.point(vh);
@@ -329,7 +323,7 @@ write(std::ostream& _out, BaseExporter& _be, Options _opt, std::streamsize _prec
                       && !_opt.check(Options::FaceTexCoord);
 
   // faces (indices starting at 1 not 0)
-  for (i=0, nF=_be.n_faces(); i<nF; ++i)
+  for (size_t i=0, nF=_be.n_faces(); i<nF; ++i)
   {
 
     if (useMatrial &&  _opt.check(Options::FaceColor) ){
@@ -356,7 +350,7 @@ write(std::ostream& _out, BaseExporter& _be, Options _opt, std::streamsize _prec
 
     _be.get_vhandles(FaceHandle(int(i)), vhandles);
 
-    for (j=0; j< vhandles.size(); ++j)
+    for (size_t j=0; j< vhandles.size(); ++j)
     {
 
       // Write vertex index
