@@ -1,5 +1,4 @@
 #include "debug.hpp"
-#include "Octree.t.hpp"
 
 void pointSetToPolyscope( std::string name, PointSet *ps ){
 
@@ -181,3 +180,35 @@ void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max)
 
   polyscope::registerCurveNetwork(name, nodes, edges);
 }
+
+polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *> octree){
+
+  std::vector<std::array<int, 2>> edges ;
+  std::vector<glm::vec3> nodes;
+
+  for(int i = 0; i < octree.size(); i++){
+
+    auto cube = build_cube_from_minmax( octree[i]->getMin(), octree[i]->getMax());
+    for(int j = 0; j < 8; j++)
+      nodes.push_back( cube[j] );
+
+    edges.push_back({0 + 8 * i, 1 + 8 * i});
+    edges.push_back({2 + 8 * i, 3 + 8 * i});
+    edges.push_back({4 + 8 * i, 5 + 8 * i});
+    edges.push_back({6 + 8 * i, 7 + 8 * i});
+
+    edges.push_back({0 + 8 * i, 2 + 8 * i});
+    edges.push_back({1 + 8 * i, 3 + 8 * i});
+    edges.push_back({4 + 8 * i, 6 + 8 * i});
+    edges.push_back({5 + 8 * i, 7 + 8 * i});
+
+    edges.push_back({0 + 8 * i, 4 + 8 * i});
+    edges.push_back({1 + 8 * i, 5 + 8 * i});
+    edges.push_back({2 + 8 * i, 6 + 8 * i});
+    edges.push_back({3 + 8 * i, 7 + 8 * i});
+  }
+  return polyscope::registerCurveNetwork(name, nodes, edges);
+
+}
+
+
