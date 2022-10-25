@@ -9,9 +9,9 @@ Moving level-of-detail surfaces
 
 ## Installation
 ```bash
-$ git clone --recursive 
+$ git clone --recurse-submodules git@github.com:Master2-IAFA/15101051.git
 $ cd 150101051
 $ mkdir build && cd build
 $ cmake .. 
-$ make install
+$ make -j 8
 ```
