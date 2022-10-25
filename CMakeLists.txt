@@ -5,7 +5,29 @@ cmake_policy(SET CMP0043 NEW)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 
-find_package(OpenMesh REQUIRED)
+include_directories(external)
+set(open_mesh_sources
+        external/OpenMesh
+        external/OpenMesh/Core
+        external/OpenMesh/Core/Geometry
+        external/OpenMesh/Core/IO
+        external/OpenMesh/Core/IO/exporter
+        external/OpenMesh/Core/IO/importer
+        external/OpenMesh/Core/IO/reader
+        external/OpenMesh/Core/IO/writer
+        external/OpenMesh/Core/Mesh
+        external/OpenMesh/Core/Mesh/gen
+        external/OpenMesh/Core/System
+        external/OpenMesh/Core/Templates
+        external/OpenMesh/Core/Utils
+        )
+
+# Add headers recursively to headers
+file(GLOB_RECURSE om_headers "*.h*" ${open_mesh_sources})
+# Add sources recursively to sources
+file(GLOB_RECURSE om_sources "*.cc" ${open_mesh_sources})
+# We need a static build of Open mesh
+add_definitions(-DOM_STATIC_BUILD)
 
 find_package(Doxygen)
 
@@ -30,11 +52,10 @@ endif (DOXYGEN_FOUND)
 
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/external/polyscope")
 
+
 FILE(GLOB_RECURSE folder_source ${CMAKE_SOURCE_DIR}/src/*.cpp)
 FILE(GLOB_RECURSE folder_header ${CMAKE_SOURCE_DIR}/src/*.hpp)
 
-add_executable(PointCloud ${folder_source} ${folder_header})
+add_executable(PointCloud ${folder_source} ${om_sources} ${folder_header} ${om_headers})
 
-target_link_libraries(PointCloud polyscope
-    OpenMeshCore
-    OpenMeshTools)
+target_link_libraries(PointCloud polyscope)
