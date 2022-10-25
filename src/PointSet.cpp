@@ -77,6 +77,8 @@ std::vector<point> PointSet::getBoundingBox() {
 }
 
 void PointSet::readOpenMesh (string filename) {
+    m_points.clear();
+
     OpenMesh::PolyMesh_ArrayKernelT<> mesh;
 
     if (!OpenMesh::IO::read_mesh(mesh, filename)) {

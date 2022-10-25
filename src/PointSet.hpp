@@ -36,7 +36,7 @@ public:
      *
      * all files, no matter the format, are considered as point cloud. If file contains mesh, only vertices are loaded.
      * supports .ply .obj formats
-     * @note if no normals are found, all normals are set to (1, 0, 0)
+     * @note if no normals are found, all normals are set to (1, 0, 0). erases former data and replaces with new read one
      * @warning dependency to OpenMesh library
      * @param filename file path (absolute or relative from src folder)
      */
