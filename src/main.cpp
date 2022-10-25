@@ -21,11 +21,11 @@ int main(int argc, char **argv){
     PointSet *ps = new PointSet();
     ps->readPly("../assets/gaussian_spike_norm.ply");
 
-    InputOctree *octree = generateInputOctree(8, ps);
+    InputOctree *octree = generateInputOctree(4, ps);
 
     drawCube("racine", octree->getMin(), octree->getMax());
 
-    auto o = octree->getAtDepth(8);
+    auto o = octree->getAtDepth(4);
     for(int i = 0; i < o.size(); i++){
       drawCube(std::to_string(i), o[i]->getMin(), o[i]->getMax());
     }
