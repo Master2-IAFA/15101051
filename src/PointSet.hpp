@@ -9,11 +9,15 @@
 using std::vector;
 using std::string;
 
+/** one point with positions and normals features
+ */
 typedef struct  {
   glm::vec3 pos;
   glm::vec3 norm;
 } point;
 
+/** represents a point cloud
+ */
 class PointSet {
 public:
     PointSet () {}

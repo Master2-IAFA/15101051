@@ -2,7 +2,8 @@
 
 ## Dependencies
 
-- The only dependency in Polyscope, who's included in the repository as submodule.
+- Polyscope, who's included in the repository as submodule.
+- OpenMesh
 
 
 ## Installation
