@@ -39,7 +39,12 @@
  *                                                                           *
  * ========================================================================= */
 
-
+/*===========================================================================*\
+ *                                                                           *
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 
 //=============================================================================
@@ -92,17 +97,17 @@ public:
   virtual ~_STLReader_() {};
 
 
-  std::string get_description() const override
+  std::string get_description() const
   { return "Stereolithography Interface Format"; }
-  std::string get_extensions() const override { return "stl stla stlb"; }
+  std::string get_extensions() const { return "stl stla stlb"; }
 
   bool read(const std::string& _filename,
 	    BaseImporter& _bi,
-            Options& _opt) override;
+            Options& _opt);
 
   bool read(std::istream& _in,
 		    BaseImporter& _bi,
-            Options& _opt) override;
+            Options& _opt);
 
   /** Set the threshold to be used for considering two point to be equal.
       Can be used to merge small gaps */

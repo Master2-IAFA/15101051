@@ -39,7 +39,12 @@
  *                                                                           *
  * ========================================================================= */
 
-
+/*===========================================================================*\
+ *                                                                           *             
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 
 //=============================================================================
@@ -97,7 +102,7 @@ class TriMesh_ArrayKernelT
 public:
   TriMesh_ArrayKernelT() {}
   template<class OtherTraits>
-  explicit TriMesh_ArrayKernelT( const PolyMesh_ArrayKernelT<OtherTraits> & t)
+   TriMesh_ArrayKernelT( const PolyMesh_ArrayKernelT<OtherTraits> & t)
   {
      //assign the connectivity and standard properties
      this->assign(t,true);

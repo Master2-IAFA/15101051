@@ -39,7 +39,12 @@
  *                                                                           *
  * ========================================================================= */
 
-
+/*===========================================================================*\
+ *                                                                           *             
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 #ifndef OPENMESH_ATTRIBKERNEL_HH
 #define OPENMESH_ATTRIBKERNEL_HH
@@ -105,26 +110,10 @@ public:
     FAttribs = MeshItems::FAttribs
   };
 
-  typedef VPropHandleT<VertexData>          DataVPropHandle;
-  typedef HPropHandleT<HalfedgeData>        DataHPropHandle;
-  typedef EPropHandleT<EdgeData>            DataEPropHandle;
-  typedef FPropHandleT<FaceData>            DataFPropHandle;
-
-  typedef VPropHandleT<Point>               PointsPropertyHandle;
-  typedef VPropHandleT<Normal>              VertexNormalsPropertyHandle;
-  typedef VPropHandleT<Color>               VertexColorsPropertyHandle;
-  typedef VPropHandleT<TexCoord1D>          VertexTexCoords1DPropertyHandle;
-  typedef VPropHandleT<TexCoord2D>          VertexTexCoords2DPropertyHandle;
-  typedef VPropHandleT<TexCoord3D>          VertexTexCoords3DPropertyHandle;
-  typedef HPropHandleT<TexCoord1D>          HalfedgeTexCoords1DPropertyHandle;
-  typedef HPropHandleT<TexCoord2D>          HalfedgeTexCoords2DPropertyHandle;
-  typedef HPropHandleT<TexCoord3D>          HalfedgeTexCoords3DPropertyHandle;
-  typedef EPropHandleT<Color>               EdgeColorsPropertyHandle;
-  typedef HPropHandleT<Normal>              HalfedgeNormalsPropertyHandle;
-  typedef HPropHandleT<Color>               HalfedgeColorsPropertyHandle;
-  typedef FPropHandleT<Normal>              FaceNormalsPropertyHandle;
-  typedef FPropHandleT<Color>               FaceColorsPropertyHandle;
-  typedef FPropHandleT<TextureIndex>        FaceTextureIndexPropertyHandle;
+  typedef VPropHandleT<VertexData>              DataVPropHandle;
+  typedef HPropHandleT<HalfedgeData>            DataHPropHandle;
+  typedef EPropHandleT<EdgeData>                DataEPropHandle;
+  typedef FPropHandleT<FaceData>                DataFPropHandle;
 
 public:
 
@@ -255,9 +244,6 @@ public:
 
   void set_point(VertexHandle _vh, const Point& _p)
   { this->property(points_, _vh) = _p; }
-
-  const PointsPropertyHandle& points_property_handle() const
-  { return points_; }
 
 
   //------------------------------------------------------------ vertex normals
@@ -610,6 +596,24 @@ public:
   bool has_face_normals()         const { return face_normals_.is_valid();        }
   bool has_face_colors()          const { return face_colors_.is_valid();         }
   bool has_face_texture_index()   const { return face_texture_index_.is_valid();  }
+
+public:
+
+  typedef VPropHandleT<Point>               PointsPropertyHandle;
+  typedef VPropHandleT<Normal>              VertexNormalsPropertyHandle;
+  typedef VPropHandleT<Color>               VertexColorsPropertyHandle;
+  typedef VPropHandleT<TexCoord1D>          VertexTexCoords1DPropertyHandle;
+  typedef VPropHandleT<TexCoord2D>          VertexTexCoords2DPropertyHandle;
+  typedef VPropHandleT<TexCoord3D>          VertexTexCoords3DPropertyHandle;
+  typedef HPropHandleT<TexCoord1D>          HalfedgeTexCoords1DPropertyHandle;
+  typedef HPropHandleT<TexCoord2D>          HalfedgeTexCoords2DPropertyHandle;
+  typedef HPropHandleT<TexCoord3D>          HalfedgeTexCoords3DPropertyHandle;
+  typedef EPropHandleT<Color>               EdgeColorsPropertyHandle;
+  typedef HPropHandleT<Normal>              HalfedgeNormalsPropertyHandle;
+  typedef HPropHandleT<Color>               HalfedgeColorsPropertyHandle;
+  typedef FPropHandleT<Normal>              FaceNormalsPropertyHandle;
+  typedef FPropHandleT<Color>               FaceColorsPropertyHandle;
+  typedef FPropHandleT<TextureIndex>        FaceTextureIndexPropertyHandle;
 
 public:
   //standard vertex properties

@@ -39,7 +39,12 @@
  *                                                                           *
  * ========================================================================= */
 
-
+/*===========================================================================*\
+ *                                                                           *
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 
 //=============================================================================
@@ -87,16 +92,16 @@ public:
 
   virtual ~_OBJReader_() { }
 
-  std::string get_description() const override { return "Alias/Wavefront"; }
-  std::string get_extensions()  const override { return "obj"; }
+  std::string get_description() const { return "Alias/Wavefront"; }
+  std::string get_extensions()  const { return "obj"; }
 
   bool read(const std::string& _filename,
 	    BaseImporter& _bi,
-	    Options& _opt) override;
+	    Options& _opt);
 
   bool read(std::istream& _in,
           BaseImporter& _bi,
-          Options& _opt) override;
+          Options& _opt);
 
 private:
 
@@ -105,7 +110,7 @@ private:
   {
   public:
 
-    Material():Tr_(0),index_Kd_(0) { cleanup(); }
+    Material() { cleanup(); }
 
     void cleanup()
     {
@@ -137,7 +142,7 @@ private:
     void set_Tr( float t )
     { Tr_=t;            Tr_is_set_=true; }
 
-    void set_map_Kd( const std::string& _name, int _index_Kd )
+    void set_map_Kd( std::string _name, int _index_Kd )
     { map_Kd_ = _name, index_Kd_ = _index_Kd; map_Kd_is_set_ = true; };
 
     const Vec3f& Kd( void ) const { return Kd_; }

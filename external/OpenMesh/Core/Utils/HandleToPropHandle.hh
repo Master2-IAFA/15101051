@@ -35,11 +35,6 @@ namespace OpenMesh {
         using type = OpenMesh::MPropHandleT<T>;
     };
 
-    template<typename T>
-    struct HandleToPropHandle<OpenMesh::MeshHandle, T> {
-        using type = OpenMesh::MPropHandleT<T>;
-    };
-
 } // namespace OpenMesh
 
 #endif // HANDLETOPROPHANDLE_HH_

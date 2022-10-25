@@ -39,7 +39,12 @@
  *                                                                           *
  * ========================================================================= */
 
-
+/*===========================================================================*\
+ *                                                                           *
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 
 #ifndef OPENMESH_IO_OMFORMAT_HH
@@ -252,7 +257,7 @@ namespace OMFormat {
 
       PropertyName( ) { }
 
-      explicit PropertyName( const std::string& _name ) { *this = _name; }
+      PropertyName( const std::string& _name ) { *this = _name; }
 
       bool is_valid() const { return is_valid( size() ); }
 
@@ -289,7 +294,7 @@ namespace OMFormat {
   inline size_t chunk_header_size( void ) { return sizeof(uint16); }
 
 
-  /// Return the size of a scaler in bytes.
+  /// Return the size of a scale in bytes.
   inline size_t scalar_size( const Chunk::Header& _hdr )
   {
     return _hdr.float_ ? (0x01 << _hdr.bits_) : (0x04 << _hdr.bits_);
@@ -348,16 +353,6 @@ namespace OMFormat {
 #else
     return !std::numeric_limits<T>::is_integer;
 #endif
-  }
-
-  template <typename T> bool is_double(const T&)
-  {
-    return false;
-  }
-
-  template <> inline bool is_double(const double&)
-  {
-    return true;
   }
 
   template <typename T> bool is_integer(const T)
@@ -751,7 +746,7 @@ namespace OMFormat {
 //=============================================================================
 #if defined(OM_INCLUDE_TEMPLATES) && !defined(OPENMESH_IO_OMFORMAT_CC)
 #  define OPENMESH_IO_OMFORMAT_TEMPLATES
-#  include "OMFormatT_impl.hh"
+#  include "OMFormatT.cc"
 #endif
 //=============================================================================
 #endif

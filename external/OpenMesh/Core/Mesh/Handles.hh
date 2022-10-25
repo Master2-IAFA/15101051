@@ -39,7 +39,12 @@
  *                                                                           *
  * ========================================================================= */
 
-
+/*===========================================================================*\
+ *                                                                           *             
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 #ifndef OPENMESH_HANDLES_HH
 #define OPENMESH_HANDLES_HH
@@ -59,7 +64,7 @@ namespace OpenMesh {
 
 
 /// Base class for all handle types
-class OPENMESHDLLEXPORT BaseHandle
+class BaseHandle
 { 
 public:
   
@@ -117,40 +122,31 @@ inline std::ostream& operator<<(std::ostream& _os, const BaseHandle& _hnd)
 
 
 /// Handle for a vertex entity
-struct OPENMESHDLLEXPORT VertexHandle : public BaseHandle
+struct VertexHandle : public BaseHandle
 {
   explicit VertexHandle(int _idx=-1) : BaseHandle(_idx) {}
 };
 
 
 /// Handle for a halfedge entity
-struct OPENMESHDLLEXPORT HalfedgeHandle : public BaseHandle
+struct HalfedgeHandle : public BaseHandle
 {
   explicit HalfedgeHandle(int _idx=-1) : BaseHandle(_idx) {}
 };
 
 
 /// Handle for a edge entity
-struct OPENMESHDLLEXPORT EdgeHandle : public BaseHandle
+struct EdgeHandle : public BaseHandle
 {
   explicit EdgeHandle(int _idx=-1) : BaseHandle(_idx) {}
 };
 
 
 /// Handle for a face entity
-struct OPENMESHDLLEXPORT FaceHandle : public BaseHandle
+struct FaceHandle : public BaseHandle
 {
   explicit FaceHandle(int _idx=-1) : BaseHandle(_idx) {}
 };
-
-
-/// Handle type for meshes to simplify some template programming
-struct OPENMESHDLLEXPORT MeshHandle : public BaseHandle
-{
-  explicit MeshHandle(int _idx=-1) : BaseHandle(_idx) {}
-};
-
-
 
 
 //=============================================================================

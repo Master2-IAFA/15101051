@@ -39,7 +39,12 @@
  *                                                                           *
  * ========================================================================= */
 
-
+/*===========================================================================*\
+ *                                                                           *
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 
 //=============================================================================
@@ -89,20 +94,20 @@ public:
   _OMReader_();
   virtual ~_OMReader_() { }
 
-  std::string get_description() const override { return "OpenMesh File Format"; }
-  std::string get_extensions()  const override { return "om"; }
-  std::string get_magic()       const override { return "OM"; }
+  std::string get_description() const { return "OpenMesh File Format"; }
+  std::string get_extensions()  const { return "om"; }
+  std::string get_magic()       const { return "OM"; }
 
   bool read(const std::string& _filename,
 	    BaseImporter& _bi,
-	    Options& _opt ) override;
+	    Options& _opt );
 
 //!  Stream Reader for std::istream input in binary format
   bool read(std::istream& _is,
 	    BaseImporter& _bi,
-	    Options& _opt ) override;
+	    Options& _opt );
 
-  virtual bool can_u_read(const std::string& _filename) const override;
+  virtual bool can_u_read(const std::string& _filename) const;
   virtual bool can_u_read(std::istream& _is) const;
 
 

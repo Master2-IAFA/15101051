@@ -39,7 +39,12 @@
  *                                                                           *
  * ========================================================================= */
 
-
+/*===========================================================================*\
+ *                                                                           *
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 
 //=============================================================================
@@ -88,14 +93,14 @@ public:
   /// Destructor
   virtual ~_STLWriter_() {};
 
-  std::string get_description() const override { return "Stereolithography Format"; }
-  std::string get_extensions()  const override { return "stl stla stlb"; }
+  std::string get_description() const { return "Stereolithography Format"; }
+  std::string get_extensions()  const { return "stl stla stlb"; }
 
-  bool write(const std::string&, BaseExporter&, Options, std::streamsize _precision = 6) const override;
+  bool write(const std::string&, BaseExporter&, Options, std::streamsize _precision = 6) const;
 
-  bool write(std::ostream&, BaseExporter&, Options, std::streamsize _precision = 6) const override;
+  bool write(std::ostream&, BaseExporter&, Options, std::streamsize _precision = 6) const;
 
-  size_t binary_size(BaseExporter&, Options) const override;
+  size_t binary_size(BaseExporter&, Options) const;
 
 private:
   bool write_stla(const std::string&, BaseExporter&, Options) const;

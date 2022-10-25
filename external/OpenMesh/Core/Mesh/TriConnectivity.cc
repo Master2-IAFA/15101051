@@ -39,7 +39,12 @@
  *                                                                           *
  * ========================================================================= */
 
-
+/*===========================================================================*\
+ *                                                                           *             
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 
 //  CLASS TriMeshT - IMPLEMENTATION
@@ -49,11 +54,11 @@
 namespace OpenMesh
 {
 
-SmartFaceHandle
+TriConnectivity::FaceHandle
 TriConnectivity::add_face(const VertexHandle* _vertex_handles, size_t _vhs_size)
 {
   // need at least 3 vertices
-  if (_vhs_size < 3) return make_smart(InvalidFaceHandle, this);
+  if (_vhs_size < 3) return InvalidFaceHandle;
 
   /// face is triangle -> ok
   if (_vhs_size == 3)
@@ -78,29 +83,21 @@ TriConnectivity::add_face(const VertexHandle* _vertex_handles, size_t _vhs_size)
       fh = PolyConnectivity::add_face(vhandles, 3);
     }
 
-    return make_smart(fh, this);
+    return fh;
   }
 }
 
 //-----------------------------------------------------------------------------
 
-SmartFaceHandle TriConnectivity::add_face(const std::vector<VertexHandle>& _vhandles)
+FaceHandle TriConnectivity::add_face(const std::vector<VertexHandle>& _vhandles)
 {
   return add_face(&_vhandles.front(), _vhandles.size());
 }
 
 //-----------------------------------------------------------------------------
 
-SmartFaceHandle TriConnectivity::add_face(const std::vector<SmartVertexHandle>& _vhandles)
-{
-  std::vector<VertexHandle> vhandles(_vhandles.begin(), _vhandles.end());
-  return add_face(&vhandles.front(), vhandles.size());
-}
 
-//-----------------------------------------------------------------------------
-
-
-SmartFaceHandle TriConnectivity::add_face(VertexHandle _vh0, VertexHandle _vh1, VertexHandle _vh2)
+FaceHandle TriConnectivity::add_face(VertexHandle _vh0, VertexHandle _vh1, VertexHandle _vh2)
 {
   VertexHandle vhs[3] = { _vh0, _vh1, _vh2 };
   return PolyConnectivity::add_face(vhs, 3);
