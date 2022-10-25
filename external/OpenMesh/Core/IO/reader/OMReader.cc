@@ -39,7 +39,12 @@
  *                                                                           *
  * ========================================================================= */
 
-
+/*===========================================================================*\
+ *                                                                           *
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 
 //== INCLUDES =================================================================
@@ -297,7 +302,6 @@ bool _OMReader_::read_binary_vertex_chunk(std::istream &_is, BaseImporter &_bi, 
   assert( chunk_header_.entity_ == Chunk::Entity_Vertex);
 
   OpenMesh::Vec3f v3f;
-  OpenMesh::Vec3d v3d;
   OpenMesh::Vec2f v2f;
   OpenMesh::Vec3uc v3uc; // rgb
   OpenMesh::Attributes::StatusInfo status;
@@ -307,57 +311,22 @@ bool _OMReader_::read_binary_vertex_chunk(std::istream &_is, BaseImporter &_bi, 
   size_t vidx = 0;
   switch (chunk_header_.type_) {
     case Chunk::Type_Pos:
-      if (chunk_header_.bits_ == OMFormat::bits(0.0f)) // read floats
-      {
-        assert( OMFormat::dimensions(chunk_header_) == size_t(OpenMesh::Vec3f::dim()));
+      assert( OMFormat::dimensions(chunk_header_) == size_t(OpenMesh::Vec3f::dim()));
 
-        for (; vidx < header_.n_vertices_ && !_is.eof(); ++vidx) {
-          bytes_ += vector_restore(_is, v3f, _swap);
-          _bi.add_vertex(v3f);
-        }
-      }
-      else if (chunk_header_.bits_ == OMFormat::bits(0.0)) // read doubles
-      {
-        assert( OMFormat::dimensions(chunk_header_) == size_t(OpenMesh::Vec3d::dim()));
-
-        for (; vidx < header_.n_vertices_ && !_is.eof(); ++vidx) {
-          bytes_ += vector_restore(_is, v3d, _swap);
-          _bi.add_vertex(v3d);
-        }
-      }
-      else
-      {
-        omerr() << "unknown Vector size" << std::endl;
+      for (; vidx < header_.n_vertices_ && !_is.eof(); ++vidx) {
+        bytes_ += vector_restore(_is, v3f, _swap);
+        _bi.add_vertex(v3f);
       }
       break;
 
     case Chunk::Type_Normal:
+      assert( OMFormat::dimensions(chunk_header_) == size_t(OpenMesh::Vec3f::dim()));
 
-      if (chunk_header_.bits_ == OMFormat::bits(0.0f)) // read floats
-      {
-        assert( OMFormat::dimensions(chunk_header_) == size_t(OpenMesh::Vec3f::dim()));
-
-        fileOptions_ += Options::VertexNormal;
-        for (; vidx < header_.n_vertices_ && !_is.eof(); ++vidx) {
-          bytes_ += vector_restore(_is, v3f, _swap);
-          if (fileOptions_.vertex_has_normal() && _opt.vertex_has_normal())
-            _bi.set_normal(VertexHandle(int(vidx)), v3f);
-        }
-      }
-      else if (chunk_header_.bits_ == OMFormat::bits(0.0)) // read doubles
-      {
-        assert( OMFormat::dimensions(chunk_header_) == size_t(OpenMesh::Vec3d::dim()));
-
-        fileOptions_ += Options::VertexNormal;
-        for (; vidx < header_.n_vertices_ && !_is.eof(); ++vidx) {
-          bytes_ += vector_restore(_is, v3d, _swap);
-          if (fileOptions_.vertex_has_normal() && _opt.vertex_has_normal())
-            _bi.set_normal(VertexHandle(int(vidx)), v3d);
-        }
-      }
-      else
-      {
-        omerr() << "Unknown vertex normal format" << std::endl;
+      fileOptions_ += Options::VertexNormal;
+      for (; vidx < header_.n_vertices_ && !_is.eof(); ++vidx) {
+        bytes_ += vector_restore(_is, v3f, _swap);
+        if (fileOptions_.vertex_has_normal() && _opt.vertex_has_normal())
+          _bi.set_normal(VertexHandle(int(vidx)), v3f);
       }
       break;
 
@@ -423,12 +392,10 @@ bool _OMReader_::read_binary_vertex_chunk(std::istream &_is, BaseImporter &_bi, 
     default: // skip unknown chunks
     {
       omerr() << "Unknown chunk type ignored!\n";
-      size_t chunk_size = header_.n_vertices_ * OMFormat::vector_size(chunk_header_);
-      _is.ignore(chunk_size);
-      bytes_ += chunk_size;
-      break;
+      size_t size_of = header_.n_vertices_ * OMFormat::vector_size(chunk_header_);
+      _is.ignore(size_of);
+      bytes_ += size_of;
     }
-
   }
 
   // all chunk data has been read..?!
@@ -446,7 +413,6 @@ bool _OMReader_::read_binary_face_chunk(std::istream &_is, BaseImporter &_bi, Op
 
   size_t fidx = 0;
   OpenMesh::Vec3f v3f;  // normal
-  OpenMesh::Vec3d v3d;  // normal as double
   OpenMesh::Vec3uc v3uc; // rgb
   OpenMesh::Attributes::StatusInfo status;
 
@@ -501,26 +467,10 @@ bool _OMReader_::read_binary_face_chunk(std::istream &_is, BaseImporter &_bi, Op
       assert( OMFormat::dimensions(chunk_header_) == size_t(OpenMesh::Vec3f::dim()));
 
       fileOptions_ += Options::FaceNormal;
-
-      if (chunk_header_.bits_ == OMFormat::bits(0.0f)) // read floats
-      {
-        for (; fidx < header_.n_faces_ && !_is.eof(); ++fidx) {
-          bytes_ += vector_restore(_is, v3f, _swap);
-          if( fileOptions_.face_has_normal() && _opt.face_has_normal())
-            _bi.set_normal(FaceHandle(int(fidx)), v3f);
-        }
-      }
-      else if (chunk_header_.bits_ == OMFormat::bits(0.0)) // read doubles
-      {
-        for (; fidx < header_.n_faces_ && !_is.eof(); ++fidx) {
-          bytes_ += vector_restore(_is, v3d, _swap);
-          if( fileOptions_.face_has_normal() && _opt.face_has_normal())
-            _bi.set_normal(FaceHandle(int(fidx)), v3d);
-        }
-      }
-      else
-      {
-        omerr() << "Unknown face normal format" << std::endl;
+      for (; fidx < header_.n_faces_ && !_is.eof(); ++fidx) {
+        bytes_ += vector_restore(_is, v3f, _swap);
+        if( fileOptions_.face_has_normal() && _opt.face_has_normal())
+          _bi.set_normal(FaceHandle(int(fidx)), v3f);
       }
       break;
 
@@ -560,9 +510,9 @@ bool _OMReader_::read_binary_face_chunk(std::istream &_is, BaseImporter &_bi, Op
     default: // skip unknown chunks
     {
       omerr() << "Unknown chunk type ignore!\n";
-      size_t chunk_size = OMFormat::chunk_data_size(header_, chunk_header_);
-      _is.ignore(chunk_size);
-      bytes_ += chunk_size;
+      size_t size_of = OMFormat::chunk_data_size(header_, chunk_header_);
+      _is.ignore(size_of);
+      bytes_ += size_of;
     }
   }
   return fidx == header_.n_faces_;
@@ -604,9 +554,9 @@ bool _OMReader_::read_binary_edge_chunk(std::istream &_is, BaseImporter &_bi, Op
 
     default:
       // skip unknown type
-      size_t chunk_size = OMFormat::chunk_data_size(header_, chunk_header_);
-      _is.ignore(chunk_size);
-      bytes_ += chunk_size;
+      size_t size_of = OMFormat::chunk_data_size(header_, chunk_header_);
+      _is.ignore(size_of);
+      bytes_ += size_of;
   }
 
   return b < bytes_;
@@ -682,9 +632,9 @@ bool _OMReader_::read_binary_halfedge_chunk(std::istream &_is, BaseImporter &_bi
     default:
       // skip unknown chunk
       omerr() << "Unknown chunk type ignored!\n";
-      size_t chunk_size = OMFormat::chunk_data_size(header_, chunk_header_);
-      _is.ignore(chunk_size);
-      bytes_ += chunk_size;
+      size_t size_of = OMFormat::chunk_data_size(header_, chunk_header_);
+      _is.ignore(size_of);
+      bytes_ += size_of;
   }
 
   return b < bytes_;
@@ -710,9 +660,9 @@ bool _OMReader_::read_binary_mesh_chunk(std::istream &_is, BaseImporter &_bi, Op
 
     default:
       // skip unknown chunk
-      size_t chunk_size = OMFormat::chunk_data_size(header_, chunk_header_);
-      _is.ignore(chunk_size);
-      bytes_ += chunk_size;
+      size_t size_of = OMFormat::chunk_data_size(header_, chunk_header_);
+      _is.ignore(size_of);
+      bytes_ += size_of;
   }
 
   return b < bytes_;

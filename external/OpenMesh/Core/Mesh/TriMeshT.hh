@@ -39,7 +39,12 @@
  *                                                                           *
  * ========================================================================= */
 
-
+/*===========================================================================*\
+ *                                                                           *             
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 
 //=============================================================================
@@ -58,7 +63,6 @@
 
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/Mesh/PolyMeshT.hh>
-#include <OpenMesh/Core/Mesh/Tags.hh>
 #include <vector>
 
 
@@ -99,12 +103,11 @@ public:
   typedef PolyMeshT<Kernel>                     PolyMesh;
 
   //@{
-  /// Determine whether this is a PolyMeshT or TriMeshT (This function does not check the per face vertex count! It only checks if the datatype is PolyMeshT or TriMeshT)
-  static constexpr bool is_polymesh() { return false; }
-  static constexpr bool is_trimesh()  { return true;  }
-  using ConnectivityTag = TriConnectivityTag;
+  /// Determine whether this is a PolyMeshT or TriMeshT ( This function does not check the per face vertex count! It only checks if the datatype is PolyMeshT or TriMeshT )
   enum { IsPolyMesh = 0 };
   enum { IsTriMesh  = 1 };
+  static bool is_polymesh() { return false; }
+  static bool is_trimesh()  { return  true; }
   //@}
 
   //--- items ---
@@ -178,10 +181,8 @@ public:
   /** \brief Vertex Split: inverse operation to collapse().
    *
    * Insert the new vertex at position v0. The vertex will be added
-   * as the inverse of the edge collapse. The faces above the split
+   * as the inverse of the vertex split. The faces above the split
    * will be correctly attached to the two new edges
-   *
-   * <pre>
    *
    * Before:
    * v_l     v0     v_r
@@ -206,8 +207,6 @@ public:
    *        \|/
    *         x
    *         v1
-   *
-   * </pre>
    *
    * @param _v0_point Point position for the new point
    * @param _v1       Vertex that will be split
@@ -222,10 +221,8 @@ public:
   /** \brief Vertex Split: inverse operation to collapse().
    *
    * Insert the new vertex at position v0. The vertex will be added
-   * as the inverse of the edge collapse. The faces above the split
+   * as the inverse of the vertex split. The faces above the split
    * will be correctly attached to the two new edges
-   *
-   * <pre>
    *
    * Before:
    * v_l     v0     v_r
@@ -250,8 +247,6 @@ public:
    *        \|/
    *         x
    *         v1
-   *
-   * </pre>
    *
    * @param _v0 Vertex handle for the newly inserted point (Input has to be unconnected!)
    * @param _v1 Vertex that will be split
@@ -272,10 +267,10 @@ public:
    * @param _p  New point position that will be inserted at the edge
    * @return    Vertex handle of the newly added vertex
    */
-  inline SmartVertexHandle split(EdgeHandle _eh, const Point& _p)
+  inline VertexHandle split(EdgeHandle _eh, const Point& _p)
   {
     //Do not call PolyMeshT function below as this does the wrong operation
-    const SmartVertexHandle vh = this->add_vertex(_p); Kernel::split(_eh, vh); return vh;
+    const VertexHandle vh = this->add_vertex(_p); Kernel::split(_eh, vh); return vh;
   }
 
   /** \brief Edge split (= 2-to-4 split)
@@ -286,10 +281,10 @@ public:
    * @param _p  New point position that will be inserted at the edge
    * @return    Vertex handle of the newly added vertex
    */
-  inline SmartVertexHandle split_copy(EdgeHandle _eh, const Point& _p)
+  inline VertexHandle split_copy(EdgeHandle _eh, const Point& _p)
   {
     //Do not call PolyMeshT function below as this does the wrong operation
-    const SmartVertexHandle vh = this->add_vertex(_p); Kernel::split_copy(_eh, vh); return vh;
+    const VertexHandle vh = this->add_vertex(_p); Kernel::split_copy(_eh, vh); return vh;
   }
 
   /** \brief Edge split (= 2-to-4 split)
@@ -327,8 +322,8 @@ public:
    *
    * @return Vertex handle of the new vertex
    */
-  inline SmartVertexHandle split(FaceHandle _fh, const Point& _p)
-  { const SmartVertexHandle vh = this->add_vertex(_p); PolyMesh::split(_fh, vh); return vh; }
+  inline VertexHandle split(FaceHandle _fh, const Point& _p)
+  { const VertexHandle vh = this->add_vertex(_p); PolyMesh::split(_fh, vh); return vh; }
 
   /** \brief Face split (= 1-to-3 split, calls corresponding PolyMeshT function).
    *
@@ -339,8 +334,8 @@ public:
    *
    * @return Vertex handle of the new vertex
    */
-  inline SmartVertexHandle split_copy(FaceHandle _fh, const Point& _p)
-  { const SmartVertexHandle vh = this->add_vertex(_p);  PolyMesh::split_copy(_fh, vh); return vh; }
+  inline VertexHandle split_copy(FaceHandle _fh, const Point& _p)
+  { const VertexHandle vh = this->add_vertex(_p);  PolyMesh::split_copy(_fh, vh); return vh; }
 
 
   /** \brief Face split (= 1-to-4) split, splits edges at midpoints and adds 4 new faces in the interior).
@@ -419,16 +414,6 @@ public:
    */
   inline void split_copy(FaceHandle _fh, VertexHandle _vh)
   { PolyMesh::split_copy(_fh, _vh); }
-
-  /** \brief Calculates the area of a face
-   *
-   * @param _fh Handle of the face to calculate the area of
-   */
-  Scalar calc_face_area(FaceHandle _fh) const
-  {
-    const HalfedgeHandle heh = this->halfedge_handle(_fh);
-    return this->calc_sector_area(heh);
-  }
   
   /** \name Normal vector computation
   */
@@ -446,7 +431,7 @@ public:
 //=============================================================================
 #if defined(OM_INCLUDE_TEMPLATES) && !defined(OPENMESH_TRIMESH_C)
 #define OPENMESH_TRIMESH_TEMPLATES
-#include "TriMeshT_impl.hh"
+#include "TriMeshT.cc"
 #endif
 //=============================================================================
 #endif // OPENMESH_TRIMESH_HH defined

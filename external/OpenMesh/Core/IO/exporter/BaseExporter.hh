@@ -39,7 +39,12 @@
  *                                                                           *
  * ========================================================================= */
 
-
+/*===========================================================================*\
+ *                                                                           *
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 
 //=============================================================================
@@ -90,15 +95,11 @@ public:
 
   // get vertex data
   virtual Vec3f  point(VertexHandle _vh)    const = 0;
-  virtual Vec3d  pointd(VertexHandle _vh)   const = 0;
-  virtual bool   is_point_double()          const = 0;
   virtual Vec3f  normal(VertexHandle _vh)   const = 0;
-  virtual Vec3d  normald(VertexHandle _vh)  const = 0;
-  virtual bool   is_normal_double()         const = 0;
   virtual Vec3uc color(VertexHandle _vh)    const = 0;
   virtual Vec4uc colorA(VertexHandle _vh)   const = 0;
-  virtual Vec3ui colori(VertexHandle _vh)   const = 0;
-  virtual Vec4ui colorAi(VertexHandle _vh)  const = 0;
+  virtual Vec3ui colori(VertexHandle _vh)    const = 0;
+  virtual Vec4ui colorAi(VertexHandle _vh)   const = 0;
   virtual Vec3f colorf(VertexHandle _vh)    const = 0;
   virtual Vec4f colorAf(VertexHandle _vh)   const = 0;
   virtual Vec2f  texcoord(VertexHandle _vh) const = 0;
@@ -122,7 +123,6 @@ public:
   virtual unsigned int
   get_face_texcoords(std::vector<Vec2f>& _hehandles) const = 0;
   virtual Vec3f  normal(FaceHandle _fh)      const = 0;
-  virtual Vec3d  normald(FaceHandle _fh)     const = 0;
   virtual Vec3uc color (FaceHandle _fh)      const = 0;
   virtual Vec4uc colorA(FaceHandle _fh)      const = 0;
   virtual Vec3ui colori(FaceHandle _fh)    const = 0;
@@ -149,7 +149,7 @@ public:
   virtual OpenMesh::Attributes::StatusInfo  status(HalfedgeHandle _heh) const = 0;
 
   // get reference to base kernel
-  virtual const BaseKernel* kernel() { return nullptr; }
+  virtual const BaseKernel* kernel() { return 0; }
 
 
   // query number of faces, vertices, normals, texcoords

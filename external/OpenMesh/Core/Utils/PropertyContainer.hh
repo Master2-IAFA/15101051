@@ -39,13 +39,22 @@
  *                                                                           *
  * ========================================================================= */
 
-
+/*===========================================================================*\
+ *                                                                           *             
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 #ifndef OPENMESH_PROPERTYCONTAINER
 #define OPENMESH_PROPERTYCONTAINER
 
+// Use static casts when not debugging
+#ifdef NDEBUG
+#define OM_FORCE_STATIC_CAST
+#endif
+
 #include <OpenMesh/Core/Utils/Property.hh>
-#include <OpenMesh/Core/Utils/typename.hh>
 
 //-----------------------------------------------------------------------------
 namespace OpenMesh
@@ -98,9 +107,9 @@ public:
   {
     Properties::iterator p_it=properties_.begin(), p_end=properties_.end();
     int idx=0;
-    for ( ; p_it!=p_end && *p_it!=nullptr; ++p_it, ++idx ) {};
-    if (p_it==p_end) properties_.push_back(nullptr);
-    properties_[idx] = new PropertyT<T>(_name, get_type_name<T>() );        // create a new property with requested name and given (system dependent) internal typename
+    for ( ; p_it!=p_end && *p_it!=NULL; ++p_it, ++idx ) {};
+    if (p_it==p_end) properties_.push_back(NULL);
+    properties_[idx] = new PropertyT<T>(_name);
     return BasePropHandleT<T>(idx);
   }
 
@@ -111,9 +120,12 @@ public:
     Properties::const_iterator p_it = properties_.begin();
     for (int idx=0; p_it != properties_.end(); ++p_it, ++idx)
     {
-      if (*p_it != nullptr &&
+      if (*p_it != NULL &&
          (*p_it)->name() == _name  //skip deleted properties
-         && (*p_it)->internal_type_name() == get_type_name<T>()     // new check type
+// Skip type check
+#ifndef OM_FORCE_STATIC_CAST
+          && dynamic_cast<PropertyT<T>*>(properties_[idx]) != NULL //check type
+#endif
          )
       {
         return BasePropHandleT<T>(idx);
@@ -127,33 +139,39 @@ public:
     Properties::const_iterator p_it = properties_.begin();
     for (int idx=0; p_it != properties_.end(); ++p_it, ++idx)
     {
-      if (*p_it != nullptr && (*p_it)->name() == _name) //skip deleted properties
+      if (*p_it != NULL && (*p_it)->name() == _name) //skip deleted properties
       {
         return *p_it;
       }
     }
-    return nullptr;
+    return NULL;
   }
 
   template <class T> PropertyT<T>& property(BasePropHandleT<T> _h)
   {
     assert(_h.idx() >= 0 && _h.idx() < (int)properties_.size());
-    assert(properties_[_h.idx()] != nullptr);
-    assert( properties_[_h.idx()]->internal_type_name() == get_type_name<T>() );
-    PropertyT<T> *p = static_cast< PropertyT<T>* > (properties_[_h.idx()]);
-    assert(p != nullptr);
+    assert(properties_[_h.idx()] != NULL);
+#ifdef OM_FORCE_STATIC_CAST
+    return *static_cast  <PropertyT<T>*> (properties_[_h.idx()]);
+#else
+    PropertyT<T>* p = dynamic_cast<PropertyT<T>*>(properties_[_h.idx()]);
+    assert(p != NULL);
     return *p;
+#endif
   }
 
 
   template <class T> const PropertyT<T>& property(BasePropHandleT<T> _h) const
   {
     assert(_h.idx() >= 0 && _h.idx() < (int)properties_.size());
-    assert(properties_[_h.idx()] != nullptr);
-    assert( properties_[_h.idx()]->internal_type_name() == get_type_name<T>() );
-    PropertyT<T> *p = static_cast< PropertyT<T>* > (properties_[_h.idx()]);
-    assert(p != nullptr);
+    assert(properties_[_h.idx()] != NULL);
+#ifdef OM_FORCE_STATIC_CAST
+    return *static_cast<PropertyT<T>*>(properties_[_h.idx()]);
+#else
+    PropertyT<T>* p = dynamic_cast<PropertyT<T>*>(properties_[_h.idx()]);
+    assert(p != NULL);
     return *p;
+#endif
   }
 
 
@@ -161,7 +179,7 @@ public:
   {
     assert(_h.idx() >= 0 && _h.idx() < (int)properties_.size());
     delete properties_[_h.idx()];
-    properties_[_h.idx()] = nullptr;
+    properties_[_h.idx()] = NULL;
   }
 
 
@@ -268,8 +286,8 @@ protected: // generic add/get
   {
     Properties::iterator p_it=properties_.begin(), p_end=properties_.end();
     size_t idx=0;
-    for (; p_it!=p_end && *p_it!=nullptr; ++p_it, ++idx) {};
-    if (p_it==p_end) properties_.push_back(nullptr);
+    for (; p_it!=p_end && *p_it!=NULL; ++p_it, ++idx) {};
+    if (p_it==p_end) properties_.push_back(NULL);
     properties_[idx] = _bp;
     return idx;
   }
@@ -277,18 +295,18 @@ protected: // generic add/get
   BaseProperty& _property( size_t _idx )
   {
     assert( _idx < properties_.size());
-    assert( properties_[_idx] != nullptr);
+    assert( properties_[_idx] != NULL);
     BaseProperty *p = properties_[_idx];
-    assert( p != nullptr );
+    assert( p != NULL );
     return *p;
   }
 
   const BaseProperty& _property( size_t _idx ) const
   {
     assert( _idx < properties_.size());
-    assert( properties_[_idx] != nullptr);
+    assert( properties_[_idx] != NULL);
     BaseProperty *p = properties_[_idx];
-    assert( p != nullptr );
+    assert( p != NULL );
     return *p;
   }
 
@@ -309,21 +327,21 @@ private:
 #ifndef DOXY_IGNORE_THIS
   struct Reserve
   {
-    explicit Reserve(size_t _n) : n_(_n) {}
+    Reserve(size_t _n) : n_(_n) {}
     void operator()(BaseProperty* _p) const { if (_p) _p->reserve(n_); }
     size_t n_;
   };
 
   struct Resize
   {
-    explicit Resize(size_t _n) : n_(_n) {}
+    Resize(size_t _n) : n_(_n) {}
     void operator()(BaseProperty* _p) const { if (_p) _p->resize(n_); }
     size_t n_;
   };
 
   struct ResizeIfSmaller
   {
-    explicit ResizeIfSmaller(size_t _n) : n_(_n) {}
+    ResizeIfSmaller(size_t _n) : n_(_n) {}
     void operator()(BaseProperty* _p) const { if (_p && _p->n_elements() < n_) _p->resize(n_); }
     size_t n_;
   };
@@ -344,7 +362,7 @@ private:
   struct Delete
   {
     Delete() {}
-    void operator()(BaseProperty* _p) const { if (_p) delete _p; }
+    void operator()(BaseProperty* _p) const { if (_p) delete _p; _p=NULL; }
   };
 #endif
 

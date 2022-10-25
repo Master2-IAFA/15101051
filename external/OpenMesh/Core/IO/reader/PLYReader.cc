@@ -39,6 +39,13 @@
  *                                                                           *
  * ========================================================================= */
 
+/*===========================================================================*\
+ *                                                                           *
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+ \*===========================================================================*/
+
 #define LINE_LEN 4096
 
 //== INCLUDES =================================================================
@@ -219,13 +226,16 @@ void _PLYReader_::readCreateCustomProperty(std::istream& _in, BaseImporter& _bi,
     }
 
     //init vector
-    unsigned int numberOfValues;
-    readInteger(_listType, _in, numberOfValues, OpenMesh::GenProg::Bool2Type<binary>());
-    std::vector<T> vec(numberOfValues);
+    int numberOfValues;
+    read(_listType, _in, numberOfValues, OpenMesh::GenProg::Bool2Type<binary>());
+    std::vector<T> vec;
+    vec.reserve(numberOfValues);
     //read and assign
-    for (unsigned int i = 0; i < numberOfValues; ++i)
+    for (int i = 0; i < numberOfValues; ++i)
     {
-      read(_valueType, _in, vec[i], OpenMesh::GenProg::Bool2Type<binary>());
+      T in;
+      read(_valueType, _in, in, OpenMesh::GenProg::Bool2Type<binary>());
+      vec.push_back(in);
     }
     _bi.kernel()->property(prop,_h) = vec;
   }
@@ -303,14 +313,6 @@ bool _PLYReader_::read_ascii(std::istream& _in, BaseImporter& _bi, const Options
 
 	for (std::vector<ElementInfo>::iterator e_it = elements_.begin(); e_it != elements_.end(); ++e_it)
 	{
-	        if (_in.eof()) {
-			if (err_enabled)
-				omerr().enable();
-
-			omerr() << "Unexpected end of file while reading." << std::endl;
-			return false;
-		}
-
 		if (e_it->element_== VERTEX)
 		{
 			// read vertices:
@@ -422,12 +424,6 @@ bool _PLYReader_::read_ascii(std::istream& _in, BaseImporter& _bi, const Options
 			// faces
 			for (i = 0; i < faceCount_ && !_in.eof(); ++i) {
 				FaceHandle fh;
-
-				c[0] = 0;
-				c[1] = 0;
-				c[2] = 0;
-				c[3] = 255;
-
 				for (size_t propertyIndex = 0; propertyIndex < e_it->properties_.size(); ++propertyIndex) {
 					PropertyInfo prop = e_it->properties_[propertyIndex];
 					switch (prop.property) {
@@ -459,38 +455,6 @@ bool _PLYReader_::read_ascii(std::istream& _in, BaseImporter& _bi, const Options
 							++complex_faces;
 						break;
 
-					case COLORRED:
-					  if (prop.value == ValueTypeFLOAT32 || prop.value == ValueTypeFLOAT) {
-					    _in >> tmp;
-					    c[0] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
-					  } else
-					    _in >> c[0];
-					  break;
-
-					case COLORGREEN:
-					  if (prop.value == ValueTypeFLOAT32 || prop.value == ValueTypeFLOAT) {
-					    _in >> tmp;
-					    c[1] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
-					  } else
-					    _in >> c[1];
-					  break;
-
-					case COLORBLUE:
-					  if (prop.value == ValueTypeFLOAT32 || prop.value == ValueTypeFLOAT) {
-					    _in >> tmp;
-					    c[2] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
-					  } else
-					    _in >> c[2];
-					  break;
-
-					case COLORALPHA:
-					  if (prop.value == ValueTypeFLOAT32 || prop.value == ValueTypeFLOAT) {
-					    _in >> tmp;
-					    c[3] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
-					  } else
-					    _in >> c[3];
-					  break;
-
 					case CUSTOM_PROP:
 						if (_opt.check(Options::Custom) && fh.is_valid())
 							readCustomProperty<false>(_in, _bi, fh, prop.name, prop.value, prop.listIndexType);
@@ -503,8 +467,7 @@ bool _PLYReader_::read_ascii(std::istream& _in, BaseImporter& _bi, const Options
 						break;
 					}
 				}
-				if (_opt.face_has_color())
-					_bi.set_color(fh, Vec4uc(c));
+
 			}
 		}
 		else
@@ -517,6 +480,14 @@ bool _PLYReader_::read_ascii(std::istream& _in, BaseImporter& _bi, const Options
 					_in >> trash;
 				}
 			}
+		}
+
+		if (_in.eof()) {
+			if (err_enabled)
+				omerr().enable();
+
+			omerr() << "Unexpected end of file while reading." << std::endl;
+			return false;
 		}
 
 		if(e_it->element_== FACE)
@@ -604,26 +575,29 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
 						readValue(prop.value, _in, t[1]);
 						break;
 					case COLORRED:
-						if (prop.value == ValueTypeFLOAT32 || prop.value == ValueTypeFLOAT) {
-						  readValue(prop.value, _in, tmp);
+						if (prop.value == ValueTypeFLOAT32 ||
+							prop.value == ValueTypeFLOAT) {
+							readValue(prop.value, _in, tmp);
 
-						  c[0] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
+							c[0] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
 						}
 						else
-						  readInteger(prop.value, _in, c[0]);
+							readInteger(prop.value, _in, c[0]);
 
 						break;
 					case COLORGREEN:
-					  if (prop.value == ValueTypeFLOAT32 || prop.value == ValueTypeFLOAT) {
-					    readValue(prop.value, _in, tmp);
-					    c[1] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
-					  }
-					  else
-					    readInteger(prop.value, _in, c[1]);
+						if (prop.value == ValueTypeFLOAT32 ||
+							prop.value == ValueTypeFLOAT) {
+							readValue(prop.value, _in, tmp);
+							c[1] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
+						}
+						else
+							readInteger(prop.value, _in, c[1]);
 
 						break;
 					case COLORBLUE:
-						if (prop.value == ValueTypeFLOAT32 ||	prop.value == ValueTypeFLOAT) {
+						if (prop.value == ValueTypeFLOAT32 ||
+							prop.value == ValueTypeFLOAT) {
 							readValue(prop.value, _in, tmp);
 							c[2] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
 						}
@@ -632,7 +606,8 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
 
 						break;
 					case COLORALPHA:
-						if (prop.value == ValueTypeFLOAT32 ||	prop.value == ValueTypeFLOAT) {
+						if (prop.value == ValueTypeFLOAT32 ||
+							prop.value == ValueTypeFLOAT) {
 							readValue(prop.value, _in, tmp);
 							c[3] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
 						}
@@ -666,12 +641,6 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
 		else if (e_it->element_ == FACE) {
 			for (unsigned i = 0; i < e_it->count_ && !_in.eof(); ++i) {
 				FaceHandle fh;
-
-				c[0] = 0;
-				c[1] = 0;
-				c[2] = 0;
-				c[3] = 255;
-
 				for (size_t propertyIndex = 0; propertyIndex < e_it->properties_.size(); ++propertyIndex)
 				{
 					PropertyInfo prop = e_it->properties_[propertyIndex];
@@ -706,38 +675,7 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
 						if (!fh.is_valid())
 							++complex_faces;
 						break;
-					case COLORRED:
-						if (prop.value == ValueTypeFLOAT32 ||
-							prop.value == ValueTypeFLOAT) {
-							readValue(prop.value, _in, tmp);
-							c[0] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
-						} else
-							readInteger(prop.value, _in, c[0]);
-						break;
-					case COLORGREEN:
-						if (prop.value == ValueTypeFLOAT32 ||
-							prop.value == ValueTypeFLOAT) {
-							readValue(prop.value, _in, tmp);
-							c[1] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
-						} else
-							readInteger(prop.value, _in, c[1]);
-						break;
-					case COLORBLUE:
-						if (prop.value == ValueTypeFLOAT32 ||
-							prop.value == ValueTypeFLOAT) {
-							readValue(prop.value, _in, tmp);
-							c[2] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
-						} else
-							readInteger(prop.value, _in, c[2]);
-						break;
-					case COLORALPHA:
-						if (prop.value == ValueTypeFLOAT32 ||
-							prop.value == ValueTypeFLOAT) {
-							readValue(prop.value, _in, tmp);
-							c[3] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
-						} else
-							readInteger(prop.value, _in, c[3]);
-						break;
+
 					case CUSTOM_PROP:
 						if (_opt.check(Options::Custom) && fh.is_valid())
 							readCustomProperty<true>(_in, _bi, fh, prop.name, prop.value, prop.listIndexType);
@@ -750,8 +688,6 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
 						break;
 					}
 				}
-				if (_opt.face_has_color())
-					_bi.set_color(fh, Vec4uc(c));
 			}
 		} 
 		else { 
@@ -801,12 +737,6 @@ void _PLYReader_::readValue(ValueType _type, std::istream& _in, float& _value) c
         restore(_in, tmp, options_.check(Options::MSB));
         _value = tmp;
         break;
-    case ValueTypeDOUBLE:
-    case ValueTypeFLOAT64:
-	double dtmp;
-	readValue(_type, _in, dtmp);
-	_value = static_cast<float>(dtmp);
-	break;
     default:
         _value = 0.0;
         std::cerr << "unsupported conversion type to float: " << _type << std::endl;
@@ -971,35 +901,15 @@ void _PLYReader_::readValue(ValueType _type, std::istream& _in, int& _value) con
 
 //-----------------------------------------------------------------------------
 
-template<typename T>
-void _PLYReader_::readInteger(ValueType _type, std::istream& _in, T& _value) const {
 
-    static_assert(std::is_integral<T>::value, "Integral required.");
+void _PLYReader_::readInteger(ValueType _type, std::istream& _in, int& _value) const {
 
-    int16_t tmp_int16_t;
-    uint16_t tmp_uint16_t;
     int32_t tmp_int32_t;
     uint32_t tmp_uint32_t;
     int8_t tmp_char;
     uint8_t tmp_uchar;
 
     switch (_type) {
-
-        case ValueTypeINT16:
-
-        case ValueTypeSHORT:
-            restore(_in, tmp_int16_t, options_.check(Options::MSB));
-            _value = tmp_int16_t;
-
-            break;
-
-        case ValueTypeUINT16:
-
-        case ValueTypeUSHORT:
-           restore(_in, tmp_uint16_t, options_.check(Options::MSB));
-            _value = tmp_uint16_t;
-
-            break;
 
         case ValueTypeINT:
 
@@ -1040,11 +950,70 @@ void _PLYReader_::readInteger(ValueType _type, std::istream& _in, T& _value) con
         default:
 
             _value = 0;
-            std::cerr << "unsupported conversion type to integral: " << _type << std::endl;
+            std::cerr << "unsupported conversion type to int: " << _type << std::endl;
 
             break;
     }
 }
+
+
+//-----------------------------------------------------------------------------
+
+
+void _PLYReader_::readInteger(ValueType _type, std::istream& _in, unsigned int& _value) const {
+
+    int32_t tmp_int32_t;
+    uint32_t tmp_uint32_t;
+    int8_t tmp_char;
+    uint8_t tmp_uchar;
+
+    switch (_type) {
+
+        case ValueTypeUINT:
+
+        case ValueTypeUINT32:
+
+            restore(_in, tmp_uint32_t, options_.check(Options::MSB));
+            _value = tmp_uint32_t;
+
+            break;
+
+        case ValueTypeINT:
+
+        case ValueTypeINT32:
+
+            restore(_in, tmp_int32_t, options_.check(Options::MSB));
+            _value = tmp_int32_t;
+
+            break;
+
+        case ValueTypeUCHAR:
+
+        case ValueTypeUINT8:
+
+            restore(_in, tmp_uchar, options_.check(Options::MSB));
+            _value = tmp_uchar;
+
+            break;
+
+        case ValueTypeCHAR:
+
+        case ValueTypeINT8:
+
+            restore(_in, tmp_char, options_.check(Options::MSB));
+            _value = tmp_char;
+
+            break;
+
+        default:
+
+            _value = 0;
+            std::cerr << "unsupported conversion type to unsigned int: " << _type << std::endl;
+
+            break;
+    }
+}
+
 
 //------------------------------------------------------------------------------
 
@@ -1380,30 +1349,6 @@ bool _PLYReader_::can_u_read(std::istream& _is) const {
             } else if (propertyName == "alpha") {
               entry = PropertyInfo(COLORALPHA, valueType);
               options_ += Options::VertexColor;
-              options_ += Options::ColorAlpha;
-              if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
-                options_ += Options::ColorFloat;
-            }
-          }
-          else if (elementName == "face") {
-            if (propertyName == "red") {
-              entry = PropertyInfo(COLORRED, valueType);
-              options_ += Options::FaceColor;
-              if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
-                options_ += Options::ColorFloat;
-            } else if (propertyName == "green") {
-              entry = PropertyInfo(COLORGREEN, valueType);
-              options_ += Options::FaceColor;
-              if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
-                options_ += Options::ColorFloat;
-            } else if (propertyName == "blue") {
-              entry = PropertyInfo(COLORBLUE, valueType);
-              options_ += Options::FaceColor;
-              if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
-                options_ += Options::ColorFloat;
-            } else if (propertyName == "alpha") {
-              entry = PropertyInfo(COLORALPHA, valueType);
-              options_ += Options::FaceColor;
               options_ += Options::ColorAlpha;
               if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
                 options_ += Options::ColorFloat;

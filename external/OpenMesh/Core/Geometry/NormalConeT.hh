@@ -40,7 +40,12 @@
  * ========================================================================= */
 
 
-
+/*===========================================================================*\
+ *                                                                           *
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 
 
@@ -60,7 +65,6 @@
 
 
 #include <OpenMesh/Core/Geometry/VectorT.hh>
-#include <OpenMesh/Core/Utils/vector_traits.hh>
 
 
 //== NAMESPACES ===============================================================
@@ -78,14 +82,13 @@ namespace OpenMesh {
     the center normal and the opening angle.
 **/
 
-template <typename Vector>
+template <typename Scalar>
 class NormalConeT
 {
 public:
 
   // typedefs
-  typedef typename vector_traits<Vector>::value_type Scalar;
-  typedef Vector Vec3;
+  typedef VectorT<Scalar, 3>  Vec3;
 
 
   //! default constructor (not initialized)
@@ -121,7 +124,7 @@ private:
 //=============================================================================
 #if defined(OM_INCLUDE_TEMPLATES) && !defined(OPENMESH_NORMALCONE_C)
 #define OPENMESH_NORMALCONE_TEMPLATES
-#include "NormalConeT_impl.hh"
+#include "NormalConeT.cc"
 #endif
 //=============================================================================
 #endif // OPENMESH_NORMALCONE_HH defined

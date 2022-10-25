@@ -39,7 +39,12 @@
  *                                                                           *
  * ========================================================================= */
 
-
+/*===========================================================================*\
+ *                                                                           *
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 
 //=============================================================================
@@ -48,7 +53,10 @@
 //
 //=============================================================================
 
-#pragma once
+
+#ifndef __OFFREADER_HH__
+#define __OFFREADER_HH__
+
 
 //=== INCLUDES ================================================================
 
@@ -115,17 +123,17 @@ public:
   /// Destructor
   virtual ~_OFFReader_() {};
 
-  std::string get_description() const override { return "Object File Format"; }
-  std::string get_extensions()  const override { return "off"; }
-  std::string get_magic()       const override { return "OFF"; }
+  std::string get_description() const { return "Object File Format"; }
+  std::string get_extensions()  const { return "off"; }
+  std::string get_magic()       const { return "OFF"; }
 
   bool read(const std::string& _filename,
 	    BaseImporter& _bi,
-	    Options& _opt) override;
+	    Options& _opt);
 
-  bool can_u_read(const std::string& _filename) const override;
+  bool can_u_read(const std::string& _filename) const;
 
-  bool read(std::istream& _in, BaseImporter& _bi, Options& _opt ) override;
+  bool read(std::istream& _in, BaseImporter& _bi, Options& _opt );
 
 private:
 
@@ -158,4 +166,6 @@ OPENMESHDLLEXPORT _OFFReader_& OFFReader();
 //=============================================================================
 } // namespace IO
 } // namespace OpenMesh
+//=============================================================================
+#endif
 //=============================================================================

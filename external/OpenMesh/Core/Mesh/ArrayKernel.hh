@@ -39,7 +39,12 @@
  *                                                                           *
  * ========================================================================= */
 
-
+/*===========================================================================*\
+ *                                                                           *
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 
 //=============================================================================
@@ -340,10 +345,10 @@ public:
   void clean_keep_reservation();
 
   // --- number of items ---
-  size_t n_vertices()  const override  { return vertices_.size(); }
-  size_t n_halfedges() const override { return 2*edges_.size(); }
-  size_t n_edges()     const override { return edges_.size(); }
-  size_t n_faces()     const override { return faces_.size(); }
+  size_t n_vertices()  const { return vertices_.size(); }
+  size_t n_halfedges() const { return 2*edges_.size(); }
+  size_t n_edges()     const { return edges_.size(); }
+  size_t n_faces()     const { return faces_.size(); }
 
   bool vertices_empty()  const { return vertices_.empty(); }
   bool halfedges_empty() const { return edges_.empty(); }
@@ -697,7 +702,7 @@ public:
     typedef StatusSetT<Handle> Base;
 
   public:
-    explicit AutoStatusSetT(ArrayKernel& _kernel)
+    AutoStatusSetT(ArrayKernel& _kernel)
     : StatusSetT<Handle>(_kernel, _kernel.pop_bit_mask(Handle()))
     { /*assert(size() == 0);*/ } //the set should be empty on creation
 
@@ -766,7 +771,7 @@ public:
     //! Complexity: O(1)
     inline void erase(iterator _it)
     {
-      assert(_it != const_cast<const ExtStatusSetT*>(this)->end() && is_in(*_it));
+      assert(_it != end() && is_in(*_it));
       Base::erase(*_it);
       *_it = handles_.back();
       _it.pop_back();
@@ -903,7 +908,7 @@ private:
 //=============================================================================
 #if defined(OM_INCLUDE_TEMPLATES) && !defined(OPENMESH_ARRAY_KERNEL_C)
 #  define OPENMESH_ARRAY_KERNEL_TEMPLATES
-#  include "ArrayKernelT_impl.hh"
+#  include "ArrayKernelT.cc"
 #endif
 //=============================================================================
 #endif // OPENMESH_ARRAY_KERNEL_HH defined

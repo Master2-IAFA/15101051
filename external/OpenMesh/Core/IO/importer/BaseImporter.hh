@@ -39,7 +39,12 @@
  *                                                                           *
  * ========================================================================= */
 
-
+/*===========================================================================*\
+ *                                                                           *
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 
 //=============================================================================
@@ -91,9 +96,6 @@ public:
   // add a vertex with coordinate \c _point
   virtual VertexHandle add_vertex(const Vec3f& _point) = 0;
 
-  // add a vertex with coordinate \c _point
-  virtual VertexHandle add_vertex(const Vec3d& _point) { return add_vertex(Vec3f(_point)); }
-
   // add a vertex without coordinate. Use set_point to set the position deferred
   virtual VertexHandle add_vertex() = 0;
 
@@ -124,9 +126,6 @@ public:
 
   // set vertex normal
   virtual void set_normal(VertexHandle _vh, const Vec3f& _normal) = 0;
-
-  // set vertex normal
-  virtual void set_normal(VertexHandle _vh, const Vec3d& _normal) = 0;
 
   // set vertex color
   virtual void set_color(VertexHandle _vh, const Vec3uc& _color) = 0;
@@ -182,9 +181,6 @@ public:
   // set face normal
   virtual void set_normal(FaceHandle _fh, const Vec3f& _normal) = 0;
 
-  // set face normal
-  virtual void set_normal(FaceHandle _fh, const Vec3d& _normal) = 0;
-
   // set face color
   virtual void set_color(FaceHandle _fh, const Vec3uc& _color) = 0;
 
@@ -205,7 +201,7 @@ public:
   virtual void add_texture_information( int _id , std::string _name ) = 0;
 
   // get reference to base kernel
-  virtual BaseKernel* kernel() { return nullptr; }
+  virtual BaseKernel* kernel() { return 0; }
 
   virtual bool is_triangle_mesh()     const { return false; }
 
