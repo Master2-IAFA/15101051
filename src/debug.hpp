@@ -6,7 +6,7 @@
 #include "polyscope/point_cloud.h"
 #include "polyscope/curve_network.h"
 #include "PointSet.hpp"
-
+#include "utils.hpp"
 
 void pointSetToPolyscope(std::string name, PointSet *ps);
 
@@ -46,3 +46,5 @@ void test_basic_polyscope ();
 void drawCube(std::string name, glm::vec3 min, glm::vec3 max);
 
 void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max);
+
+polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *> octree);

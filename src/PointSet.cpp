@@ -31,6 +31,18 @@ std::vector<point> PointSet::getBoundingBox() {
     float max_z ;
 
     int i ;
+
+    //initialize min/max to first point coordinates if such point exists
+    if (this->m_points.size() > 0) {
+        min_x = m_points[0].pos[0];
+        min_y = m_points[0].pos[1];
+        min_z = m_points[0].pos[2];
+
+        max_x = m_points[0].pos[0];
+        max_y = m_points[0].pos[1];
+        max_z = m_points[0].pos[2];
+    }
+
     //iterate on points to find max/min value on each coordinate
     for (i = 0 ; i < this->m_points.size() ; ++i)
     {
@@ -57,12 +69,11 @@ std::vector<point> PointSet::getBoundingBox() {
     bb[0].pos.y = min_y ;
     bb[0].pos.z = min_z ;
 
-    bb[1].pos.x = (max_x - min_x)? max : (-1) * max;
-    bb[1].pos.y = (max_y - min_y)? max : (-1) * max;
-    bb[1].pos.z = (max_z - min_z)? max : (-1) * max;
+    bb[1].pos.x = min_x + max;
+    bb[1].pos.y = min_y + max;
+    bb[1].pos.z = min_z + max;
 
     return bb ;
-
 }
 
 void PointSet::readOpenMesh (string filename) {
