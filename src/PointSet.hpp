@@ -12,8 +12,8 @@ using std::string;
 /** one point with positions and normals features
  */
 typedef struct  {
-  glm::vec3 pos;
-  glm::vec3 norm;
+  std::vector<float> pos;
+  std::vector<float> norm;
 } point;
 
 /** represents a point cloud
@@ -47,7 +47,7 @@ public:
      * bounding box: cuboïd that contains all points of the point cloud
      * @return min/max points (down left front/up right back corner points) of the box
      */
-    vector<point> getBoundingBox ();
+    std::pair<point, point> getBoundingBox ();
     void addPoint(point point) { m_points.push_back(point); }
 
 private:

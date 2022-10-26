@@ -5,8 +5,8 @@
 #include "glm/gtx/norm.hpp"
 
 typedef struct {
-  glm::vec3 position;
-  glm::vec3 normal;
+  std::vector<float> position;
+  std::vector<float> normal;
   double norm;
   double area;
   double pdn;

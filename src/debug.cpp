@@ -9,8 +9,8 @@ void pointSetToPolyscope( std::string name, PointSet *ps ){
 
     #pragma omp parallel for
     for(int i = 0; i < points.size(); i++){
-        position[i] = points[i].pos;
-        normal[i] = points[i].norm;
+        position[i] = glm::vec3(points[i].pos[0], points[i].pos[1], points[i].pos[2]) ;
+        normal[i] = glm::vec3(points[i].norm[0], points[i].norm[1], points[i].norm[2]);
     }
 
     polyscope::PointCloud *pointCloud = polyscope::registerPointCloud(name, position);
@@ -78,7 +78,9 @@ void test_debug_readPly () {
 }
 
 void test_debug_subdivide () {
-    Octree<int> tree (0, glm::vec3(0, 0, 0), glm::vec3(100, 100, 100));
+    std::vector<float> a {0, 0, 0};
+    std::vector<float> b {100, 100, 100};
+    Octree<int> tree (0, a, b, 3);
 
     tree.subDivide();
 
@@ -97,23 +99,27 @@ void test_debug_bounding_box(std::vector<glm::vec3> points)
   for (int i = 0 ; i < points.size() ; ++i)
   {
     point p;
-    p.pos = points[i] ;
-    p.norm = glm::vec3(0.0, 0.0, 0.0) ;
+    p.pos[0] = points[i][0] ;
+    p.pos[1] = points[i][1] ;
+    p.pos[2] = points[i][2] ;
+
+    p.norm[0] = 1 ;
+    p.norm[1] = 0 ;
+    p.norm[2] = 0 ;
+
     my_points.push_back(p);
   }
 
   PointSet * ps = new PointSet(my_points) ;
-  vector<point> bb_example ;
 
-  bb_example = ps->getBoundingBox();
-  std::cout << "bb_example : min = " << bb_example[0].pos.x << "," << bb_example[0].pos.y << "," << bb_example[0].pos.z ;
-  std::cout << "bb_example : max = " << bb_example[1].pos.x << "," << bb_example[1].pos.y << "," << bb_example[1].pos.z ;
+  std::pair<point, point> bb_example = ps->getBoundingBox();
+  std::cout << "bb_example : min = " << bb_example.first.pos[0] << "," << bb_example.first.pos[1] << "," << bb_example.first.pos[2] ;
+  std::cout << "bb_example : max = " << bb_example.second.pos[0] << "," << bb_example.second.pos[1] << "," << bb_example.second.pos[2] ;
 
   std::vector<glm::vec3> points_bb;
-  for (int i = 0 ; i < bb_example.size() ; ++i)
-  {
-    points_bb.push_back(bb_example[i].pos) ;
-  }
+  points_bb.emplace_back(bb_example.first.pos[0], bb_example.first.pos[1], bb_example.first.pos[2]);
+  points_bb.emplace_back(bb_example.second.pos[0], bb_example.second.pos[1], bb_example.second.pos[2]);
+
   polyscope::registerPointCloud("bounding box", points_bb);
   auto f = polyscope::getPointCloud("bounding box");
   f->setEnabled(true);
@@ -187,8 +193,9 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *>
   std::vector<glm::vec3> nodes;
 
   for(int i = 0; i < octree.size(); i++){
-
-    auto cube = build_cube_from_minmax( octree[i]->getMin(), octree[i]->getMax());
+    auto min = octree[i]->getMin();
+    auto max = octree[i]->getMax();
+    auto cube = build_cube_from_minmax( glm::vec3(min[0], min[1], min[2]), glm::vec3(max[0], max[1], max[2]) );
     for(int j = 0; j < 8; j++)
       nodes.push_back( cube[j] );
 
@@ -208,7 +215,4 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *>
     edges.push_back({3 + 8 * i, 7 + 8 * i});
   }
   return polyscope::registerCurveNetwork(name, nodes, edges);
-
 }
-
-
