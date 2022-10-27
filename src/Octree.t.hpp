@@ -36,8 +36,10 @@ void Octree<Data>::subDivide(){
     }
 
     if (m_dim == 2) {
+        m_children.clear();
+        m_children.reserve(4);
         //bottom left
-        m_children[0] = new Octree<Data>( m_depth + 1, m_min, center, m_dim );
+        m_children.emplace_back( new Octree<Data>( m_depth + 1, m_min, center, m_dim ) );
 
         //bottom right
         min.emplace_back( (m_min[0] + m_max[0]) / 2 );
@@ -46,7 +48,7 @@ void Octree<Data>::subDivide(){
         max.emplace_back( m_max[0] );
         max.emplace_back( (m_min[1] + m_max[1]) / 2 );
 
-        m_children[1] = new Octree<Data>( m_depth + 1, min, max, m_dim );
+        m_children.emplace_back( new Octree<Data>( m_depth + 1, min, max, m_dim ) );
 
         min.clear();
         max.clear();
@@ -58,18 +60,20 @@ void Octree<Data>::subDivide(){
         max.emplace_back( (m_min[0] + m_max[0]) / 2 );
         max.emplace_back( m_max[1] );
 
-        m_children[2] = new Octree<Data>( m_depth + 1, min, max, m_dim );
+        m_children.emplace_back( new Octree<Data>( m_depth + 1, min, max, m_dim ) );
 
         min.clear();
         max.clear();
 
         //top right
-        m_children[3] = new Octree<Data>( m_depth + 1, center, m_max, m_dim );
+        m_children.emplace_back( new Octree<Data>( m_depth + 1, center, m_max, m_dim ) );
     }
 
     if (m_dim == 3) {
+        m_children.clear();
+        m_children.reserve(8);
         //bottom front left
-        m_children[0] = new Octree<Data>( m_depth + 1, m_min, center, m_dim );
+        m_children.emplace_back( new Octree<Data>( m_depth + 1, m_min, center, m_dim ) );
 
         //bottom front right
         min.emplace_back( (m_min[0] + m_max[0]) / 2 );
@@ -80,7 +84,7 @@ void Octree<Data>::subDivide(){
         max.emplace_back( (m_min[1] + m_max[1]) / 2 );
         max.emplace_back( (m_min[2] + m_max[2]) / 2 );
 
-        m_children[1] = new Octree<Data>( m_depth + 1, min, max, m_dim );
+        m_children.emplace_back( new Octree<Data>( m_depth + 1, min, max, m_dim ) );
 
         min.clear();
         max.clear();
@@ -94,7 +98,7 @@ void Octree<Data>::subDivide(){
         max.emplace_back( m_max[1] );
         max.emplace_back( (m_min[2] + m_max[2]) / 2 );
 
-        m_children[2] = new Octree<Data>( m_depth + 1, min, max, m_dim );
+        m_children.emplace_back( new Octree<Data>( m_depth + 1, min, max, m_dim ) );
 
         min.clear();
         max.clear();
@@ -108,7 +112,7 @@ void Octree<Data>::subDivide(){
         max.emplace_back( m_max[1] );
         max.emplace_back( (m_min[2] + m_max[2]) / 2 );
 
-        m_children[3] = new Octree<Data>( m_depth + 1, min, max, m_dim );
+        m_children.emplace_back( new Octree<Data>( m_depth + 1, min, max, m_dim ) );
 
         min.clear();
         max.clear();
@@ -122,7 +126,7 @@ void Octree<Data>::subDivide(){
         max.emplace_back( (m_min[1] + m_max[1]) / 2 );
         max.emplace_back( m_max[2] );
 
-        m_children[4] = new Octree<Data>( m_depth + 1, min, max, m_dim );
+        m_children.emplace_back( new Octree<Data>( m_depth + 1, min, max, m_dim ) );
 
         min.clear();
         max.clear();
@@ -136,7 +140,7 @@ void Octree<Data>::subDivide(){
         max.emplace_back( (m_min[1] + m_max[1]) / 2 );
         max.emplace_back( m_max[2] );
 
-        m_children[5] = new Octree<Data>( m_depth + 1, min, max, m_dim );
+        m_children.emplace_back( new Octree<Data>( m_depth + 1, min, max, m_dim ) );
 
         min.clear();
         max.clear();
@@ -150,13 +154,13 @@ void Octree<Data>::subDivide(){
         max.emplace_back( m_max[1] );
         max.emplace_back( m_max[2] );
 
-        m_children[6] = new Octree<Data>( m_depth + 1, min, max, m_dim );
+        m_children.emplace_back( new Octree<Data>( m_depth + 1, min, max, m_dim ) );
 
         min.clear();
         max.clear();
 
         //top back right
-        m_children[7] = new Octree<Data>(m_depth + 1, center, m_max, m_dim );
+        m_children.emplace_back( new Octree<Data>(m_depth + 1, center, m_max, m_dim ) );
     }
 
     for ( int  i = 0 ; i < int(pow(2, m_dim)) ; ++i ) {

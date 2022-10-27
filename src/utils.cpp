@@ -25,42 +25,47 @@ inline T dot (std::vector<T> a, std::vector<T> b) {
 }
 
 InputOctree *generateInputOctree( int max_depth, PointSet *pc ) {
-  std::pair<point, point> aabb = pc->getBoundingBox();
-  InputOctree *octree = new InputOctree(0, aabb.first.pos, aabb.second.pos, aabb.first.pos.size());
-  std::vector<point> points = pc->getPoints();
-  fitInputOctree( max_depth, octree, &points );
-  return octree;
+    std::pair<point, point> aabb = pc->getBoundingBox();
+    InputOctree *octree = new InputOctree(0, aabb.first.pos, aabb.second.pos, aabb.first.pos.size());
+    std::vector<point> points = pc->getPoints();
+    fitInputOctree( max_depth, octree, &points );
+
+    return octree;
 }
 
 void fitInputOctree( int max_depth, InputOctree *octree, std::vector<point> *points ) {
-  if ( max_depth == 0 ) return;
+    if ( max_depth == 0 ) return;
 
-  octree->subDivide();
-  auto children = octree->getChildren();
+    octree->subDivide();
 
-  
-  bool hasPoint = false;
-  for ( int i = 0; i < 8; i++ ) {
+    auto children = octree->getChildren();
+    bool hasPoint = false;
 
-    std::vector<point> children_points;
-    statistics stat;
-    hasPoint = false;
+    for ( int i = 0; i < int(pow(2, octree->getDim())); i++ ) {
+        std::vector<point> children_points;
+        children_points.clear();
+        statistics stat;
+        stat.normal.clear();
+        stat.position.clear();
+        for ( int k = 0 ; k < octree->getDim() ; ++k ) {
+            stat.position.emplace_back(0);
+            stat.normal.emplace_back(0);
+        }
 
-    for ( int j = 0; j < points->size(); j++ ) {
-      if ( children[i]->isPointIn( points->at(j).pos ) ) {
-        children_points.push_back( points->at(j) );
-        //statisticsAdd( &stat, &points[j] );
-        hasPoint = true;
-      }
+        hasPoint = false;
 
+        for ( int j = 0; j < points->size(); ++j ) {
+            if ( children[i]->isPointIn( points->at(j).pos ) ) {
+                children_points.push_back( points->at(j) );
+                statisticsAdd( &stat, points->at(j) );
+                hasPoint = true;
+            }
+        }
+        if (hasPoint) {
+            children[i]->setData( stat );
+            fitInputOctree( max_depth - 1, children[i], &children_points );
+        }
     }
-    if (hasPoint) {
-        children[i]->setData( stat );
-        fitInputOctree( max_depth - 1, children[i], &children_points );
-    }
-
-  }
-
 }
 
 void statisticsAdd(statistics *stat, point point) {

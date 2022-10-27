@@ -20,7 +20,6 @@ inline float max(float x, float y)
 
 //function that returns bounding box of point set
 std::pair<point, point> PointSet::getBoundingBox() {
-    std::pair<point, point> bb;
     //goal is to get min and max of every x y z axis
     std::vector<float> min_vec;
     std::vector<float> max_vec;
@@ -34,7 +33,7 @@ std::pair<point, point> PointSet::getBoundingBox() {
     }
 
     //iterate on points to find max/min value on each coordinate
-    for ( size_t i = 0 ; i < this->m_points.size() ; ++i ) {
+    for ( size_t i = 1 ; i < this->m_points.size() ; ++i ) {
       point p = this->m_points[i] ;
 
       for ( size_t i = 0 ; i < p.pos.size() ; ++i ) {
@@ -54,12 +53,13 @@ std::pair<point, point> PointSet::getBoundingBox() {
         max_val = max( max_val, distances[i] );
     }
 
-    for ( size_t i = 0 ; i < m_points[0].pos.size() ; ++i ) {
-        bb.first.pos[i] = min_vec[i];
-        bb.second.pos[i] = max_vec[i];
+    point p1, p2;
+    for ( size_t i = 0 ; i < min_vec.size() ; ++i ) {
+        p1.pos.emplace_back(min_vec[i]);
+        p2.pos.emplace_back(max_vec[i]);
     }
 
-    return bb ;
+    return std::make_pair(p1, p2);
 }
 
 void PointSet::readOpenMesh (string filename) {

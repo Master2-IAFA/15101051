@@ -29,8 +29,7 @@ void showAtDepth( int depth );
 void loadPointCloud();
 void callback();
 
-int main(int argc, char **argv){
-
+int main () {
     for (const auto & entry : fs::directory_iterator(pathToDirectory)){
         std::string s = entry.path();
         files.push_back( s );
@@ -38,9 +37,9 @@ int main(int argc, char **argv){
 
     polyscope::init();
     ps = new PointSet();
-    ps->readOpenMesh( path );
+
     loadPointCloud();
-    
+
     polyscope::state::userCallback = callback;
     polyscope::show();
 
@@ -66,15 +65,16 @@ void callback(){
 }
 
 void showAtDepth( int depth ){
-  for( int i = 0; i < MAX_DEPTH; i++ ){
-    octreeGraph[i]->setEnabled( false );
-  }
-  octreeGraph[ depth ]->setEnabled( true );
+    for( int i = 0; i < MAX_DEPTH; i++ ){
+        octreeGraph[i]->setEnabled( false );
+    }
+    octreeGraph[ depth ]->setEnabled( true );
 }
 
 void loadPointCloud(){
     ps->readOpenMesh( std::string( path ) );
     delete octree;
+
     octree = generateInputOctree( MAX_DEPTH, ps );
 
     for( int i = 0; i < MAX_DEPTH; i++ ){
