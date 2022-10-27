@@ -87,13 +87,50 @@ void test_debug_subdivide () {
     //TODO display tree
 }
 
+void _traverse_for_fake_blending (InputOctree* current_node_octree, glm::vec3& q, std::vector<std::array<int, 2>>* edges, std::vector<glm::vec3>* nodes) {
+  if (!current_node_octree->hasChildren())
+    return;
+  auto children = current_node_octree->getChildren();
 
-void test_octreeTraversing(InputOctree* oct) {
+  auto cube = build_cube_from_minmax( current_node_octree->getMin(), current_node_octree->getMax());
+  int nodes_size = nodes->size();
+
+  for(int j = 0; j < 8; j++)
+      nodes->push_back( cube[j] );
+  
+    edges->push_back({nodes_size,   nodes_size+1});
+    edges->push_back({nodes_size+2, nodes_size+3});
+    edges->push_back({nodes_size+4, nodes_size+5});
+    edges->push_back({nodes_size+6, nodes_size+7});
+
+    edges->push_back({nodes_size,   nodes_size+2});
+    edges->push_back({nodes_size+1, nodes_size+3});
+    edges->push_back({nodes_size+4, nodes_size+6});
+    edges->push_back({nodes_size+5, nodes_size+7});
+
+    edges->push_back({nodes_size,   nodes_size+4});
+    edges->push_back({nodes_size+1, nodes_size+5});
+    edges->push_back({nodes_size+2, nodes_size+6});
+    edges->push_back({nodes_size+3, nodes_size+7});
+
+  for (int i = 0; i < 8; i++){
+      if (is_InProtectionSphere(children[i], q))
+          _traverse_for_fake_blending(children[i], q, edges, nodes);
+  }
+
+  
+}
+
+void draw_traverseOctree_onePoint(InputOctree* oct) {
+
+  std::vector<std::array<int, 2>> edges ;
+  std::vector<glm::vec3> nodes;
+
   glm::vec3 bb_min = oct->getMin();
   glm::vec3 bb_max = oct->getMax();
 
   glm::vec3 bb_mid = midpoint(bb_min, bb_max);
-  float radius_protectionSphere = glm::distance(bb_mid, bb_max) * LAMBDA;
+  float radius_protectionSphere = (glm::distance(bb_mid, bb_max) * LAMBDA)/2;
 
   float rand_x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
   float rand_y = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
@@ -105,7 +142,10 @@ void test_octreeTraversing(InputOctree* oct) {
   polyscope::PointCloud *pointCloud = polyscope::registerPointCloud("just_a_simple_point", pc_only_one_point);
   pointCloud->setPointRadius(0.02f);
 
-  projection (oct, &gaussian_mixture, q);
+  _traverse_for_fake_blending(oct ,q ,&edges, &nodes);
+
+  polyscope::registerCurveNetwork("Traversing", nodes, edges);
+
 }
 
 //-----------------------------VIZUALISE BB OF POINT CLOUD----------------------

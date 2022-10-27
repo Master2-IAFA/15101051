@@ -6,7 +6,7 @@
 #include "Octree.t.hpp"
 #include <glm/glm.hpp>
 
-#define LAMBDA 1.3f
+#define LAMBDA 1.7f
 
 /**
  * @brief This function returns the middle of two points.

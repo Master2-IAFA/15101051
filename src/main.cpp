@@ -77,8 +77,8 @@ void loadPointCloud(){
     ps->readOpenMesh( std::string( path ) );
     delete octree;
     octree = generateInputOctree( MAX_DEPTH, ps );
+    draw_traverseOctree_onePoint(octree);
 
-    test_octreeTraversing(octree);
 
     for( int i = 0; i < MAX_DEPTH; i++ ){
       auto o = octree->getAtDepth( i );

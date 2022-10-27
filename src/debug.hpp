@@ -34,13 +34,14 @@ void test_debug_readPly ();
  */
 void test_debug_subdivide ();
 
+void test_debug_bounding_box(std::vector<glm::vec3> points);
+
 /**
- * @brief this function will traverse an octree for blending with a given point.
+ *
+ * @brief This function draws the nodes traversed for 1 random point.
  *
  */
-void test_octreeTraversing(InputOctree *octree);
-
-void test_debug_bounding_box(std::vector<glm::vec3> points);
+void draw_traverseOctree_onePoint (InputOctree *oct);
 
 void test_basic_polyscope ();
 
