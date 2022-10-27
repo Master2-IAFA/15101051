@@ -9,6 +9,7 @@
 #include "utils.hpp"
 
 void pointSetToPolyscope(std::string name, PointSet *ps);
+void pointSet2dToPolyscope (std::string name, PointSet *ps);
 
 /**
  * @brief given min and max of a cube, returns vector of each point of the cube
@@ -16,7 +17,6 @@ void pointSetToPolyscope(std::string name, PointSet *ps);
  * @param max : max point of cube
  */
 std::vector<glm::vec3> build_cube_from_minmax(glm::vec3 min, glm::vec3 max);
-
 
 /**
  * @brief generates small gaussian point cloud
@@ -29,7 +29,7 @@ void generate_gaussian ();
 void test_debug_readPly ();
 
 /**
- * @brief reads gaussian from ply file and displays it on polyscope
+ * @brief subdivides an octree
  */
 void test_debug_subdivide ();
 
@@ -48,3 +48,5 @@ void drawCube(std::string name, glm::vec3 min, glm::vec3 max);
 void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max);
 
 polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *> octree);
+
+PointSet generate2dGaussian ();

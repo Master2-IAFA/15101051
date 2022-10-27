@@ -4,8 +4,8 @@ void pointSetToPolyscope( std::string name, PointSet *ps ){
 
     std::vector<point> points = ps->getPoints();
 
-    std::vector<glm::vec3> position(points.size());
-    std::vector<glm::vec3> normal(points.size());
+    std::vector<glm::vec3> position ( points.size() );
+    std::vector<glm::vec3> normal ( points.size() );
 
     #pragma omp parallel for
     for(int i = 0; i < points.size(); i++){
@@ -17,32 +17,47 @@ void pointSetToPolyscope( std::string name, PointSet *ps ){
     pointCloud->addVectorQuantity("normal", normal);
 }
 
+void pointSet2dToPolyscope (std::string name, PointSet *ps) {
+    std::vector<point> points = ps->getPoints();
+
+    std::vector<glm::vec2> position ( points.size() );
+    std::vector<glm::vec2> normal ( points.size() );
+
+    for ( int i = 0 ; i < points.size() ; ++i ) {
+        position[i] = glm::vec2( points[i].pos[0], points[i].pos[1] );
+        normal[i] = glm::vec2( points[i].norm[0], points[i].norm[1] );
+    }
+
+    polyscope::view::style = polyscope::view::NavigateStyle::Planar;
+
+    polyscope::registerPointCloud2D(name, position);
+    polyscope::getPointCloud(name)->addVectorQuantity2D(name + " normal", normal);
+}
+
 //function that takes minmax of a cube a returns 8 coordinates of cube
-std::vector<glm::vec3> build_cube_from_minmax(glm::vec3 min, glm::vec3 max)
-{
-  //float len_body_diag = (max-min).length() ;
-  //float a = len_body_diag/sqrt(3) ;
+std::vector<glm::vec3> build_cube_from_minmax(glm::vec3 min, glm::vec3 max) {
+    //float len_body_diag = (max-min).length() ;
+    //float a = len_body_diag/sqrt(3) ;
 
-  glm::vec3 tfl = glm::vec3(min.x, max.y, min.z ) ;
-  glm::vec3 tfr = glm::vec3(max.x, max.y, min.z) ;
-  glm::vec3 tbl = glm::vec3(min.x, max.y, max.z ) ;
-  glm::vec3 tbr = glm::vec3(max.x, max.y, max.z) ;
-  glm::vec3 bfl = glm::vec3(min.x, min.y, min.z) ;
-  glm::vec3 bfr =glm::vec3(max.x, min.y, min.z) ;
-  glm::vec3 bbl  = glm::vec3(min.x, min.y, max.z) ;
-  glm::vec3 bbr = glm::vec3(max.x, min.y, max.z) ;
+    glm::vec3 tfl = glm::vec3(min.x, max.y, min.z ) ;
+    glm::vec3 tfr = glm::vec3(max.x, max.y, min.z) ;
+    glm::vec3 tbl = glm::vec3(min.x, max.y, max.z ) ;
+    glm::vec3 tbr = glm::vec3(max.x, max.y, max.z) ;
+    glm::vec3 bfl = glm::vec3(min.x, min.y, min.z) ;
+    glm::vec3 bfr =glm::vec3(max.x, min.y, min.z) ;
+    glm::vec3 bbl  = glm::vec3(min.x, min.y, max.z) ;
+    glm::vec3 bbr = glm::vec3(max.x, min.y, max.z) ;
 
-  std::vector<glm::vec3> cube ;
-  cube.push_back(tfl);
-  cube.push_back(tfr);
-  cube.push_back(tbl);
-  cube.push_back(tbr);
-  cube.push_back(bfl);
-  cube.push_back(bfr);
-  cube.push_back(bbl);
-  cube.push_back(bbr);
-  return cube ;
-
+    std::vector<glm::vec3> cube ;
+    cube.push_back(tfl);
+    cube.push_back(tfr);
+    cube.push_back(tbl);
+    cube.push_back(tbr);
+    cube.push_back(bfl);
+    cube.push_back(bfr);
+    cube.push_back(bbl);
+    cube.push_back(bbr);
+    return cube ;
 }
 
 void generate_gaussian () {
@@ -215,4 +230,36 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *>
     edges.push_back({3 + 8 * i, 7 + 8 * i});
   }
   return polyscope::registerCurveNetwork(name, nodes, edges);
+}
+
+PointSet generate2dGaussian () {
+    std::vector<point> ps;
+    point p;
+
+    for( float i = 0 ; i < 50 ; ++i ) {
+        for( float j = 0 ; j < 50 ; ++j ) {
+            float x = (i - 25) / 25.0f;
+            float y = exp( -(x * x) );
+            float dy = -2 * x * exp( -(x * x) );
+
+            std::cout << "1" << std::endl;
+            p.pos.clear();
+
+            std::cout << "2" << std::endl;
+            p.pos.emplace_back(x);
+
+            std::cout << "3" << std::endl;
+            p.pos.emplace_back(y);
+
+            p.norm.clear();
+            p.norm.emplace_back(x);
+            p.norm.emplace_back(dy);
+
+            ps.emplace_back(p);
+        }
+    }
+
+    auto pc = PointSet(ps);
+    std::cout << "4" << std::endl;
+    return pc;
 }
