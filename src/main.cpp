@@ -1,78 +1,91 @@
+#include <iostream>
+#include <string>
+#include <filesystem>
 
 #include "polyscope/messages.h"
 #include "polyscope/point_cloud.h"
 #include "polyscope/pick.h"
 #include "polyscope/polyscope.h"
 
-void reconstruct(){
+#include "glm/gtx/string_cast.hpp"
 
-}
+#include "utils.hpp"
+#include "debug.hpp"
 
+#define MAX_DEPTH 7
 
-float kernelSize = 1.0f;
-polyscope::PointCloud* psCloud;
-std::vector<glm::vec3> points;
-std::vector<glm::vec3> colors;
-int prev = -1;
+namespace fs = std::filesystem;
 
-void callback() {
+std::string pathToDirectory{ "../assets/" };
+std::string path{"../assets/gaussian_spike_norm.ply"};
+std::vector<string> files;
+int current_item = 0;
+int depthToShow = 0;
+PointSet *ps;
+InputOctree *octree;
+std::array< polyscope::CurveNetwork*, MAX_DEPTH > octreeGraph;
 
-    ImGui::PushItemWidth(100);
-    ImGui::Text("custom window");
-
-    ImGui::SliderFloat("Kernel size", &kernelSize, 0.0f, 1.0f, "%.3f");
-    ImGui::Button("Surface");
-
-    ImGui::PopItemWidth();
-
-    if(polyscope::pick::haveSelection()){
-        std::pair<polyscope::Structure*, size_t> t = polyscope::pick::getSelection();
-        if( t.second != prev ){
-            std::cout << t.second << std::endl;
-            prev = t.second;
-            colors[prev] = glm::vec3( 1, 0, 0 );
-            polyscope::getPointCloud("really great points")->addColorQuantity("random color", colors);
-        }
-        
-    }
-}
-
-
+void showAtDepth( int depth );
+void loadPointCloud();
+void callback();
 
 int main(int argc, char **argv){
-    
-    polyscope::init();
-    std::vector<glm::vec3> points;
 
-    // generate points
-    for(float i = 0; i < 50; i++){
-        for( float j = 0; j < 50; j++){
-            float x = (i - 25) / 25.0f;
-            float y = (j - 25) / 25.0f;
-            points.push_back( glm::vec3( i/50.0f, exp( -(x*x) - (y*y)) , j/50.0f));
-            colors.push_back( glm::vec3(0.0f, 0.0f, 0.0f) );
-        }
+    for (const auto & entry : fs::directory_iterator(pathToDirectory)){
+        std::string s = entry.path();
+        files.push_back( s );
     }
 
-    // visualize!
-    psCloud = polyscope::registerPointCloud("really great points", points);
+    polyscope::init();
+    ps = new PointSet();
+    ps->readOpenMesh( path );
+    loadPointCloud();
     
-
-    // set some options
-    psCloud->setPointRadius(0.02);
-    psCloud->setPointRenderMode(polyscope::PointRenderMode::Sphere);
-    //psCloud->buildPickUI(0);
-
-    
-
-    // visualize
-    auto e = polyscope::getPointCloud("really great points")->addColorQuantity("random color", colors);
-    e->setEnabled(true);
-
     polyscope::state::userCallback = callback;
-
-    // show
     polyscope::show();
 
+    delete ps;
+    delete octree;
+
     return 0;
+}
+
+bool fileGetter(void *data, int index, const char** output)
+{
+    std::vector<string>* vec = (std::vector<string>*)data;
+    string &s = vec->at(index);
+    *output = s.c_str(); // not very safe
+    return true;
+}
+
+void callback(){
+  ImGui::PushItemWidth( 100 );
+  if(ImGui::SliderInt( "profondeur", &depthToShow, 0, MAX_DEPTH - 1 )) showAtDepth( depthToShow );
+  if(ImGui::ListBox("files", &current_item, fileGetter, &files, files.size())){ path = files[current_item]; };
+  if(ImGui::Button("load file")) loadPointCloud();
+}
+
+void showAtDepth( int depth ){
+  for( int i = 0; i < MAX_DEPTH; i++ ){
+    octreeGraph[i]->setEnabled( false );
+  }
+  octreeGraph[ depth ]->setEnabled( true );
+}
+
+void loadPointCloud(){
+    ps->readOpenMesh( std::string( path ) );
+    delete octree;
+    octree = generateInputOctree( MAX_DEPTH, ps );
+
+    for( int i = 0; i < MAX_DEPTH; i++ ){
+      auto o = octree->getAtDepth( i );
+      octreeGraph[i] = drawOctree( std::to_string(i), o );
+      octreeGraph[i]->setEnabled( false );
+    }
+
+    pointSetToPolyscope("pointCloud", ps);
+
+    octreeGraph[0]->setEnabled( true );
+
+    polyscope::view::resetCameraToHomeView();
 }

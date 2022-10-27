@@ -1,4 +1,4 @@
-# Chef-d'oeuvre M2 IAFA : Moving level-of-detail surfaces
+# MLoDS.exe
 
 ## Dependencies
 
@@ -8,9 +8,9 @@
 
 ## Installation
 ```bash
-$ git clone --recurse-submodules git@github.com:Master2-IAFA/15101051.git
+$ git clone --recursive 
 $ cd 150101051
 $ mkdir build && cd build
 $ cmake .. 
-$ make -j 8
-
+$ make install
+```

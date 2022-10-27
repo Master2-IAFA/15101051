@@ -1,5 +1,10 @@
+*build*
+*bin*
 ./build/**
 ./bin/**
 bin/
-
 build/
+src/main.cpp
+**/html
+**/latex
+
