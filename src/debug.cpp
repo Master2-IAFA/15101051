@@ -87,6 +87,27 @@ void test_debug_subdivide () {
     //TODO display tree
 }
 
+
+void test_octreeTraversing(InputOctree* oct) {
+  glm::vec3 bb_min = oct->getMin();
+  glm::vec3 bb_max = oct->getMax();
+
+  glm::vec3 bb_mid = midpoint(bb_min, bb_max);
+  float radius_protectionSphere = glm::distance(bb_mid, bb_max) * LAMBDA;
+
+  float rand_x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
+  float rand_y = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
+  float rand_z = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
+
+  glm::vec3 q = glm::vec3(bb_mid.x+rand_x, bb_mid.y+rand_y, bb_mid.z+rand_z);
+  std::vector<glm::vec3> pc_only_one_point;
+  pc_only_one_point.push_back(q); 
+  polyscope::PointCloud *pointCloud = polyscope::registerPointCloud("just_a_simple_point", pc_only_one_point);
+  pointCloud->setPointRadius(0.02f);
+
+  projection (oct, &gaussian_mixture, q);
+}
+
 //-----------------------------VIZUALISE BB OF POINT CLOUD----------------------
 void test_debug_bounding_box(std::vector<glm::vec3> points)
 {
@@ -165,7 +186,7 @@ void drawCube(std::string name, glm::vec3 min, glm::vec3 max)
   polyscope::registerCurveNetwork(name, nodes, edges);
 
   // visualize!
-  //polyscope::show();
+  // polyscope::show();
 }
 
 void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max)

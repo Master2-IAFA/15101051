@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Octree.hpp"
 
 template<class Data>

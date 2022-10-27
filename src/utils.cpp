@@ -1,5 +1,13 @@
 #include "utils.hpp"
 
+void init_statistics (statistics *stat){
+    stat->position = glm::vec3(0.0f);
+    stat->normal = glm::vec3(0.0f);
+    stat->norm = 0.0f;
+    stat->area = 0.0f;
+    stat->pdn = 0.0f;
+}
+
 InputOctree *generateInputOctree( int max_depth, PointSet *pc ){
   std::vector<point> aabb = pc->getBoundingBox();
   InputOctree *octree = new InputOctree(0, aabb[0].pos, aabb[1].pos);
@@ -22,10 +30,12 @@ void fitInputOctree( int max_depth, InputOctree *octree, std::vector<point> *poi
     statistics stat;
     hasPoint = false;
 
+    init_statistics (&stat);
+
     for( int j = 0; j < points->size(); j++ ){
       if( children[i]->isPointIn( points->at(j).pos ) ){
         children_points.push_back( points->at(j) );
-        //statisticsAdd( &stat, &points[j] );
+        statisticsAdd( &stat, points->at(j) );
         hasPoint = true;
       }
 

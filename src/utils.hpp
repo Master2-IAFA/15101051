@@ -14,6 +14,8 @@ typedef struct {
 
 typedef Octree<statistics> InputOctree;
 
+void init_statistics (statistics *stats);
+
 InputOctree* generateInputOctree( int max_depth, PointSet *pc );
 
 void fitInputOctree( int max_depth, InputOctree *octree, std::vector<point> *points );

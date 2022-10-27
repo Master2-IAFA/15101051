@@ -11,6 +11,7 @@
 
 #include "utils.hpp"
 #include "debug.hpp"
+#include "blending.hpp"
 
 #define MAX_DEPTH 7
 
@@ -76,6 +77,8 @@ void loadPointCloud(){
     ps->readOpenMesh( std::string( path ) );
     delete octree;
     octree = generateInputOctree( MAX_DEPTH, ps );
+
+    test_octreeTraversing(octree);
 
     for( int i = 0; i < MAX_DEPTH; i++ ){
       auto o = octree->getAtDepth( i );

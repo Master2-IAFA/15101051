@@ -5,6 +5,7 @@
 #include "polyscope/polyscope.h"
 #include "polyscope/point_cloud.h"
 #include "polyscope/curve_network.h"
+#include "blending.hpp"
 #include "PointSet.hpp"
 #include "utils.hpp"
 
@@ -33,8 +34,14 @@ void test_debug_readPly ();
  */
 void test_debug_subdivide ();
 
+/**
+ * @brief this function will traverse an octree for blending with a given point.
+ *
+ */
+void test_octreeTraversing(InputOctree *octree);
 
 void test_debug_bounding_box(std::vector<glm::vec3> points);
+
 void test_basic_polyscope ();
 
 /**
@@ -46,5 +53,7 @@ void test_basic_polyscope ();
 void drawCube(std::string name, glm::vec3 min, glm::vec3 max);
 
 void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max);
+
+
 
 polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *> octree);
