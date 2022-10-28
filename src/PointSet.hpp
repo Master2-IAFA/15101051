@@ -12,12 +12,19 @@ using std::string;
 /** one point with positions and normals features
  */
 typedef struct  {
-  std::vector<float> pos;
-  std::vector<float> norm;
-} point;
+    glm::vec3 pos;
+    glm::vec3 norm;
+} point3d;
+
+typedef struct  {
+    glm::vec2 pos;
+    glm::vec2 norm;
+} point2d;
 
 /** represents a point cloud
  */
+
+template<typename point>
 class PointSet {
 public:
     PointSet () {}
@@ -48,7 +55,7 @@ public:
      * @return min/max points (down left front/up right back corner points) of the box
      */
     std::pair<point, point> getBoundingBox ();
-    void addPoint(point point) { m_points.push_back(point); }
+    void addPoint(point p) { m_points.push_back(p); }
 
 private:
   vector<point> m_points;

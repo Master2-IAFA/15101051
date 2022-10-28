@@ -17,9 +17,9 @@ inline float max(float x, float y)
   else return y ;
 }
 
-
 //function that returns bounding box of point set
-std::pair<point, point> PointSet::getBoundingBox() {
+template<typename point>
+std::pair<point, point> PointSet<point>::getBoundingBox() {
     //goal is to get min and max of every x y z axis
     std::vector<float> min_vec;
     std::vector<float> max_vec;
@@ -62,7 +62,8 @@ std::pair<point, point> PointSet::getBoundingBox() {
     return std::make_pair(p1, p2);
 }
 
-void PointSet::readOpenMesh (string filename) {
+template<typename point>
+void PointSet<point>::readOpenMesh (string filename) {
     m_points.clear();
 
     OpenMesh::PolyMesh_ArrayKernelT<> mesh;
@@ -94,7 +95,8 @@ void PointSet::readOpenMesh (string filename) {
     }
 }
 
-void PointSet::readPly (string filename) {
+template<typename point>
+void PointSet<point>::readPly (string filename) {
     //file opening
     std::ifstream file (filename, std::ios::binary);
     if (!file) {

@@ -1,8 +1,8 @@
 #include "debug.hpp"
 
-void pointSetToPolyscope( std::string name, PointSet *ps ){
+void pointSetToPolyscope( std::string name, PointSet<point3d> *ps ){
 
-    std::vector<point> points = ps->getPoints();
+    std::vector<point3d> points = ps->getPoints();
 
     std::vector<glm::vec3> position ( points.size() );
     std::vector<glm::vec3> normal ( points.size() );
@@ -17,8 +17,8 @@ void pointSetToPolyscope( std::string name, PointSet *ps ){
     pointCloud->addVectorQuantity("normal", normal);
 }
 
-void pointSet2dToPolyscope (std::string name, PointSet *ps) {
-    std::vector<point> points = ps->getPoints();
+void pointSet2dToPolyscope (std::string name, PointSet<point2d> *ps) {
+    std::vector<point2d> points = ps->getPoints();
 
     std::vector<glm::vec2> position ( points.size() );
     std::vector<glm::vec2> normal ( points.size() );
@@ -85,7 +85,7 @@ void generate_gaussian () {
 }
 
 void test_debug_readPly () {
-    PointSet p;
+    PointSet<point3d> p;
     p.readPly("../assets/gaussian_spike_norm.ply");
     polyscope::init();
     pointSetToPolyscope( "gaussian", &p);
@@ -93,13 +93,13 @@ void test_debug_readPly () {
 }
 
 void test_debug_subdivide () {
-    std::vector<float> a {0, 0, 0};
-    std::vector<float> b {100, 100, 100};
-    Octree<int> tree (0, a, b, 3);
+    glm::vec3 a (0, 0, 0);
+    glm::vec3 b (100, 100, 100);
+    Octree<int, glm::vec3>* tree = new Octree<int, glm::vec3>(0, a, b);
 
-    tree.subDivide();
+    tree->subDivide();
 
-    auto children = tree.getChildren();
+    auto children = tree->getChildren();
     children[0]->subDivide();
     //TODO display tree
 }
@@ -108,12 +108,12 @@ void test_debug_subdivide () {
 void test_debug_bounding_box(std::vector<glm::vec3> points)
 {
   //------------------test getBoundingBox (Lou)
-  vector<point> my_points ;
+  vector<point3d> my_points ;
   std::vector<glm::vec3> colors;
   //glm::vec3 useless_norm = (0.0, 0.0, 0.0);
   for (int i = 0 ; i < points.size() ; ++i)
   {
-    point p;
+    point3d p;
     p.pos[0] = points[i][0] ;
     p.pos[1] = points[i][1] ;
     p.pos[2] = points[i][2] ;
@@ -125,9 +125,9 @@ void test_debug_bounding_box(std::vector<glm::vec3> points)
     my_points.push_back(p);
   }
 
-  PointSet * ps = new PointSet(my_points) ;
+  PointSet<point3d> * ps = new PointSet(my_points) ;
 
-  std::pair<point, point> bb_example = ps->getBoundingBox();
+  std::pair<point3d, point3d> bb_example = ps->getBoundingBox();
   std::cout << "bb_example : min = " << bb_example.first.pos[0] << "," << bb_example.first.pos[1] << "," << bb_example.first.pos[2] ;
   std::cout << "bb_example : max = " << bb_example.second.pos[0] << "," << bb_example.second.pos[1] << "," << bb_example.second.pos[2] ;
 
@@ -232,9 +232,9 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *>
   return polyscope::registerCurveNetwork(name, nodes, edges);
 }
 
-PointSet generate2dGaussian () {
-    std::vector<point> ps;
-    point p;
+PointSet<point2d> generate2dGaussian () {
+    std::vector<point2d> ps;
+    point2d p;
 
     for( float i = 0 ; i < 50 ; ++i ) {
         for( float j = 0 ; j < 50 ; ++j ) {
@@ -242,24 +242,14 @@ PointSet generate2dGaussian () {
             float y = exp( -(x * x) );
             float dy = -2 * x * exp( -(x * x) );
 
-            std::cout << "1" << std::endl;
-            p.pos.clear();
-
-            std::cout << "2" << std::endl;
-            p.pos.emplace_back(x);
-
-            std::cout << "3" << std::endl;
-            p.pos.emplace_back(y);
-
-            p.norm.clear();
-            p.norm.emplace_back(x);
-            p.norm.emplace_back(dy);
+            p.pos = glm::vec2( x, y );
+            p.norm = glm::vec2( x, dy );
 
             ps.emplace_back(p);
         }
     }
 
-    auto pc = PointSet(ps);
+    auto pc = PointSet<point2d>(ps);
     std::cout << "4" << std::endl;
     return pc;
 }

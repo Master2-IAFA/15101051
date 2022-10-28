@@ -7,7 +7,7 @@ inline T norm (std::vector<T> v) {
         n += v[i] * v[i];
     }
 
-    return sqrt(n);
+    return n;
 }
 
 template<typename T>
@@ -24,15 +24,17 @@ inline T dot (std::vector<T> a, std::vector<T> b) {
     return p;
 }
 
-InputOctree *generateInputOctree( int max_depth, PointSet *pc ) {
+template<typename statistics, typename point>
+InputOctree *generateInputOctree( int max_depth, PointSet<statistics> *pc ) {
     std::pair<point, point> aabb = pc->getBoundingBox();
-    InputOctree *octree = new InputOctree(0, aabb.first.pos, aabb.second.pos, aabb.first.pos.size());
+    InputOctree *octree = new InputOctree(0, aabb.first.pos, aabb.second.pos);
     std::vector<point> points = pc->getPoints();
     fitInputOctree( max_depth, octree, &points );
 
     return octree;
 }
 
+template<typename statistics, typename point>
 void fitInputOctree( int max_depth, InputOctree *octree, std::vector<point> *points ) {
     if ( max_depth == 0 ) return;
 
@@ -68,14 +70,13 @@ void fitInputOctree( int max_depth, InputOctree *octree, std::vector<point> *poi
     }
 }
 
-void statisticsAdd(statistics *stat, point point) {
+template<typename statistics, typename point>
+void statisticsAdd(statistics *stat, point p) {
     stat->area += 1;
-    stat->norm += norm(point.pos);
-    stat->normal[0] += point.norm[0];
-    stat->normal[1] += point.norm[1];
-    stat->normal[2] += point.norm[2];
-    stat->pdn += dot(point.pos, point.norm);
-    stat->position[0] += point.pos[0];
-    stat->position[1] += point.pos[1];
-    stat->position[2] += point.pos[2];
+    stat->norm += norm(p.pos);
+    stat->pdn += dot(p.pos, p.norm);
+    for ( int i = 0 ; i < p.pos.size() ; ++i ) {
+        stat->normal[i] += p.norm[i];
+        stat->position[i] += p.pos[i];
+    }
 }

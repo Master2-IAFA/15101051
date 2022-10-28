@@ -21,7 +21,7 @@ std::string path{"../assets/gaussian_spike_norm.ply"};
 std::vector<string> files;
 int current_item = 0;
 int depthToShow = 0;
-PointSet *ps;
+PointSet<point3d> *ps;
 InputOctree *octree;
 std::array< polyscope::CurveNetwork*, MAX_DEPTH > octreeGraph;
 
@@ -36,11 +36,13 @@ int main () {
     }
 
     polyscope::init();
-    ps = new PointSet();
+    ps = new PointSet<point3d>();
 
     loadPointCloud();
 
     polyscope::state::userCallback = callback;
+    pointSetToPolyscope("", ps);
+
     polyscope::show();
 
     delete ps;
@@ -58,10 +60,10 @@ bool fileGetter(void *data, int index, const char** output)
 }
 
 void callback(){
-  ImGui::PushItemWidth( 100 );
-  if(ImGui::SliderInt( "profondeur", &depthToShow, 0, MAX_DEPTH - 1 )) showAtDepth( depthToShow );
-  if(ImGui::ListBox("files", &current_item, fileGetter, &files, files.size())){ path = files[current_item]; };
-  if(ImGui::Button("load file")) loadPointCloud();
+    ImGui::PushItemWidth( 100 );
+    if(ImGui::SliderInt( "profondeur", &depthToShow, 0, MAX_DEPTH - 1 )) showAtDepth( depthToShow );
+    if(ImGui::ListBox("files", &current_item, fileGetter, &files, files.size())){ path = files[current_item]; };
+    if(ImGui::Button("load file")) loadPointCloud();
 }
 
 void showAtDepth( int depth ){

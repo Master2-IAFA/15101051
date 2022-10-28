@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <omp.h>
 #include <string>
@@ -8,8 +9,8 @@
 #include "PointSet.hpp"
 #include "utils.hpp"
 
-void pointSetToPolyscope(std::string name, PointSet *ps);
-void pointSet2dToPolyscope (std::string name, PointSet *ps);
+void pointSetToPolyscope(std::string name, PointSet<point3d> *ps);
+void pointSet2dToPolyscope (std::string name, PointSet<point2d> *ps);
 
 /**
  * @brief given min and max of a cube, returns vector of each point of the cube
@@ -49,4 +50,4 @@ void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max);
 
 polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *> octree);
 
-PointSet generate2dGaussian ();
+PointSet<point2d> generate2dGaussian ();

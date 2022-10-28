@@ -1,199 +1,85 @@
 #include "Octree.hpp"
 
-template<class Data>
-Octree<Data>::Octree(int _depth, std::vector<float> _min, std::vector<float> _max, int _dim) {
-    m_children.reserve( int(pow(2, _dim)) );
-    for(int i = 0; i < int(pow(2, _dim)); i++){
+template<class Data, typename VecType>
+Octree<Data, VecType>::Octree(int _depth, VecType _min, VecType _max) {
+    m_dim = _min.length();
+    m_children.reserve( int(pow(2, m_dim)) );
+    for(int i = 0; i < int(pow(2, m_dim)); i++){
         m_children[i] = nullptr;
     }
     m_min = _min;
     m_depth = _depth;
     m_max = _max;
-    m_dim = _dim;
 
-    if (_min.size() != _dim || _max.size() != _dim) {
+    if (_min.length() != m_dim || _max.length() != m_dim) {
         std::cout << "incoherent dimension on Octree creation" << std::endl;
         this->~Octree();
     }
 }
 
-template<class Data>
-Octree<Data>::~Octree(){
+template<class Data, typename VecType>
+Octree<Data, VecType>::~Octree(){
     m_father = nullptr;
     //delete _data;
-    for(int i = 0; i < 8; i++){
+    for(int i = 0; i < int(pow( 2, m_dim )); i++){
         delete m_children[i];
     }
 }
 
-template<class Data>
-void Octree<Data>::subDivide(){
-    std::vector<float> min;
-    std::vector<float> max;
-    std::vector<float> center;
+template<class Data, typename VecType>
+void Octree<Data, VecType>::subDivide(){
+    VecType min;
+    VecType max;
+    VecType center;
+
     for ( int i = 0 ; i < m_dim ; ++i ) {
-        center.emplace_back( (m_min[i] + m_max[i]) / 2 );
+        center[i] = (m_min[i] + m_max[i]) / 2;
     }
 
-    if (m_dim == 2) {
-        m_children.clear();
-        m_children.reserve(4);
-        //bottom left
-        m_children.emplace_back( new Octree<Data>( m_depth + 1, m_min, center, m_dim ) );
+    m_children.clear();
+    m_children.reserve( size_t(pow( 2, m_dim )) );
 
-        //bottom right
-        min.emplace_back( (m_min[0] + m_max[0]) / 2 );
-        min.emplace_back( m_min[1] );
-
-        max.emplace_back( m_max[0] );
-        max.emplace_back( (m_min[1] + m_max[1]) / 2 );
-
-        m_children.emplace_back( new Octree<Data>( m_depth + 1, min, max, m_dim ) );
-
-        min.clear();
-        max.clear();
-
-        //top left
-        min.emplace_back( m_min[0] );
-        min.emplace_back( (m_min[1] + max[1]) / 2 );
-
-        max.emplace_back( (m_min[0] + m_max[0]) / 2 );
-        max.emplace_back( m_max[1] );
-
-        m_children.emplace_back( new Octree<Data>( m_depth + 1, min, max, m_dim ) );
-
-        min.clear();
-        max.clear();
-
-        //top right
-        m_children.emplace_back( new Octree<Data>( m_depth + 1, center, m_max, m_dim ) );
+    for ( int i = 0 ; i < int(pow( 2, m_dim )) ; ++i ) {
+        for ( int j = 0 ; j < m_dim ; ++j ) {
+            if ( (i / int(pow( 2, j ))) % 2 == 0 ) {
+                min[j] = m_min[j];
+                max[j] = center[j];
+            }
+            else {
+                min[j] = center[j];
+                max[j] = m_max[j];
+            }
+        }
+        m_children.emplace_back( new Octree<Data, VecType>( m_depth + 1, min, max ) );
     }
 
-    if (m_dim == 3) {
-        m_children.clear();
-        m_children.reserve(8);
-        //bottom front left
-        m_children.emplace_back( new Octree<Data>( m_depth + 1, m_min, center, m_dim ) );
-
-        //bottom front right
-        min.emplace_back( (m_min[0] + m_max[0]) / 2 );
-        min.emplace_back( m_min[1] );
-        min.emplace_back( m_min[2] );
-
-        max.emplace_back( m_max[0] );
-        max.emplace_back( (m_min[1] + m_max[1]) / 2 );
-        max.emplace_back( (m_min[2] + m_max[2]) / 2 );
-
-        m_children.emplace_back( new Octree<Data>( m_depth + 1, min, max, m_dim ) );
-
-        min.clear();
-        max.clear();
-
-        //bottom back left
-        min.emplace_back( m_min[0] );
-        min.emplace_back( (m_min[1] + m_max[1]) / 2 );
-        min.emplace_back( m_min[2] );
-
-        max.emplace_back( (m_min[0] + m_max[0]) / 2 );
-        max.emplace_back( m_max[1] );
-        max.emplace_back( (m_min[2] + m_max[2]) / 2 );
-
-        m_children.emplace_back( new Octree<Data>( m_depth + 1, min, max, m_dim ) );
-
-        min.clear();
-        max.clear();
-
-        //bottom back right
-        min.emplace_back( (m_min[0] + m_max[0]) / 2 );
-        min.emplace_back( (m_min[1] + m_max[1]) / 2 );
-        min.emplace_back( m_min[2] );
-
-        max.emplace_back( m_max[0] );
-        max.emplace_back( m_max[1] );
-        max.emplace_back( (m_min[2] + m_max[2]) / 2 );
-
-        m_children.emplace_back( new Octree<Data>( m_depth + 1, min, max, m_dim ) );
-
-        min.clear();
-        max.clear();
-
-        //top front left
-        min.emplace_back( m_min[0] );
-        min.emplace_back( m_min[1] );
-        min.emplace_back( (m_min[2] + m_max[2]) / 2 );
-
-        max.emplace_back( (m_min[0] + m_max[0]) / 2 );
-        max.emplace_back( (m_min[1] + m_max[1]) / 2 );
-        max.emplace_back( m_max[2] );
-
-        m_children.emplace_back( new Octree<Data>( m_depth + 1, min, max, m_dim ) );
-
-        min.clear();
-        max.clear();
-
-        //top front right
-        min.emplace_back( (m_min[0] + m_max[0]) / 2 );
-        min.emplace_back( m_min[1] );
-        min.emplace_back( (m_min[2] + m_max[2]) / 2 );
-
-        max.emplace_back( m_max[0] );
-        max.emplace_back( (m_min[1] + m_max[1]) / 2 );
-        max.emplace_back( m_max[2] );
-
-        m_children.emplace_back( new Octree<Data>( m_depth + 1, min, max, m_dim ) );
-
-        min.clear();
-        max.clear();
-
-        //top back left
-        min.emplace_back( m_min[0] );
-        min.emplace_back( (m_min[1] + m_max[1]) / 2 );
-        min.emplace_back( (m_min[2] + m_max[2]) / 2 );
-
-        max.emplace_back( (m_min[0] + m_max[0]) / 2 );
-        max.emplace_back( m_max[1] );
-        max.emplace_back( m_max[2] );
-
-        m_children.emplace_back( new Octree<Data>( m_depth + 1, min, max, m_dim ) );
-
-        min.clear();
-        max.clear();
-
-        //top back right
-        m_children.emplace_back( new Octree<Data>(m_depth + 1, center, m_max, m_dim ) );
-    }
-
-    for ( int  i = 0 ; i < int(pow(2, m_dim)) ; ++i ) {
+    for ( int  i = 0 ; i < int(pow( 2, m_dim )) ; ++i ) {
         m_children[i]->setFather(this);
     }
 }
 
-template<class Data>
-bool Octree<Data>::isPointIn(std::vector<float> p) {
-    std::vector<float> min = this->getMin();
-    std::vector<float> max = this->getMax();
-    //if you want to vizualise cube and point on polyscope
-    //std::vector<glm::vec3> cube = build_cube_from_minmax(min, max);
-    //cube.push_back(p) ;
+template<class Data, typename VecType>
+bool Octree<Data, VecType>::isPointIn ( std::vector<float> p ) {
+    VecType min = this->getMin();
+    VecType max = this->getMax();
 
-    if ((p[0] > min[0]) && (p[0] < max[0]) &&
-        (p[1] > min[1]) && (p[1] < max[1]) &&
-        (p[2] > min[2]) && (p[2] < max[2])) {
-        //std::cout << "point is inside \n" ;
-        return true ;
+    for ( int i = 0 ; i < m_dim ; ++i ) {
+        if ( (p[i] < min[i]) || (p[i] > max[i]) ) {
+            return false;
+        }
     }
-    //std::cout << "point is outside \n" ;
-    return false ;
+
+    return true;
 }
 
-template<class Data>
-std::vector<Octree<Data>*> Octree<Data>::getAtDepth(int depth){
-    std::vector<Octree<Data>*> octree;
-    std::vector<Octree<Data>*> stack;
+template<class Data, typename VecType>
+std::vector<Octree<Data, VecType>*> Octree<Data, VecType>::getAtDepth(int depth){
+    std::vector<Octree<Data, VecType>*> octree;
+    std::vector<Octree<Data, VecType>*> stack;
     stack.push_back( this );
 
     while( !stack.empty() ) {
-        Octree<Data>* current = stack.back();
+        Octree<Data, VecType>* current = stack.back();
         stack.pop_back();
 
         if( current->hasChildren() ) {
