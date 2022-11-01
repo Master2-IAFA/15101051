@@ -1,10 +1,5 @@
 #include "PointSet.hpp"
 
-#include <stdlib.h>
-
-#include <OpenMesh/Core/IO/MeshIO.hh>
-#include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
-
 float min(float x, float y)
 {
   if (x < y) return x ;
@@ -15,6 +10,17 @@ float max(float x, float y)
 {
   if (x > y) return x ;
   else return y ;
+}
+
+void PointSet::print_pointset_infos(OpenMesh::PolyMesh_ArrayKernelT<> mesh)
+{
+  // move all vertices one unit length along it's normal direction
+  for (OpenMesh::PolyMesh_ArrayKernelT<>::VertexIter v_it = mesh.vertices_begin();
+       v_it != mesh.vertices_end(); ++v_it)
+  {
+    std::cout << "Vertex #"  << ": " << mesh.point( *v_it );
+    std::cout << " Normal # " << mesh.point( *v_it ) << std::endl;
+  }
 }
 
 
@@ -76,6 +82,7 @@ std::vector<point> PointSet::getBoundingBox() {
     return bb ;
 }
 
+
 void PointSet::readOpenMesh (string filename) {
     m_points.clear();
 
@@ -84,6 +91,9 @@ void PointSet::readOpenMesh (string filename) {
     if (!OpenMesh::IO::read_mesh(mesh, filename)) {
         return;
     }
+
+    //auto unpackOpenMesh = unpack_mesh(mesh);
+    //std::vector<glm::vec3> normals = calculateNormals(unpackOpenMesh);
 
     for (auto v = mesh.vertices_sbegin(); v != mesh.vertices_end(); ++v) {
         auto current_point = mesh.point(*v);
@@ -99,11 +109,12 @@ void PointSet::readOpenMesh (string filename) {
             p.norm[2] = n[2];
         }
         else {
-            p.norm = glm::vec3(1, 0, 0);
+          p.norm = glm::vec3(0.0, 0.0, 1.0) ;
         }
-
         this->m_points.emplace_back(p);
     }
+
+
 }
 
 void PointSet::readPly (string filename) {
@@ -213,4 +224,87 @@ void PointSet::readPly (string filename) {
             record.clear();
         }
     }
+}
+
+
+//-----------------------------------------------------------------------------
+
+//fonctions de Lou pour calculer les normales d'un fichier ply en fonction de ses
+//faces et de ses vertices (pas très utile pour le moment malheureusement)
+
+glm::vec3 PointSet::computeFaceNormal(std::array<double, 3> p1, std::array<double, 3> p2, std::array<double, 3> p3) {
+    // Uses p2 as a new origin for p1,p3
+    glm::vec3 vec_p3 = { p3[0], p3[1], p3[2] };
+    glm::vec3 vec_p2 = { p2[0], p2[1], p2[2] };
+    glm::vec3 vec_p1 = { p1[0], p1[1], p1[2] };
+
+    auto a = vec_p3 - vec_p2;
+    auto b = vec_p1 - vec_p2;
+    // Compute the cross product a X b to get the face normal
+    return glm::normalize(glm::cross(a, b));
+}
+
+std::vector<glm::vec3> PointSet::calculateNormals(std::pair<std::vector<std::array<double, 3> >, std::vector<std::array<size_t, 3>>> unpackOpenMesh)
+{
+    auto vertices = unpackOpenMesh.first;
+    auto faces = unpackOpenMesh.second;
+    std::vector<glm::vec3> normals ;
+    // For each face calculate normals and append it
+    // to the corresponding vertices of the face
+    for (unsigned int i = 0; i < faces.size(); i ++)
+    {
+        std::array<double, 3> A = vertices[faces[i][0]];
+        std::array<double, 3> B = vertices[faces[i][1]];
+        std::array<double, 3> C = vertices[faces[i][2]];
+        glm::vec3 normal = computeFaceNormal(A, B, C);
+        normals[faces[i][0]] += normal;
+        normals[faces[i][1]] += normal;
+        normals[faces[i][2]] += normal;
+    }
+    // Normalize each normal
+    for (unsigned int i = 0; i < normals.size(); i++)
+        normals.push_back(glm::normalize(normals[i]));
+
+    std::cout << "normal size in function = " << faces.size() << "\n" ;
+    return normals ;
+}
+
+std::pair<std::vector<std::array<double, 3> >, std::vector<std::array<size_t, 3>>>
+PointSet::unpack_mesh(OpenMesh::PolyMesh_ArrayKernelT<> &mesh)
+{
+  std::vector<std::array<double, 3> > vertices ;
+  std::vector<std::array<size_t, 3>> faces ;
+
+  for( auto p : mesh.vertices()){
+      auto point = mesh.point( p );
+      std::array<double, 3> arrayPoint;
+      arrayPoint[0] = point[0];
+      arrayPoint[1] = point[1];
+      arrayPoint[2] = point[2];
+      vertices.push_back( arrayPoint );
+    }
+
+    int temp = 0;
+    for (auto f: mesh.faces()) {
+          std::array<size_t, 3> arrayFace;
+          for (auto fv_it = mesh.fv_iter(f); fv_it.is_valid(); ++fv_it) {
+              arrayFace[temp] = fv_it->idx();
+              temp++;
+          }
+          faces.push_back( arrayFace );
+          temp = 0;
+      }
+
+      //debug
+      /*for (int i = 0 ; i < vertices.size() ; ++i)
+      {
+        std::cout << vertices[i][0] << vertices[i][1] << vertices[i][2] ;
+      }
+
+      for (int i = 0 ; i < faces.size() ; ++i)
+      {
+        std::cout << faces[i][0] << faces[i][1] << faces[i][2] << "\n" ;
+      }*/
+
+      return std::make_pair(vertices, faces);
 }

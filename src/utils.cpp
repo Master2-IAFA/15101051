@@ -9,23 +9,24 @@ InputOctree *generateInputOctree( int max_depth, PointSet *pc ){
 }
 
 void fitInputOctree( int max_depth, InputOctree *octree, std::vector<point> *points ){
-  if( max_depth == 0 ) return;
+  if ( max_depth == 0 ) return;
 
   octree->subDivide();
   auto children = octree->getChildren();
 
-  
+
   bool hasPoint = false;
-  for( int i = 0; i < 8; i++ ){ 
+  for( int i = 0; i < 8; i++ ){
 
     std::vector<point> children_points;
-    statistics stat;
+    statistics stat ;
+    init_statistics (&stat);
     hasPoint = false;
 
     for( int j = 0; j < points->size(); j++ ){
       if( children[i]->isPointIn( points->at(j).pos ) ){
         children_points.push_back( points->at(j) );
-        //statisticsAdd( &stat, &points[j] );
+        statisticsAdd( &stat, points->at(j) );
         hasPoint = true;
       }
 
@@ -41,8 +42,16 @@ void fitInputOctree( int max_depth, InputOctree *octree, std::vector<point> *poi
 
 void statisticsAdd(statistics *stat, point point){
     stat->area += 1;
-    stat->norm += glm::l2Norm(point.pos);
+    stat->norm += glm::pow(glm::l2Norm(point.pos), 2);
     stat->normal += point.norm;
     stat->pdn += glm::dot(point.pos, point.norm);
     stat->position += point.pos;
+}
+
+void init_statistics (statistics *stat){
+    stat->position = glm::vec3(0.0f);
+    stat->normal = glm::vec3(0.0f);
+    stat->norm = 0.0f;
+    stat->area = 0.0f;
+    stat->pdn = 0.0f;
 }

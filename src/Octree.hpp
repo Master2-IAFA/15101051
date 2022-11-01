@@ -18,7 +18,7 @@
  * @brief class that represent an octree define by an aabb box.
  *        an octree can contain other octrees (8)
  *        an octree can also contain arbitrary data
- * 
+ *
  * @tparam Data: the type of data the octree can take.
  */
 template<typename Data>
@@ -46,9 +46,9 @@ public:
 
   /**
    * @brief return if the octree has children
-   * 
-   * @return true 
-   * @return false 
+   *
+   * @return true
+   * @return false
    */
   bool hasChildren(){ return !(_children[0] == nullptr);}
 

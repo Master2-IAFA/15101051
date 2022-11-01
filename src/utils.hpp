@@ -7,9 +7,9 @@
 typedef struct {
   glm::vec3 position;
   glm::vec3 normal;
-  double norm;
-  double area;
-  double pdn;
+  float norm;
+  float area;
+  float pdn;
 } statistics;
 
 typedef Octree<statistics> InputOctree;
@@ -19,3 +19,5 @@ InputOctree* generateInputOctree( int max_depth, PointSet *pc );
 void fitInputOctree( int max_depth, InputOctree *octree, std::vector<point> *points );
 
 void statisticsAdd( statistics *stat, point point );
+
+void init_statistics (statistics *stats);

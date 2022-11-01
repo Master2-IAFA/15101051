@@ -1,5 +1,10 @@
 #pragma once
 
+#include <stdlib.h>
+
+#include <OpenMesh/Core/IO/MeshIO.hh>
+#include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -44,11 +49,37 @@ public:
 
     /** compute the bounding box of current point cloud
      *
-     * bounding box: cuboïd that contains all points of the point cloud
+     * bounding box: cuboï¿½d that contains all points of the point cloud
      * @return min/max points (down left front/up right back corner points) of the box
      */
     vector<point> getBoundingBox ();
     void addPoint(point point) { m_points.push_back(point); }
+
+    /**
+     * @brief function to debug (prints pointset coords and normals)
+     */
+    void print_pointset_infos(OpenMesh::PolyMesh_ArrayKernelT<> mesh);
+
+
+    //----------------------------fonctions de calcul de normales en fonction
+    //---------------------------des faces et vertices d'un fichier (inutile pour
+    //-------------------------le moment, Ã  supprimer ou ignorer)
+
+    /**
+     * @brief function to compute face normals
+     */
+    glm::vec3 computeFaceNormal(std::array<double, 3> p1, std::array<double, 3> p2, std::array<double, 3> p3);
+
+    /**
+     * @brief function to compute vertices normals
+     */
+    std::vector<glm::vec3> calculateNormals(std::pair<std::vector<std::array<double, 3> >, std::vector<std::array<size_t, 3>>> unpackOpenMesh);
+
+    /**
+     * @brief function get vertices and normals list of mesh
+     */
+    std::pair<std::vector<std::array<double, 3> >, std::vector<std::array<size_t, 3>>>
+    unpack_mesh(OpenMesh::PolyMesh_ArrayKernelT<> &mesh) ;
 
 private:
   vector<point> m_points;

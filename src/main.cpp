@@ -31,21 +31,20 @@ void callback();
 
 int main(int argc, char **argv){
 
-    for (const auto & entry : fs::directory_iterator(pathToDirectory)){
+    /*for (const auto & entry : fs::directory_iterator(pathToDirectory)){
         std::string s = entry.path();
         files.push_back( s );
-    }
-
+    }*/
     polyscope::init();
     ps = new PointSet();
     ps->readOpenMesh( path );
     loadPointCloud();
-    
-    polyscope::state::userCallback = callback;
+    //polyscope::state::userCallback = callback;
     polyscope::show();
 
     delete ps;
     delete octree;
+
 
     return 0;
 }
@@ -77,15 +76,23 @@ void loadPointCloud(){
     delete octree;
     octree = generateInputOctree( MAX_DEPTH, ps );
 
-    for( int i = 0; i < MAX_DEPTH; i++ ){
+    //debug Lou fit sphere
+    auto o = octree->getAtDepth( 2 );
+    fit_sphere_on_node(o[2], ps, glm::vec3(1.0, 1.0, 1.0));
+    //  fit_sphere_on_node(o[2], ps, glm::vec3(1.0, 1.0, 1.0));
+    /*for(int i = 0; i < o.size(); i++){
+        fit_sphere_on_node(o[i]);
+    }*/
+
+  /*  for( int i = 0; i < MAX_DEPTH; i++ ){
       auto o = octree->getAtDepth( i );
       octreeGraph[i] = drawOctree( std::to_string(i), o );
       octreeGraph[i]->setEnabled( false );
-    }
+    }*/
 
     pointSetToPolyscope("pointCloud", ps);
 
-    octreeGraph[0]->setEnabled( true );
+    //octreeGraph[0]->setEnabled( true );
 
     polyscope::view::resetCameraToHomeView();
 }

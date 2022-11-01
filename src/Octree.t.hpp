@@ -1,5 +1,6 @@
 #include "Octree.hpp"
 
+
 template<class Data>
 Octree<Data>::Octree(int depth, glm::vec3 min, glm::vec3 max){
     for(int i = 0; i < 8; i++){
@@ -106,7 +107,7 @@ std::vector<Octree<Data>*> Octree<Data>::getAtDepth(int depth){
             for(int i = 0; i < 8; i++){
                 if( children[i]->getDepth() == depth ){
                     octree.push_back( children[i] );
-                }else{ 
+                }else{
                     stack.push_back( children[i] );
                 }
             }
