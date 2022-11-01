@@ -202,7 +202,7 @@ void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max)
   polyscope::registerCurveNetwork(name, nodes, edges);
 }
 
-polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *> octree){
+polyscope::CurveNetwork* drawOctree(std::string name, std::vector<Octree<statistics3d, glm::vec3> *> octree){
 
   std::vector<std::array<int, 2>> edges ;
   std::vector<glm::vec3> nodes;

@@ -6,8 +6,7 @@
 #include "polyscope/polyscope.h"
 #include "polyscope/point_cloud.h"
 #include "polyscope/curve_network.h"
-#include "PointSet.hpp"
-#include "utils.hpp"
+#include "utils.t.hpp"
 
 void pointSetToPolyscope(std::string name, PointSet<point3d> *ps);
 void pointSet2dToPolyscope (std::string name, PointSet<point2d> *ps);
@@ -34,8 +33,8 @@ void test_debug_readPly ();
  */
 void test_debug_subdivide ();
 
-
 void test_debug_bounding_box(std::vector<glm::vec3> points);
+
 void test_basic_polyscope ();
 
 /**
@@ -48,6 +47,6 @@ void drawCube(std::string name, glm::vec3 min, glm::vec3 max);
 
 void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max);
 
-polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *> octree);
+polyscope::CurveNetwork* drawOctree(std::string name, std::vector<Octree<statistics3d, glm::vec3> *> octree);
 
 PointSet<point2d> generate2dGaussian ();

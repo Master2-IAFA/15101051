@@ -5,19 +5,12 @@
 #include <OpenMesh/Core/IO/MeshIO.hh>
 #include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
 
-inline float min(float x, float y)
-{
-  if (x < y) return x ;
-  else return y ;
-}
+inline float min(float x, float y) { return (x < y)? x : y; }
 
-inline float max(float x, float y)
-{
-  if (x > y) return x ;
-  else return y ;
-}
+inline float max(float x, float y) { return (x > y)? x : y; }
 
-//function that returns bounding box of point set
+/** function that returns bounding box of point set
+ */
 template<typename point>
 std::pair<point, point> PointSet<point>::getBoundingBox() {
     //goal is to get min and max of every x y z axis
@@ -26,7 +19,7 @@ std::pair<point, point> PointSet<point>::getBoundingBox() {
 
     //initialize min/max to first point coordinates if such point exists
     if ( this->m_points.size() > 0 ) {
-        for ( size_t i = 0 ; i < m_points[0].pos.size() ; ++i ) {
+        for ( size_t i = 0 ; i < m_points[0].pos.length() ; ++i ) {
             min_vec.emplace_back( m_points[0].pos[i] );
             max_vec.emplace_back( m_points[0].pos[i] );
         }
@@ -34,12 +27,12 @@ std::pair<point, point> PointSet<point>::getBoundingBox() {
 
     //iterate on points to find max/min value on each coordinate
     for ( size_t i = 1 ; i < this->m_points.size() ; ++i ) {
-      point p = this->m_points[i] ;
+        point p = this->m_points[i] ;
 
-      for ( size_t i = 0 ; i < p.pos.size() ; ++i ) {
-          min_vec[i] = min( min_vec[i], p.pos[i] );
-          max_vec[i] = max( max_vec[i], p.pos[i] );
-      }
+        for ( size_t i = 0 ; i < min_vec.size() ; ++i ) {
+            min_vec[i] = min( min_vec[i], p.pos[i] );
+            max_vec[i] = max( max_vec[i], p.pos[i] );
+        }
     }
 
     //find max value between coordinates
@@ -55,8 +48,8 @@ std::pair<point, point> PointSet<point>::getBoundingBox() {
 
     point p1, p2;
     for ( size_t i = 0 ; i < min_vec.size() ; ++i ) {
-        p1.pos.emplace_back(min_vec[i]);
-        p2.pos.emplace_back(max_vec[i]);
+        p1.pos[i] = min_vec[i];
+        p2.pos[i] = max_vec[i];
     }
 
     return std::make_pair(p1, p2);
@@ -75,20 +68,22 @@ void PointSet<point>::readOpenMesh (string filename) {
     for (auto v = mesh.vertices_sbegin(); v != mesh.vertices_end(); ++v) {
         auto current_point = mesh.point(*v);
         point p;
-        p.pos.emplace_back(current_point[0]);
-        p.pos.emplace_back(current_point[1]);
-        p.pos.emplace_back(current_point[2]);
+
+        for (int i = 0;i < p.pos.length();++i) {
+            p.pos[i] = current_point[i];
+        }
 
         if (mesh.has_vertex_normals()) {
             auto n = mesh.normal(*v);
-            p.norm.emplace_back(n[0]);
-            p.norm.emplace_back(n[1]);
-            p.norm.emplace_back(n[2]);
+            for (int i = 0;i < p.norm.length();++i) {
+                p.norm[i] = n[i];
+            }
         }
         else {
-            p.norm.emplace_back(1);
-            p.norm.emplace_back(0);
-            p.norm.emplace_back(0);
+            p.norm[0] = 1;
+            for (int i = 1;i < p.norm.length();++i) {
+                p.norm[i] = 0;
+            }
         }
 
         this->m_points.emplace_back(p);

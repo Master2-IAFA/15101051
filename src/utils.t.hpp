@@ -1,41 +1,22 @@
+#pragma once
+
 #include "utils.hpp"
 
-template<typename T>
-inline T norm (std::vector<T> v) {
-    T n = 0;
-    for ( size_t i = 0 ; i < v.size() ; ++i ) {
-        n += v[i] * v[i];
-    }
-
-    return n;
-}
-
-template<typename T>
-inline T dot (std::vector<T> a, std::vector<T> b) {
-    if (a.size() != b.size()) {
-        std::cout << "incoherent vectors' size while computing dot" << std::endl;
-    }
-
-    T p = 0;
-    for ( size_t i = 0 ; i < a.size() ; ++i ) {
-        p += a[i] * b[i];
-    }
-
-    return p;
-}
-
-template<typename statistics, typename point>
-InputOctree *generateInputOctree( int max_depth, PointSet<statistics> *pc ) {
+template<typename statistics, typename point, typename VecType>
+Octree<statistics, VecType>* generateInputOctree( int max_depth, PointSet<point> *pc ) {
     std::pair<point, point> aabb = pc->getBoundingBox();
-    InputOctree *octree = new InputOctree(0, aabb.first.pos, aabb.second.pos);
+    Octree<statistics, VecType>* octree = new Octree<statistics, VecType>(0, aabb.first.pos, aabb.second.pos);
     std::vector<point> points = pc->getPoints();
-    fitInputOctree( max_depth, octree, &points );
 
+    std::cout << "4" << std::endl;
+    fitInputOctree<statistics, point, VecType>( max_depth, octree, &points );
+
+    std::cout << "5" << std::endl;
     return octree;
 }
 
-template<typename statistics, typename point>
-void fitInputOctree( int max_depth, InputOctree *octree, std::vector<point> *points ) {
+template<typename statistics, typename point, typename VecType>
+void fitInputOctree( int max_depth, Octree<statistics, VecType>* octree, std::vector<point> *points ) {
     if ( max_depth == 0 ) return;
 
     octree->subDivide();
@@ -47,11 +28,9 @@ void fitInputOctree( int max_depth, InputOctree *octree, std::vector<point> *poi
         std::vector<point> children_points;
         children_points.clear();
         statistics stat;
-        stat.normal.clear();
-        stat.position.clear();
         for ( int k = 0 ; k < octree->getDim() ; ++k ) {
-            stat.position.emplace_back(0);
-            stat.normal.emplace_back(0);
+            stat.position[i] = 0;
+            stat.normal[i] = 0;
         }
 
         hasPoint = false;
@@ -72,10 +51,11 @@ void fitInputOctree( int max_depth, InputOctree *octree, std::vector<point> *poi
 
 template<typename statistics, typename point>
 void statisticsAdd(statistics *stat, point p) {
+    std::cout << "..";
     stat->area += 1;
-    stat->norm += norm(p.pos);
-    stat->pdn += dot(p.pos, p.norm);
-    for ( int i = 0 ; i < p.pos.size() ; ++i ) {
+    stat->norm += glm::l2Norm(p.pos) * glm::l2Norm(p.pos);
+    stat->pdn += glm::dot(p.pos, p.norm);
+    for ( int i = 0 ; i < p.pos.length() ; ++i ) {
         stat->normal[i] += p.norm[i];
         stat->position[i] += p.pos[i];
     }

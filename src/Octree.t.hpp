@@ -59,12 +59,9 @@ void Octree<Data, VecType>::subDivide(){
 }
 
 template<class Data, typename VecType>
-bool Octree<Data, VecType>::isPointIn ( std::vector<float> p ) {
-    VecType min = this->getMin();
-    VecType max = this->getMax();
-
+bool Octree<Data, VecType>::isPointIn ( VecType p ) {
     for ( int i = 0 ; i < m_dim ; ++i ) {
-        if ( (p[i] < min[i]) || (p[i] > max[i]) ) {
+        if ( (p[i] < m_min[i]) || (p[i] > m_max[i]) ) {
             return false;
         }
     }

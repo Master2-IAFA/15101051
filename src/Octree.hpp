@@ -32,7 +32,7 @@ public:
     /**
     * @brief check if the given point is inside the octree using it's min/max points
     */
-    bool isPointIn ( std::vector<float> p );
+    bool isPointIn ( VecType p );
 
     /**
     * @brief return if the octree has children
