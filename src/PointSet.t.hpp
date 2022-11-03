@@ -92,6 +92,8 @@ void PointSet<point>::readOpenMesh (string filename) {
 
 template<typename point>
 void PointSet<point>::readPly (string filename) {
+    m_points.clear();
+
     //file opening
     std::ifstream file (filename, std::ios::binary);
     if (!file) {
