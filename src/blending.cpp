@@ -7,6 +7,7 @@
  * @param q : A point that will be compared with p
  */
 float gaussian_mixture (glm::vec3& p, glm::vec3& q){
+    // I don't understand all of we need to do.
     return 0.0f;
 }
 
@@ -16,7 +17,16 @@ float gaussian_mixture (glm::vec3& p, glm::vec3& q){
  * @param q : A point that will be compared with p
  */
 float rational_kernel (glm::vec3& p, glm::vec3& q){
-    return 0.0f;
+    // Interpolation : Epsilon = 0.0f
+    // approximatin surfaces : Epsilon > 0.0f
+    float epsilon = 0.5f;
+    float dist = glm::pow(glm::distance(p, q),2);
+
+    // Try to find a good k
+    int k = 1;
+
+    float res = glm::pow((dist + epsilon), (-k/2));
+    return res;
 }
 
 /**
@@ -53,27 +63,48 @@ bool is_InProtectionSphere (InputOctree* node, glm::vec3& q) {
 }
 
 
+statistics weighted_statistics (statistics stats, float w) {
+    statistics w_stats;
+    w_stats.position = stats.position * w;
+    w_stats.normal = stats.normal * w;
+    w_stats.norm = stats.norm * w;
+    w_stats.area = stats.area * w;
+    w_stats.pdn = stats.pdn * w;
+    return w_stats;
+}
+
+
 /**
  * @brief Sub-methode of the projection that will recursivly go throught the octree to blend the stats of the algebraic sphere
  * @param octree : Root octree of the input point cloud
  * @param q : Point q that we want to project into the octree
  */
-statistics cumul_stats(InputOctree* child, float (*kernel)(glm::vec3&,glm::vec3&), glm::vec3& q){
-    statistics stats;
-    init_statistics(&stats);
-    // std::cout << "Je passe dans un sous noeud." << std::endl;
+statistics cumul_stats(InputOctree* node, float (*kernel)(glm::vec3&,glm::vec3&), glm::vec3& q){
 
-    if (!child->hasChildren())
-        return stats;
-    
-    auto children = child->getChildren();
+    statistics father_stats = node->getData();
+    double sigma_n = father_stats.area;
+    double sigma_nu;
+
+    // If node is a leaf :
+    if (!node->hasChildren()){
+        // Accumulate statistics over points in the leaf.
+}
+
+    auto children = node->getChildren();
     
     for (int i = 0; i < 8; i++){
         if (is_InProtectionSphere(children[i], q))
             cumul_stats(children[i], kernel, q);
+        else {
+            // As we can see with the equation (5) in the paper, we could estimate it by taking the average position.
+            float sigma_n_toFloat = round(sigma_n * pow(10, 7)) / pow(10, 7);
+            glm::vec3 averagePosition = father_stats.position / (sigma_n_toFloat);
+            float weight = kernel (q, averagePosition);
+            return weighted_statistics(father_stats, weight);  
+        }
     }
 
-    return stats;
+    return father_stats;
 }
 
 /**
