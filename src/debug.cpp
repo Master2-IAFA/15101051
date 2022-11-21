@@ -45,9 +45,9 @@ void fit_sphere_on_node(InputOctree * octree, PointSet * ps, glm::vec3 q)
   stat->pdn += glm::dot(point.pos, point.norm);
   stat->position += point.pos;*/
 
-  //DANS TOUT CE QUI SUIT WEIGHT ET AREA SONT MIT A 1
-  auto m_nume = stat.pdn - glm::dot(stat.position, stat.normal) ;
-  auto m_deno =  stat.norm * glm::dot(stat.position, stat.position) ;
+  //DANS TOUT CE QUI SUIT WEIGHT ET AREA (LA DENSITE) SONT MIT A 1
+  auto m_nume = stat.pdn - ( 1.0 / stat->area ) * glm::dot(stat.position, stat.normal) ;
+  auto m_deno =  stat.norm * ( 1 / stat->area ) * glm::dot(stat.position, stat.position) ;
 
   auto m_uq = 0.5f * m_nume/m_deno ;
   auto m_ul = stat.normal - 2.0f * m_uq * stat.position ;
