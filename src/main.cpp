@@ -12,6 +12,8 @@
 #include "utils.hpp"
 #include "debug.hpp"
 
+#include "Sphere.hpp"
+
 #define MAX_DEPTH 7
 
 namespace fs = std::filesystem;
@@ -78,7 +80,8 @@ void loadPointCloud(){
 
     //debug Lou fit sphere
     auto o = octree->getAtDepth( 2 );
-    fit_sphere_on_node(o[2], ps, glm::vec3(1.0, 1.0, 1.0));
+    Sphere * sphere = new Sphere() ;
+    sphere->fit_sphere_on_node(o[2], ps, glm::vec3(1.0, 1.0, 1.0));
     //  fit_sphere_on_node(o[2], ps, glm::vec3(1.0, 1.0, 1.0));
     /*for(int i = 0; i < o.size(); i++){
         fit_sphere_on_node(o[i]);

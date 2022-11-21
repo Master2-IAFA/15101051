@@ -10,61 +10,11 @@ std::vector<glm::vec3> delete_points_not_in_cube(InputOctree * octree, PointSet 
     {
       points_in_cube.push_back(points[i].pos);
     }
+
   }
   return points_in_cube ;
 }
 
-void fit_sphere_on_node(InputOctree * octree, PointSet * ps, glm::vec3 q)
-{
-  //draw q for debug
-  display_sphere(0.02, q);
-
-  //draww cube for debug
-  drawCube("node sphere fitting", octree->getMin(), octree->getMax());
-
-  //group points which are in node for debug
-  std::vector<glm::vec3> points_in_cube = delete_points_not_in_cube(octree, ps);
-  polyscope::PointCloud *pointCloud = polyscope::registerPointCloud("points in my cube", points_in_cube);
-
-  //display stats of this node
-  statistics stat= octree->getData() ;
-  //auto data =  ;
-  //std::cout << "area " << stat.area << "\n"; //sigma
-  //std::cout << "norm " << stat.norm << "\n" ; //pbeta
-  //std::cout << "pdn " << stat.pdn << "\n"; //pn_beta  = n_sum_dot_pn
-  //stat->normal += point.norm; //n alpha
-  //std::cout << "position " << stat.position.x << stat.position.y << stat.position.z << "\n"; //p alpha
-  //m_nume
-  //w = kernel
-
-  //compute algebraic sphere
-
-  /*stat->area += 1;
-  stat->norm += glm::l2Norm(point.pos);
-  stat->normal += point.norm;
-  stat->pdn += glm::dot(point.pos, point.norm);
-  stat->position += point.pos;*/
-
-  //DANS TOUT CE QUI SUIT WEIGHT ET AREA (LA DENSITE) SONT MIT A 1
-  auto m_nume = stat.pdn - ( 1.0 / stat->area ) * glm::dot(stat.position, stat.normal) ;
-  auto m_deno =  stat.norm * ( 1 / stat->area ) * glm::dot(stat.position, stat.position) ;
-
-  auto m_uq = 0.5f * m_nume/m_deno ;
-  auto m_ul = stat.normal - 2.0f * m_uq * stat.position ;
-  auto m_uc = -1.0f * glm::dot(stat.position, m_ul) + m_uq * stat.norm ;
-
-  //std::cout << m_uq << "\n" ;
-  //std::cout << m_ul.x << "," << m_ul.y  << "," << m_ul.z << "\n" ;
-  //std::cout << m_uc << "\n" ;
-
-  //check if sphere fits points
-  glm::vec3 center = get_center( m_ul, m_uq) ;
-  float radius = get_radius(m_ul, m_uc, m_uq) ;
-  std::cout << "center =" << center.x << "," << center.y  << "," << center.z << "\n" ;
-  std::cout << "radius =" << radius << "\n" ;
-  //display_sphere(0.1f, center) ;
-
-}
 
 
 void display_sphere(float radius, glm::vec3 center)
@@ -289,29 +239,12 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *>
 
 }
 
-/*!
-       \brief return the estimated radius of the sphere
-       \warning return inf if the fitted surface is planar
-       \ATTENTION LE CAS OU ON A UN PLAN EST IGNORE (VOIR L150 DE
-        ALGEBRAIC SPHERE DE PONCA)
-   */
-  float get_radius(glm::vec3 m_ul, float m_uc, float m_uq)
-   {
-       float b = 1.0f/m_uq;
-       //glm::pow(glm::l2Norm(point.pos)
-        //return Scalar(sqrt( ((Scalar(-0.5)*b)*m_ul).squaredNorm() - m_uc*b ));
-        return sqrt(glm::pow(glm::l2Norm((-0.5f*b)*m_ul), 2) - m_uc*b );
-   }
 
-   /*!
-       \brief return the estimated center of the sphere
-       \ATTENTION LE CAS OU ON A UN PLAN EST IGNORE (VOIR L150 DE
-       \ALGEBRAIC SPHERE DE PONCA) ET IL MANQUE LA COMPOSANTE BASIS CENTER
-       \DANS LE CALCUL
-
-   */
-   glm::vec3 get_center(glm::vec3 m_ul, float m_uq)
-   {
-       float b = 1.0f/m_uq;
-       return ((-0.5f)*b)*m_ul ; //+ Base::m_w.basisCenter();
-   }
+//auto data =  ;
+//std::cout << "area " << stat.area << "\n"; //sigma
+//std::cout << "norm " << stat.norm << "\n" ; //pbeta
+//std::cout << "pdn " << stat.pdn << "\n"; //pn_beta  = n_sum_dot_pn
+//stat->normal += point.norm; //n alpha
+//std::cout << "position " << stat.position.x << stat.position.y << stat.position.z << "\n"; //p alpha
+//m_nume
+//w = kernel

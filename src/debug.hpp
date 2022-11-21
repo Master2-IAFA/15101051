@@ -8,6 +8,7 @@
 #include "PointSet.hpp"
 #include "utils.hpp"
 #include "Octree.hpp"
+#include "Sphere.hpp"
 
 
 void pointSetToPolyscope(std::string name, PointSet *ps);
@@ -57,14 +58,6 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *>
  */
 void display_sphere(float radius, glm::vec3 center) ;
 
-/**
- * @brief function to fit an algebraic sphere to projected point according to the node's statistics
- */
-void fit_sphere_on_node(InputOctree * octree, PointSet * ps, glm::vec3 q);
-
-/**
- * @brief function display only points in cube
- */
 vector<glm::vec3> delete_points_not_in_cube(InputOctree * octree, PointSet * ps);
 
 /**
