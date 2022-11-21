@@ -60,34 +60,30 @@ void PointSet<point>::readOpenMesh (string filename) {
     m_points.clear();
 
     OpenMesh::PolyMesh_ArrayKernelT<> mesh;
+    mesh.request_vertex_normals();
 
-    if (!OpenMesh::IO::read_mesh(mesh, filename)) {
+    OpenMesh::IO::Options opt (OpenMesh::IO::Options::VertexNormal);
+    if (!OpenMesh::IO::read_mesh(mesh, filename, opt)) {
         return;
     }
 
     for (auto v = mesh.vertices_sbegin(); v != mesh.vertices_end(); ++v) {
-        auto current_point = mesh.point(*v);
         point p;
 
+        auto current_point = mesh.point(*v);
         for (int i = 0;i < p.pos.length();++i) {
             p.pos[i] = current_point[i];
         }
 
-        if (mesh.has_vertex_normals()) {
-            auto n = mesh.normal(*v);
-            for (int i = 0;i < p.norm.length();++i) {
-                p.norm[i] = n[i];
-            }
-        }
-        else {
-            p.norm[0] = 1;
-            for (int i = 1;i < p.norm.length();++i) {
-                p.norm[i] = 0;
-            }
+        auto n = mesh.normal(*v);
+        for (int i = 0;i < p.norm.length();++i) {
+            p.norm[i] = n[i];
         }
 
         this->m_points.emplace_back(p);
     }
+
+    mesh.release_vertex_normals();
 }
 
 template<typename point>
