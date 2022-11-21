@@ -5,78 +5,58 @@
 #include <OpenMesh/Core/IO/MeshIO.hh>
 #include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
 
-float min(float x, float y)
-{
-  if (x < y) return x ;
-  else return y ;
-}
+inline float min(float x, float y) { return (x < y)? x : y; }
 
-float max(float x, float y)
-{
-  if (x > y) return x ;
-  else return y ;
-}
+inline float max(float x, float y) { return (x > y)? x : y; }
 
-
-//function that returns bounding box of point set
-std::vector<point> PointSet::getBoundingBox() {
-    std::vector<point> bb(2);
+/** function that returns bounding box of point set
+ */
+template<typename point>
+std::pair<point, point> PointSet<point>::getBoundingBox() {
     //goal is to get min and max of every x y z axis
-    float min_x ;
-    float min_y ;
-    float min_z ;
-
-    float max_x ;
-    float max_y ;
-    float max_z ;
-
-    int i ;
+    std::vector<float> min_vec;
+    std::vector<float> max_vec;
 
     //initialize min/max to first point coordinates if such point exists
-    if (this->m_points.size() > 0) {
-        min_x = m_points[0].pos[0];
-        min_y = m_points[0].pos[1];
-        min_z = m_points[0].pos[2];
-
-        max_x = m_points[0].pos[0];
-        max_y = m_points[0].pos[1];
-        max_z = m_points[0].pos[2];
+    if ( this->m_points.size() > 0 ) {
+        for ( size_t i = 0 ; i < m_points[0].pos.length() ; ++i ) {
+            min_vec.emplace_back( m_points[0].pos[i] );
+            max_vec.emplace_back( m_points[0].pos[i] );
+        }
     }
 
     //iterate on points to find max/min value on each coordinate
-    for (i = 0 ; i < this->m_points.size() ; ++i)
-    {
-      point p = this->m_points[i] ;
+    for ( size_t i = 1 ; i < this->m_points.size() ; ++i ) {
+        point p = this->m_points[i] ;
 
-      min_x = min(min_x, p.pos.x) ;
-      min_y = min(min_y, p.pos.y) ;
-      min_z = min(min_z, p.pos.z) ;
-
-      max_x = max(max_x, p.pos.x) ;
-      max_y = max(max_y, p.pos.y) ;
-      max_z = max(max_z, p.pos.z) ;
-
+        for ( size_t i = 0 ; i < min_vec.size() ; ++i ) {
+            min_vec[i] = min( min_vec[i], p.pos[i] );
+            max_vec[i] = max( max_vec[i], p.pos[i] );
+        }
     }
 
     //find max value between coordinates
-    float x = abs(max_x - min_x);
-    float y = abs(max_y - min_y);
-    float z = abs(max_z - min_z);
+    std::vector<float> distances;
+    for ( size_t i = 0 ; i < min_vec.size() ; ++i ) {
+        distances.emplace_back( abs( max_vec[i] - min_vec[i] ) );
+    }
 
-    float max = (x > y && x > z)? x : ((y > z)? y : z);
+    float max_val = distances[0];
+    for ( size_t i = 1 ; i < distances.size() ; ++i ) {
+        max_val = max( max_val, distances[i] );
+    }
 
-    bb[0].pos.x = min_x ;
-    bb[0].pos.y = min_y ;
-    bb[0].pos.z = min_z ;
+    point p1, p2;
+    for ( size_t i = 0 ; i < min_vec.size() ; ++i ) {
+        p1.pos[i] = min_vec[i];
+        p2.pos[i] = max_vec[i];
+    }
 
-    bb[1].pos.x = min_x + max;
-    bb[1].pos.y = min_y + max;
-    bb[1].pos.z = min_z + max;
-
-    return bb ;
+    return std::make_pair(p1, p2);
 }
 
-void PointSet::readOpenMesh (string filename) {
+template<typename point>
+void PointSet<point>::readOpenMesh (string filename) {
     m_points.clear();
 
     OpenMesh::PolyMesh_ArrayKernelT<> mesh;
@@ -88,25 +68,32 @@ void PointSet::readOpenMesh (string filename) {
     for (auto v = mesh.vertices_sbegin(); v != mesh.vertices_end(); ++v) {
         auto current_point = mesh.point(*v);
         point p;
-        p.pos[0] = current_point[0];
-        p.pos[1] = current_point[1];
-        p.pos[2] = current_point[2];
+
+        for (int i = 0;i < p.pos.length();++i) {
+            p.pos[i] = current_point[i];
+        }
 
         if (mesh.has_vertex_normals()) {
             auto n = mesh.normal(*v);
-            p.norm[0] = n[0];
-            p.norm[1] = n[1];
-            p.norm[2] = n[2];
+            for (int i = 0;i < p.norm.length();++i) {
+                p.norm[i] = n[i];
+            }
         }
         else {
-            p.norm = glm::vec3(1, 0, 0);
+            p.norm[0] = 1;
+            for (int i = 1;i < p.norm.length();++i) {
+                p.norm[i] = 0;
+            }
         }
 
         this->m_points.emplace_back(p);
     }
 }
 
-void PointSet::readPly (string filename) {
+template<typename point>
+void PointSet<point>::readPly (string filename) {
+    m_points.clear();
+
     //file opening
     std::ifstream file (filename, std::ios::binary);
     if (!file) {
