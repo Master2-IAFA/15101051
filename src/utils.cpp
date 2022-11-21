@@ -42,7 +42,7 @@ void fitInputOctree( int max_depth, InputOctree *octree, std::vector<point> *poi
 
 void statisticsAdd(statistics *stat, point point){
     stat->area += 1;
-    stat->norm += glm::pow(glm::l2Norm(point.pos), 2);
+    stat->norm += glm::dot( point.pos, point.pos );
     stat->normal += point.norm;
     stat->pdn += glm::dot(point.pos, point.norm);
     stat->position += point.pos;

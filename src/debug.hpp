@@ -60,7 +60,7 @@ void display_sphere(float radius, glm::vec3 center) ;
 /**
  * @brief function to fit an algebraic sphere to projected point according to the node's statistics
  */
-void fit_sphere_on_node(InputOctree * octree, PointSet * ps, glm::vec3 q);
+void fit_sphere_on_node(InputOctree *octree, PointSet *ps, glm::vec3 q);
 
 /**
  * @brief function display only points in cube

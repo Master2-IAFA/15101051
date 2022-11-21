@@ -17,7 +17,7 @@ std::vector<glm::vec3> delete_points_not_in_cube(InputOctree * octree, PointSet 
 void fit_sphere_on_node(InputOctree * octree, PointSet * ps, glm::vec3 q)
 {
   //draw q for debug
-  display_sphere(0.02, q);
+  //display_sphere(0.02, q);
 
   //draww cube for debug
   drawCube("node sphere fitting", octree->getMin(), octree->getMax());
@@ -27,11 +27,14 @@ void fit_sphere_on_node(InputOctree * octree, PointSet * ps, glm::vec3 q)
   polyscope::PointCloud *pointCloud = polyscope::registerPointCloud("points in my cube", points_in_cube);
 
   //display stats of this node
-  statistics stat= octree->getData() ;
+  statistics stat = octree->getData() ;
   //auto data =  ;
-  //std::cout << "area " << stat.area << "\n"; //sigma
-  //std::cout << "norm " << stat.norm << "\n" ; //pbeta
-  //std::cout << "pdn " << stat.pdn << "\n"; //pn_beta  = n_sum_dot_pn
+  std::cout << "area " << stat.area << "\n"; //sigma
+  std::cout << "norm " << stat.norm << "\n" ; //pbeta
+  std::cout << "pdn " << stat.pdn << "\n"; //pn_beta  = n_sum_dot_pn
+  std::cout << "normal " << stat.normal.x << " " << stat.normal.y << " " << stat.normal.z <<"\n";
+  std::cout << "position " << stat.position.x << " " << stat.position.y << " " << stat.position.z << "\n"; 
+
   //stat->normal += point.norm; //n alpha
   //std::cout << "position " << stat.position.x << stat.position.y << stat.position.z << "\n"; //p alpha
   //m_nume
@@ -45,24 +48,27 @@ void fit_sphere_on_node(InputOctree * octree, PointSet * ps, glm::vec3 q)
   stat->pdn += glm::dot(point.pos, point.norm);
   stat->position += point.pos;*/
 
+  float invSumW = 1.0 / stat.area; //TODO remplacer stat.area par la sum des poids (kernel)
+  std::cout << "aled: " << invSumW << std::endl;
   //DANS TOUT CE QUI SUIT WEIGHT ET AREA (LA DENSITE) SONT MIT A 1
-  auto m_nume = stat.pdn - ( 1.0 / stat->area ) * glm::dot(stat.position, stat.normal) ;
-  auto m_deno =  stat.norm * ( 1 / stat->area ) * glm::dot(stat.position, stat.position) ;
+  auto m_nume = stat.pdn - invSumW * glm::dot(stat.position, stat.normal) ;
+  auto m_deno = stat.norm - invSumW * glm::dot(stat.position, stat.position) ;
 
-  auto m_uq = 0.5f * m_nume/m_deno ;
-  auto m_ul = stat.normal - 2.0f * m_uq * stat.position ;
-  auto m_uc = -1.0f * glm::dot(stat.position, m_ul) + m_uq * stat.norm ;
+  auto m_uq = 0.5f * m_nume / m_deno ;
+  glm::vec3 m_ul = ( stat.normal - stat.position * glm::vec3(2.0) * m_uq ) * glm::vec3(invSumW);
+  auto m_uc = - invSumW * ( glm::dot( stat.position, m_ul ) + stat.norm * m_uq );
 
-  //std::cout << m_uq << "\n" ;
-  //std::cout << m_ul.x << "," << m_ul.y  << "," << m_ul.z << "\n" ;
-  //std::cout << m_uc << "\n" ;
+  std::cout << m_uq << "\n" ;
+  std::cout << m_ul.x << "," << m_ul.y  << "," << m_ul.z << "\n" ;
+  std::cout << m_uc << "\n" ;
 
   //check if sphere fits points
   glm::vec3 center = get_center( m_ul, m_uq) ;
   float radius = get_radius(m_ul, m_uc, m_uq) ;
   std::cout << "center =" << center.x << "," << center.y  << "," << center.z << "\n" ;
   std::cout << "radius =" << radius << "\n" ;
-  //display_sphere(0.1f, center) ;
+  std::cout << "ouehgfkjhejhgorpoiui " << std::endl;
+  display_sphere(radius, center) ;
 
 }
 
@@ -297,10 +303,10 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *>
    */
   float get_radius(glm::vec3 m_ul, float m_uc, float m_uq)
    {
-       float b = 1.0f/m_uq;
-       //glm::pow(glm::l2Norm(point.pos)
-        //return Scalar(sqrt( ((Scalar(-0.5)*b)*m_ul).squaredNorm() - m_uc*b ));
-        return sqrt(glm::pow(glm::l2Norm((-0.5f*b)*m_ul), 2) - m_uc*b );
+      float b = 1.0f/m_uq;
+      //glm::pow(glm::l2Norm(point.pos)
+      //return Scalar(sqrt( ((Scalar(-0.5)*b)*m_ul).squaredNorm() - m_uc*b ));
+      //return glm::sqrt( glm::dot( m_ul, m_ul ) - m_uq );
    }
 
    /*!
@@ -313,5 +319,6 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *>
    glm::vec3 get_center(glm::vec3 m_ul, float m_uq)
    {
        float b = 1.0f/m_uq;
-       return ((-0.5f)*b)*m_ul ; //+ Base::m_w.basisCenter();
+       //return - (m_ul / 2.0f); //+ Base::m_w.basisCenter();
+       return - (m_ul / glm::vec3(2.0));
    }

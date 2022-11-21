@@ -17,7 +17,7 @@
 namespace fs = std::filesystem;
 
 std::string pathToDirectory{ "../assets/" };
-std::string path{"../assets/gaussian_spike_norm.ply"};
+std::string path{"../assets/bunny_norm.ply"};
 std::vector<string> files;
 int current_item = 0;
 int depthToShow = 0;
@@ -40,6 +40,7 @@ int main(int argc, char **argv){
     ps->readOpenMesh( path );
     loadPointCloud();
     //polyscope::state::userCallback = callback;
+    std::cout << "zaemomhztroihzrtgohzrtohzrtgohmemjhgjktrgzmjhzmhzrlgoiho ooi otztuh  " << std::endl;
     polyscope::show();
 
     delete ps;
@@ -72,13 +73,13 @@ void showAtDepth( int depth ){
 }
 
 void loadPointCloud(){
-    ps->readOpenMesh( std::string( path ) );
+    ps->readPly( std::string( path ) );
     delete octree;
     octree = generateInputOctree( MAX_DEPTH, ps );
 
     //debug Lou fit sphere
     auto o = octree->getAtDepth( 2 );
-    fit_sphere_on_node(o[2], ps, glm::vec3(1.0, 1.0, 1.0));
+    fit_sphere_on_node(o[8], ps, glm::vec3(1.0, 1.0, 1.0));
     //  fit_sphere_on_node(o[2], ps, glm::vec3(1.0, 1.0, 1.0));
     /*for(int i = 0; i < o.size(); i++){
         fit_sphere_on_node(o[i]);
