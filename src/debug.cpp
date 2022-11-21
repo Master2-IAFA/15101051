@@ -1,48 +1,63 @@
 #include "debug.hpp"
 
-void pointSetToPolyscope( std::string name, PointSet *ps ){
+void pointSetToPolyscope( std::string name, PointSet<point3d> *ps ){
 
-    std::vector<point> points = ps->getPoints();
+    std::vector<point3d> points = ps->getPoints();
 
-    std::vector<glm::vec3> position(points.size());
-    std::vector<glm::vec3> normal(points.size());
+    std::vector<glm::vec3> position ( points.size() );
+    std::vector<glm::vec3> normal ( points.size() );
 
     #pragma omp parallel for
     for(int i = 0; i < points.size(); i++){
-        position[i] = points[i].pos;
-        normal[i] = points[i].norm;
+        position[i] = glm::vec3(points[i].pos[0], points[i].pos[1], points[i].pos[2]) ;
+        normal[i] = glm::vec3(points[i].norm[0], points[i].norm[1], points[i].norm[2]);
     }
 
     polyscope::PointCloud *pointCloud = polyscope::registerPointCloud(name, position);
     pointCloud->addVectorQuantity("normal", normal);
 }
 
+void pointSet2dToPolyscope (std::string name, PointSet<point2d> *ps) {
+    std::vector<point2d> points = ps->getPoints();
+
+    std::vector<glm::vec2> position ( points.size() );
+    std::vector<glm::vec2> normal ( points.size() );
+
+    for ( int i = 0 ; i < points.size() ; ++i ) {
+        position[i] = glm::vec2( points[i].pos[0], points[i].pos[1] );
+        normal[i] = glm::vec2( points[i].norm[0], points[i].norm[1] );
+    }
+
+    polyscope::view::style = polyscope::view::NavigateStyle::Planar;
+
+    polyscope::registerPointCloud2D(name, position);
+    polyscope::getPointCloud(name)->addVectorQuantity2D(name + " normal", normal);
+}
+
 //function that takes minmax of a cube a returns 8 coordinates of cube
-std::vector<glm::vec3> build_cube_from_minmax(glm::vec3 min, glm::vec3 max)
-{
-  //float len_body_diag = (max-min).length() ;
-  //float a = len_body_diag/sqrt(3) ;
+std::vector<glm::vec3> build_cube_from_minmax(glm::vec3 min, glm::vec3 max) {
+    //float len_body_diag = (max-min).length() ;
+    //float a = len_body_diag/sqrt(3) ;
 
-  glm::vec3 tfl = glm::vec3(min.x, max.y, min.z ) ;
-  glm::vec3 tfr = glm::vec3(max.x, max.y, min.z) ;
-  glm::vec3 tbl = glm::vec3(min.x, max.y, max.z ) ;
-  glm::vec3 tbr = glm::vec3(max.x, max.y, max.z) ;
-  glm::vec3 bfl = glm::vec3(min.x, min.y, min.z) ;
-  glm::vec3 bfr =glm::vec3(max.x, min.y, min.z) ;
-  glm::vec3 bbl  = glm::vec3(min.x, min.y, max.z) ;
-  glm::vec3 bbr = glm::vec3(max.x, min.y, max.z) ;
+    glm::vec3 tfl = glm::vec3(min.x, max.y, min.z ) ;
+    glm::vec3 tfr = glm::vec3(max.x, max.y, min.z) ;
+    glm::vec3 tbl = glm::vec3(min.x, max.y, max.z ) ;
+    glm::vec3 tbr = glm::vec3(max.x, max.y, max.z) ;
+    glm::vec3 bfl = glm::vec3(min.x, min.y, min.z) ;
+    glm::vec3 bfr =glm::vec3(max.x, min.y, min.z) ;
+    glm::vec3 bbl  = glm::vec3(min.x, min.y, max.z) ;
+    glm::vec3 bbr = glm::vec3(max.x, min.y, max.z) ;
 
-  std::vector<glm::vec3> cube ;
-  cube.push_back(tfl);
-  cube.push_back(tfr);
-  cube.push_back(tbl);
-  cube.push_back(tbr);
-  cube.push_back(bfl);
-  cube.push_back(bfr);
-  cube.push_back(bbl);
-  cube.push_back(bbr);
-  return cube ;
-
+    std::vector<glm::vec3> cube ;
+    cube.push_back(tfl);
+    cube.push_back(tfr);
+    cube.push_back(tbl);
+    cube.push_back(tbr);
+    cube.push_back(bfl);
+    cube.push_back(bfr);
+    cube.push_back(bbl);
+    cube.push_back(bbr);
+    return cube ;
 }
 
 void generate_gaussian () {
@@ -70,7 +85,7 @@ void generate_gaussian () {
 }
 
 void test_debug_readPly () {
-    PointSet p;
+    PointSet<point3d> p;
     p.readPly("../assets/gaussian_spike_norm.ply");
     polyscope::init();
     pointSetToPolyscope( "gaussian", &p);
@@ -78,103 +93,48 @@ void test_debug_readPly () {
 }
 
 void test_debug_subdivide () {
-    Octree<int> tree (0, glm::vec3(0, 0, 0), glm::vec3(100, 100, 100));
+    glm::vec3 a (0, 0, 0);
+    glm::vec3 b (100, 100, 100);
+    Octree<int, glm::vec3>* tree = new Octree<int, glm::vec3>(0, a, b);
 
-    tree.subDivide();
+    tree->subDivide();
 
-    auto children = tree.getChildren();
+    auto children = tree->getChildren();
     children[0]->subDivide();
     //TODO display tree
-}
-
-void _traverse_for_fake_blending (InputOctree* current_node_octree, glm::vec3& q, std::vector<std::array<int, 2>>* edges, std::vector<glm::vec3>* nodes) {
-  if (!current_node_octree->hasChildren())
-    return;
-  auto children = current_node_octree->getChildren();
-
-  auto cube = build_cube_from_minmax( current_node_octree->getMin(), current_node_octree->getMax());
-  int nodes_size = nodes->size();
-
-  for(int j = 0; j < 8; j++)
-      nodes->push_back( cube[j] );
-  
-    edges->push_back({nodes_size,   nodes_size+1});
-    edges->push_back({nodes_size+2, nodes_size+3});
-    edges->push_back({nodes_size+4, nodes_size+5});
-    edges->push_back({nodes_size+6, nodes_size+7});
-
-    edges->push_back({nodes_size,   nodes_size+2});
-    edges->push_back({nodes_size+1, nodes_size+3});
-    edges->push_back({nodes_size+4, nodes_size+6});
-    edges->push_back({nodes_size+5, nodes_size+7});
-
-    edges->push_back({nodes_size,   nodes_size+4});
-    edges->push_back({nodes_size+1, nodes_size+5});
-    edges->push_back({nodes_size+2, nodes_size+6});
-    edges->push_back({nodes_size+3, nodes_size+7});
-
-  for (int i = 0; i < 8; i++){
-      if (is_InProtectionSphere(children[i], q))
-          _traverse_for_fake_blending(children[i], q, edges, nodes);
-  }
-
-  
-}
-
-void draw_traverseOctree_onePoint(InputOctree* oct) {
-
-  std::vector<std::array<int, 2>> edges ;
-  std::vector<glm::vec3> nodes;
-
-  glm::vec3 bb_min = oct->getMin();
-  glm::vec3 bb_max = oct->getMax();
-
-  glm::vec3 bb_mid = midpoint(bb_min, bb_max);
-  float radius_protectionSphere = (glm::distance(bb_mid, bb_max) * LAMBDA)/2;
-
-  float rand_x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
-  float rand_y = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
-  float rand_z = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
-
-  glm::vec3 q = glm::vec3(bb_mid.x+rand_x, bb_mid.y+rand_y, bb_mid.z+rand_z);
-  std::vector<glm::vec3> pc_only_one_point;
-  pc_only_one_point.push_back(q); 
-  polyscope::PointCloud *pointCloud = polyscope::registerPointCloud("just_a_simple_point", pc_only_one_point);
-  pointCloud->setPointRadius(0.02f);
-
-  _traverse_for_fake_blending(oct ,q ,&edges, &nodes);
-
-  polyscope::registerCurveNetwork("Traversing", nodes, edges);
-
 }
 
 //-----------------------------VIZUALISE BB OF POINT CLOUD----------------------
 void test_debug_bounding_box(std::vector<glm::vec3> points)
 {
   //------------------test getBoundingBox (Lou)
-  vector<point> my_points ;
+  vector<point3d> my_points ;
   std::vector<glm::vec3> colors;
   //glm::vec3 useless_norm = (0.0, 0.0, 0.0);
   for (int i = 0 ; i < points.size() ; ++i)
   {
-    point p;
-    p.pos = points[i] ;
-    p.norm = glm::vec3(0.0, 0.0, 0.0) ;
+    point3d p;
+    p.pos[0] = points[i][0] ;
+    p.pos[1] = points[i][1] ;
+    p.pos[2] = points[i][2] ;
+
+    p.norm[0] = 1 ;
+    p.norm[1] = 0 ;
+    p.norm[2] = 0 ;
+
     my_points.push_back(p);
   }
 
-  PointSet * ps = new PointSet(my_points) ;
-  vector<point> bb_example ;
+  PointSet<point3d> * ps = new PointSet(my_points) ;
 
-  bb_example = ps->getBoundingBox();
-  std::cout << "bb_example : min = " << bb_example[0].pos.x << "," << bb_example[0].pos.y << "," << bb_example[0].pos.z ;
-  std::cout << "bb_example : max = " << bb_example[1].pos.x << "," << bb_example[1].pos.y << "," << bb_example[1].pos.z ;
+  std::pair<point3d, point3d> bb_example = ps->getBoundingBox();
+  std::cout << "bb_example : min = " << bb_example.first.pos[0] << "," << bb_example.first.pos[1] << "," << bb_example.first.pos[2] ;
+  std::cout << "bb_example : max = " << bb_example.second.pos[0] << "," << bb_example.second.pos[1] << "," << bb_example.second.pos[2] ;
 
   std::vector<glm::vec3> points_bb;
-  for (int i = 0 ; i < bb_example.size() ; ++i)
-  {
-    points_bb.push_back(bb_example[i].pos) ;
-  }
+  points_bb.emplace_back(bb_example.first.pos[0], bb_example.first.pos[1], bb_example.first.pos[2]);
+  points_bb.emplace_back(bb_example.second.pos[0], bb_example.second.pos[1], bb_example.second.pos[2]);
+
   polyscope::registerPointCloud("bounding box", points_bb);
   auto f = polyscope::getPointCloud("bounding box");
   f->setEnabled(true);
@@ -226,7 +186,7 @@ void drawCube(std::string name, glm::vec3 min, glm::vec3 max)
   polyscope::registerCurveNetwork(name, nodes, edges);
 
   // visualize!
-  // polyscope::show();
+  //polyscope::show();
 }
 
 void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max)
@@ -242,14 +202,15 @@ void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max)
   polyscope::registerCurveNetwork(name, nodes, edges);
 }
 
-polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *> octree){
+polyscope::CurveNetwork* drawOctree(std::string name, std::vector<Octree<statistics3d, glm::vec3> *> octree){
 
   std::vector<std::array<int, 2>> edges ;
   std::vector<glm::vec3> nodes;
 
   for(int i = 0; i < octree.size(); i++){
-
-    auto cube = build_cube_from_minmax( octree[i]->getMin(), octree[i]->getMax());
+    auto min = octree[i]->getMin();
+    auto max = octree[i]->getMax();
+    auto cube = build_cube_from_minmax( glm::vec3(min[0], min[1], min[2]), glm::vec3(max[0], max[1], max[2]) );
     for(int j = 0; j < 8; j++)
       nodes.push_back( cube[j] );
 
@@ -269,7 +230,90 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *>
     edges.push_back({3 + 8 * i, 7 + 8 * i});
   }
   return polyscope::registerCurveNetwork(name, nodes, edges);
-
 }
 
+PointSet<point2d> generate2dGaussian () {
+    std::vector<point2d> ps;
+    point2d p;
 
+    for( float i = 0 ; i < 50 ; ++i ) {
+        for( float j = 0 ; j < 50 ; ++j ) {
+            float x = (i - 25) / 25.0f;
+            float y = exp( -(x * x) );
+            float dy = -2 * x * exp( -(x * x) );
+
+            p.pos = glm::vec2( x, y );
+            p.norm = glm::vec2( x, dy );
+
+            ps.emplace_back(p);
+        }
+    }
+
+    auto pc = PointSet<point2d>(ps);
+    std::cout << "4" << std::endl;
+    return pc;
+}
+
+void _traverse_for_fake_blending (Octree<statistics3d, glm::vec3> *current_node_octree, glm::vec3& q, std::vector<std::array<int, 2>>* edges, std::vector<glm::vec3>* nodes) {
+  if (!current_node_octree->hasChildren())
+    return;
+  auto children = current_node_octree->getChildren();
+
+  auto cube = build_cube_from_minmax( current_node_octree->getMin(), current_node_octree->getMax());
+  int nodes_size = nodes->size();
+
+  for(int j = 0; j < 8; j++)
+      nodes->push_back( cube[j] );
+  
+    edges->push_back({nodes_size,   nodes_size+1});
+    edges->push_back({nodes_size+2, nodes_size+3});
+    edges->push_back({nodes_size+4, nodes_size+5});
+    edges->push_back({nodes_size+6, nodes_size+7});
+
+    edges->push_back({nodes_size,   nodes_size+2});
+    edges->push_back({nodes_size+1, nodes_size+3});
+    edges->push_back({nodes_size+4, nodes_size+6});
+    edges->push_back({nodes_size+5, nodes_size+7});
+
+    edges->push_back({nodes_size,   nodes_size+4});
+    edges->push_back({nodes_size+1, nodes_size+5});
+    edges->push_back({nodes_size+2, nodes_size+6});
+    edges->push_back({nodes_size+3, nodes_size+7});
+
+  for (int i = 0; i < 8; i++){
+      if (is_InProtectionSphere<statistics3d, glm::vec3>(children[i], q))
+          _traverse_for_fake_blending(children[i], q, edges, nodes);
+  }
+  
+}
+
+void draw_traverseOctree_onePoint(Octree<statistics3d, glm::vec3> * oct) {
+
+  std::vector<std::array<int, 2>> edges ;
+  std::vector<glm::vec3> nodes;
+
+  glm::vec3 bb_min = oct->getMin();
+  glm::vec3 bb_max = oct->getMax();
+
+  glm::vec3 bb_mid = midpoint<glm::vec3>(bb_min, bb_max);
+  float radius_protectionSphere = (glm::distance(bb_mid, bb_max) * LAMBDA)/2;
+
+  float rand_x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
+  float rand_y = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
+  float rand_z = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
+
+  glm::vec3 q = glm::vec3(bb_mid.x+rand_x, bb_mid.y+rand_y, bb_mid.z+rand_z);
+
+  point3d p_proj = projection<statistics3d, point3d, glm::vec3>(oct, gaussian_mixture, q);
+
+  std::vector<glm::vec3> pc_only_one_point;
+  pc_only_one_point.push_back(q); 
+  pc_only_one_point.push_back(p_proj.pos);
+  polyscope::PointCloud *pointCloud = polyscope::registerPointCloud("just_a_simple_point", pc_only_one_point);
+  pointCloud->setPointRadius(0.02f);
+  
+  _traverse_for_fake_blending(oct ,q ,&edges, &nodes);
+
+  polyscope::registerCurveNetwork("Traversing", nodes, edges);
+
+}

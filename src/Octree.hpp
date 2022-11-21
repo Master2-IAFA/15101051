@@ -4,16 +4,6 @@
 #include <polyscope/polyscope.h>
 #include <cmath>
 
-
-#define TOP_FRONT_LEFT     0 // 0b000
-#define TOP_FRONT_RIGHT    1 // 0b001
-#define TOP_BACK_LEFT      2 // 0b010
-#define TOP_BACK_RIGHT     3 // 0b011
-#define BOTTOM_FRONT_LEFT  4 // 0b100
-#define BOTTOM_FRONT_RIGHT 5 // 0b101
-#define BOTTOM_BACK_LEFT   6 // 0b110
-#define BOTTOM_BACK_RIGHT  7 // 0b111
-
 /**
  * @brief class that represent an octree define by an aabb box.
  *        an octree can contain other octrees (8)
@@ -21,58 +11,68 @@
  * 
  * @tparam Data: the type of data the octree can take.
  */
-template<typename Data>
+template<typename Data, typename VecType>
 class Octree{
 
 public:
-  Octree(int depth, glm::vec3 min, glm::vec3 max);
+    Octree (int _depth, VecType _min, VecType _max);
 
-  ~Octree();
+    ~Octree ();
 
-  /**
-  * @brief split the octree into 8 childrens, and link it as their father.
-  */
-  void subDivide();
+    /**
+    * @brief split the octree into 8 childrens, and link it as their father.
+    */
+    void subDivide ();
 
-  /**
-   * @brief get all the octrees at the given depth
-   */
-  std::vector<Octree<Data>*> getAtDepth(int depth);
+    /**
+    * @brief get all the octrees at the given depth
+    */
+    std::vector<Octree<Data, VecType>*> getAtDepth ( int depth );
 
-  /**
-  * @brief check if the given point is inside the octree using it's min/max points
-  */
-  bool isPointIn(glm::vec3 p);
+    /**
+    * @brief check if the given point is inside the octree using it's min/max points
+    */
+    bool isPointIn ( VecType p );
 
-  /**
-   * @brief return if the octree has children
-   * 
-   * @return true 
-   * @return false 
-   */
-  bool hasChildren(){ return !(_children[0] == nullptr);}
+    /**
+    * @brief return if the octree has children
+    *
+    * @return true
+    * @return false
+    */
+    bool hasChildren () { return !(m_children[0] == nullptr); }
 
-  /***** setters ******/
-  inline void setFather( Octree<Data> *father ){ _father = father; }
-  inline void setData( Data data ){ _data = data; }
+    /***** setters ******/
+    inline void setFather ( Octree<Data, VecType>* _father ) { m_father = _father; }
+    inline void setData ( Data& _data ) { m_data = _data; }
+    inline void setPoints (std::vector<VecType> _points) { m_points = _points; }
 
-  /***** getters ******/
-  inline const Data getData(){ return _data; }
-  inline glm::vec3 getMin(){ return _min; }
-  inline glm::vec3 getMax(){ return _max; }
-  inline int getDepth(){ return _depth; }
-  inline Octree<Data> **getChildren(){ return _children; }
-
+    /***** getters ******/
+    inline const Data& getData () const { return m_data; }
+    inline const VecType& getMin () const { return m_min; }
+    inline const VecType& getMax () const { return m_max; }
+    inline const int getDepth () const { return m_depth; }
+    inline std::vector<Octree<Data, VecType>*>& getChildren () { return m_children; }
+    inline const int getDim () const { return m_dim; }
+    inline std::vector<VecType> getPoints () { return m_points; }
 
 private:
+    std::vector<Octree<Data, VecType>*> pGetAtDepth(int depth, std::vector<Octree<Data, VecType>*> vector);
 
-  std::vector<Octree<Data>*> pGetAtDepth(int depth, std::vector<Octree<Data>*> vector);
+private:
+    /**
+     * nullptr for root
+     */
+    Octree<Data, VecType>* m_father { nullptr };
+    std::vector<Octree<Data, VecType>*> m_children;
+    int m_depth { 0 };
+    VecType m_min ;
+    VecType m_max ;
+    Data m_data;
+    std::vector<VecType> m_points;
 
-  Octree<Data> *_father{ nullptr };
-  Octree<Data> *_children[8];
-  int _depth{ 0 };
-  glm::vec3 _min ;
-  glm::vec3 _max ;
-  Data _data;
-
+    /**
+     * ambiant space dimension (2 or 3)
+     */
+    int m_dim;
 };

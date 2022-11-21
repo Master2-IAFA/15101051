@@ -1,15 +1,16 @@
 #pragma once
+
 #include <iostream>
 #include <omp.h>
 #include <string>
 #include "polyscope/polyscope.h"
 #include "polyscope/point_cloud.h"
 #include "polyscope/curve_network.h"
-#include "blending.hpp"
-#include "PointSet.hpp"
-#include "utils.hpp"
+#include "utils.t.hpp"
+#include "blending.t.hpp"
 
-void pointSetToPolyscope(std::string name, PointSet *ps);
+void pointSetToPolyscope(std::string name, PointSet<point3d> *ps);
+void pointSet2dToPolyscope (std::string name, PointSet<point2d> *ps);
 
 /**
  * @brief given min and max of a cube, returns vector of each point of the cube
@@ -34,14 +35,16 @@ void test_debug_readPly ();
  */
 void test_debug_subdivide ();
 
-void test_debug_bounding_box(std::vector<glm::vec3> points);
 
+
+void test_debug_bounding_box(std::vector<glm::vec3> points);
 /**
  *
  * @brief This function draws the nodes traversed for 1 random point.
  *
  */
-void draw_traverseOctree_onePoint (InputOctree *oct);
+void draw_traverseOctree_onePoint (Octree<statistics3d, glm::vec3> *oct);
+
 
 void test_basic_polyscope ();
 
@@ -56,5 +59,4 @@ void drawCube(std::string name, glm::vec3 min, glm::vec3 max);
 void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max);
 
 
-
-polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *> octree);
+polyscope::CurveNetwork* drawOctree(std::string name, std::vector<Octree<statistics3d, glm::vec3> *> octree);
