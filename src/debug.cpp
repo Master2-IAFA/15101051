@@ -238,13 +238,3 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<InputOctree *>
   return polyscope::registerCurveNetwork(name, nodes, edges);
 
 }
-
-
-//auto data =  ;
-//std::cout << "area " << stat.area << "\n"; //sigma
-//std::cout << "norm " << stat.norm << "\n" ; //pbeta
-//std::cout << "pdn " << stat.pdn << "\n"; //pn_beta  = n_sum_dot_pn
-//stat->normal += point.norm; //n alpha
-//std::cout << "position " << stat.position.x << stat.position.y << stat.position.z << "\n"; //p alpha
-//m_nume
-//w = kernel

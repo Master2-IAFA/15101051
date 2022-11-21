@@ -19,7 +19,7 @@
 namespace fs = std::filesystem;
 
 std::string pathToDirectory{ "../assets/" };
-std::string path{"../assets/gaussian_spike_norm.ply"};
+std::string path{"../assets/bunny_norm.ply"};
 std::vector<string> files;
 int current_item = 0;
 int depthToShow = 0;
@@ -74,7 +74,7 @@ void showAtDepth( int depth ){
 }
 
 void loadPointCloud(){
-    ps->readOpenMesh( std::string( path ) );
+    ps->readPly( std::string( path ) );
     delete octree;
     octree = generateInputOctree( MAX_DEPTH, ps );
 
