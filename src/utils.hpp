@@ -53,3 +53,12 @@ void fitInputOctree( int max_depth, Octree<statistics, VecType> *octree, std::ve
 
 template<typename statistics, typename point>
 void statisticsAdd( statistics *stat, point p );
+
+template<typename VecType>
+float get_radius(float m_uc, VecType m_ul, float m_uq, VecType center);
+
+template<typename VecType>
+VecType get_center(float m_uc, VecType m_ul, float m_uq);
+
+template<typename statistics, typename VecType>
+std::pair<VecType, float> fit_algebraic_sphere(statistics stat, VecType q);

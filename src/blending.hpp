@@ -56,4 +56,5 @@ statistics cumul_stats(Octree<statistics, VecType>* child, float (*kernel)(VecTy
  * @param q : Point q that we want to project into the octree
  */
 template<typename statistics, typename VecType, typename point>
-point projection (Octree<statistics, VecType>* octree, float (*kernel)(VecType& ,VecType& ) ,VecType& q);
+std::pair<VecType, float> projection (Octree<statistics, VecType>* octree, float (*kernel)(VecType& ,VecType& ) ,VecType& q);
+// point projection (Octree<statistics, VecType>* octree, float (*kernel)(VecType& ,VecType& ) ,VecType& q);

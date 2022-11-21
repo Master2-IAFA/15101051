@@ -304,16 +304,29 @@ void draw_traverseOctree_onePoint(Octree<statistics3d, glm::vec3> * oct) {
 
   glm::vec3 q = glm::vec3(bb_mid.x+rand_x, bb_mid.y+rand_y, bb_mid.z+rand_z);
 
-  point3d p_proj = projection<statistics3d, point3d, glm::vec3>(oct, gaussian_mixture, q);
+  // point3d p_proj = projection<statistics3d, point3d, glm::vec3>(oct, rational_kernel, q);
+  std::pair<glm::vec3, float> sphere = projection<statistics3d, point3d, glm::vec3>(oct, rational_kernel, q);
+
+  display_sphere(sphere.first, sphere.second);
 
   std::vector<glm::vec3> pc_only_one_point;
   pc_only_one_point.push_back(q); 
-  pc_only_one_point.push_back(p_proj.pos);
+  // pc_only_one_point.push_back(p_proj.pos);
   polyscope::PointCloud *pointCloud = polyscope::registerPointCloud("just_a_simple_point", pc_only_one_point);
   pointCloud->setPointRadius(0.02f);
   
   _traverse_for_fake_blending(oct ,q ,&edges, &nodes);
 
   polyscope::registerCurveNetwork("Traversing", nodes, edges);
+
+}
+
+void display_sphere(glm::vec3 center, float radius)
+{
+  std::vector<glm::vec3> sphere_pos ;
+  sphere_pos.push_back(center) ;
+
+  polyscope::PointCloud *pointCloud = polyscope::registerPointCloud("sphere", sphere_pos);
+  pointCloud->setPointRadius(radius);
 
 }

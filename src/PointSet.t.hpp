@@ -61,8 +61,34 @@ void PointSet<point>::readOpenMesh (string filename) {
 
     OpenMesh::PolyMesh_ArrayKernelT<> mesh;
 
-    if (!OpenMesh::IO::read_mesh(mesh, filename)) {
-        return;
+    // request vertex normals, so the mesh reader can use normal information
+    // if available
+    mesh.release_vertex_colors();
+    mesh.request_vertex_normals();
+    // assure we have vertex normals
+    if (!mesh.has_vertex_normals())
+    {
+        std::cerr << "ERROR: Standard vertex property 'Normals' not available!\n";
+        exit(1);
+    }
+    OpenMesh::IO::Options opt;
+    if ( ! OpenMesh::IO::read_mesh(mesh,filename, opt))
+    {
+        std::cerr << "Error loading mesh from file " << filename << std::endl;
+        exit(1);
+    }
+
+    // If the file did not provide vertex normals, then calculate them
+    if ( !opt.check( OpenMesh::IO::Options::VertexNormal ) )
+    {
+        std::cout << "The file doesn't contain normal informations." << std::endl;
+        std::cout << "Try to create them thanks to face normals." << std::endl;
+        // we need face normals to update the vertex normals
+        mesh.request_face_normals();
+        // let the mesh update the normals
+        mesh.update_normals();
+        // dispose the face normals, as we don't need them anymore
+        mesh.release_face_normals();
     }
 
     for (auto v = mesh.vertices_sbegin(); v != mesh.vertices_end(); ++v) {
@@ -88,6 +114,8 @@ void PointSet<point>::readOpenMesh (string filename) {
 
         this->m_points.emplace_back(p);
     }
+
+    mesh.release_vertex_normals();
 }
 
 template<typename point>

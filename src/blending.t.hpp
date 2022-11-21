@@ -68,9 +68,7 @@ float signedDistanceToSphere (Octree <statistics, VecType> *node, VecType& q){
  */
 template<typename statistics, typename VecType>
 bool is_InProtectionSphere (Octree<statistics, VecType> *node, VecType& q){
-    if (signedDistanceToSphere (node, q) > 0)
-        return false;
-    return true;
+    return (! (signedDistanceToSphere (node, q) > 0));
 }
 
 template <typename statistics>
@@ -125,21 +123,20 @@ statistics cumul_stats(Octree<statistics, VecType> *node, float (*kernel)(VecTyp
     double sigma_n = father_stats.area;
     double sigma_nu;
     
-    std::cout << "======================" << std::endl;
-    std::cout << "Stats of the node : " << std::endl;
-    display_statistics(father_stats);
-
     // If node is a leaf :
-    auto c = node->getChildren();
-    
-    if (!node->hasChildren()){
+    if ( ! node->hasChildren() ){
         float weight = 0.0f;
         // [A revoir]
         // Accumulate statistics over points in the leaf.
-        for (VecType p : node->getPoints()){ 
-            float k = kernel (q, p);
+        for (VecType p : node->getPoints()){
             weight += kernel (q, p); 
         }
+        std::cout << "Je stop sur une feuille avec les stats : " << std::endl;
+        std::cout << "Stats avant : " << std::endl;
+        display_statistics(father_stats);
+        std::cout << "Weigth : " << weight << std::endl;
+        display_statistics(weighted_statistics(father_stats, weight));
+        std::cout << "==============================" << std::endl;
         return weighted_statistics(father_stats, weight);
     }
     // float sigma_n_toFloat = round(sigma_n * pow(10, 7)) / pow(10, 7);
@@ -149,23 +146,28 @@ statistics cumul_stats(Octree<statistics, VecType> *node, float (*kernel)(VecTyp
     // Case q isn't in the node
     if (! is_InProtectionSphere(node, q)){
         statistics far_away = weighted_statistics(father_stats, weight_averagePos);
+        std::cout << "Je stop car je ne suis pas dans un noeud : " << std::endl;
+        std::cout << "Stats avant : " << std::endl;
+        display_statistics(father_stats);
+        std::cout << "Weigth : " << weight_averagePos << std::endl;
+        display_statistics(weighted_statistics(father_stats, weight_averagePos));
+        std::cout << "==============================" << std::endl;
         return weighted_statistics(father_stats, weight_averagePos);  
     }
-
     // Let's blend statistics between n and its children
     statistics node_stats;
     std::vector<Octree<statistics, VecType> *> children = node->getChildren();
-    for (auto c : children){
-        double weight_area = (c->getData().area)/sigma_n;
 
-        float gamma = gamma_maj(node, c, q);
+    for (auto child : children){
+        double weight_area = (child->getData().area)/sigma_n;
+        float gamma = gamma_maj(node, child, q);
         float weight = weight_averagePos * weight_area * gamma;
-
-        statistics child_stats = cumul_stats(c, kernel, q);
+        statistics child_stats = cumul_stats(child, kernel, q);
         node_stats = sum_statistics(node_stats, weighted_statistics(child_stats, (1-gamma)));
         node_stats = sum_statistics(node_stats, weighted_statistics(child_stats, weight));
-
     }
+    // std::cout << "Stats of this node : " << std::endl;
+    // display_statistics(node_stats);
     return node_stats;
 }
 
@@ -174,12 +176,17 @@ statistics cumul_stats(Octree<statistics, VecType> *node, float (*kernel)(VecTyp
  * @param octree : Root octree of the input point cloud
  * @param q : Point q that we want to project into the octree
  */
+//  point projection (Octree<statistics, VecType>* octree, float (*kernel)(VecType& ,VecType& ) ,VecType& q);
 template<typename statistics, typename point, typename VecType>
-point projection (Octree<statistics, VecType> *octree, float (*kernel)(VecType&,VecType&) ,VecType& q){
+std::pair<VecType, float> projection (Octree<statistics, VecType> *octree, float (*kernel)(VecType&,VecType&) ,VecType& q){
     statistics stats = cumul_stats (octree, kernel, q);
     std::cout << "Stats : pos X = " << stats.position[0] << " Y = " << stats.position[1] << " Z = " << stats.position[2] << std::endl;
-    point new_q;
-    new_q.pos = VecType(0.0f);
-    new_q.norm = VecType(0.0f);
-    return new_q;
+    std::pair<VecType, float> sphere = fit_algebraic_sphere(stats, q, kernel);
+    return sphere;
+
+    // // ONLY TO RETURNING SOMETHING
+    // point new_q;
+    // new_q.pos = VecType(0.0f);
+    // new_q.norm = VecType(0.0f);
+    // return new_q;
 }

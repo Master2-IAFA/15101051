@@ -18,7 +18,7 @@
 namespace fs = std::filesystem;
 
 std::string pathToDirectory{ "../assets/" };
-std::string path{"../assets/bunny2.ply"};
+std::string path{"../assets/Head Sculpture.stl"};
 std::vector<string> files;
 int current_item = 0;
 int depthToShow = 0;

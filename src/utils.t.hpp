@@ -1,14 +1,6 @@
 #pragma once
 #include "utils.hpp"
 
-// template <typename statistics, typename VecType>
-// void init_statistics (statistics *s){
-//     s->position = VecType(0.0f);
-//     s->normal = VecType(0.0f);
-//     s->norm = 0;
-//     s->area = 0;
-//     s->pdn = 0;
-// }
 
 template<typename statistics, typename point, typename VecType>
 Octree<statistics, VecType>* generateInputOctree( int max_depth, PointSet<point> *pc ) {
@@ -32,6 +24,7 @@ void fitInputOctree( int max_depth, Octree<statistics, VecType>* octree, std::ve
         for (auto x : *points)
             vecTypePoints.emplace_back(x.pos);
         octree->setPoints(vecTypePoints) ;
+        octree->getChildren()[0] = nullptr;
         return;
     }
 
@@ -43,11 +36,6 @@ void fitInputOctree( int max_depth, Octree<statistics, VecType>* octree, std::ve
     for ( int i = 0; i < int(pow(2, octree->getDim())); i++ ) {
         std::vector<point> children_points;
         statistics stat;
-
-        for ( int k = 0 ; k < stat.position.length() ; ++k ) {
-            stat.position[k] = 0;
-            stat.normal[k] = 0;
-        }
 
         hasPoint = false;
 
@@ -95,4 +83,62 @@ void display_statistics (statistics stats){
     std::cout << "Norm : " << stats.norm << std::endl;
     std::cout << "Area : " << stats.area << std::endl;
     std::cout << "Pdn : " << stats.pdn << std::endl;
+}
+
+template<typename VecType>
+float get_radius(float m_uc, VecType m_ul, float m_uq, VecType c)
+{
+    float b = m_uc / m_uq;
+    auto cTc = c.t * c;
+    auto r = sqrt(cTc - b);
+    std::cout << "r" << std::endl;
+    float radius = sqrt(glm::pow(glm::l2Norm((-0.5f*b)*m_ul), 2) - m_uc*b );
+    return radius ;
+}
+
+template<typename VecType>
+VecType get_center(float m_uc, VecType m_ul, float m_uq)
+{
+    float b = - 1.0f / (2 * m_uq);
+    VecType center = b*m_ul ;
+    return center ;
+}
+
+template<typename statistics, typename VecType>
+std::pair<VecType, float> fit_algebraic_sphere(statistics stat, VecType q, float (*kernel)(VecType&,VecType&)){
+
+    VecType to_Kernel = VecType (stat.position);
+    for (int i = 0 ; i < to_Kernel.length() ; i++ ){
+        to_Kernel[i] /= (float)stat.area;
+    }
+
+    float weight_wi = kernel(q, to_Kernel);
+    float pi_ni = weight_wi * stat.pdn;
+    VecType pi = weight_wi * stat.position;
+    VecType ni = weight_wi * stat.normal;
+    float area = weight_wi * stat.area;
+    float norm = weight_wi * stat.norm; 
+
+    float num = pi_ni - glm::dot(pi, ni)/area;
+    float denom = norm - (glm::pow(glm::l2Norm(pi),2) / area);
+    float u4 = (num/denom)/2;
+
+    std::cout << "U4 = " << u4 << std::endl;
+
+    VecType num_vec = ni - 2*u4*(pi);
+    VecType u123 = num_vec/area;
+
+    num = glm::dot(pi, u123) + u4 * norm;
+    float u0 = - num / area;
+
+    //check if sphere fits points
+    VecType center = get_center(u0, u123, u4);
+    // center += to_Kernel;
+    float radius = get_radius(u0, u123, u4, center);
+    if (center.length() == 3)
+        std::cout << "center =" << center.x << "," << center.y  << "," << center.z << "\n" ;
+    else
+        std::cout << "center =" << center.x << "," << center.y  << "\n" ;
+    std::cout << "radius =" << radius << "\n" ;
+    return std::pair<VecType, float>(center, radius);
 }
