@@ -22,7 +22,9 @@ std::vector<string> files;
 int current_item = 0;
 int depthToShow = 0;
 PointSet<point3d> *ps;
+PointSet<point2d> *ps2d;
 Octree<statistics3d, glm::vec3> *octree;
+Octree<statistics2d, glm::vec2> *quad;
 std::array< polyscope::CurveNetwork*, MAX_DEPTH > octreeGraph;
 
 void showAtDepth( int depth );
@@ -36,17 +38,27 @@ int main () {
     }
 
     polyscope::init();
-    ps = new PointSet<point3d>();
+    *ps2d = generate2dGaussian();
+    quad = generateInputOctree<statistics2d, point2d, glm::vec2>( MAX_DEPTH, ps2d );
 
-    loadPointCloud();
+    pointSet2dToPolyscope("point cloud", ps2d);
+    for( int i = 0; i < MAX_DEPTH; i++ ){
+        auto o = quad->getAtDepth( i );
+        octreeGraph[i] = drawQuadtree( std::to_string(i), o );
+        octreeGraph[i]->setEnabled( false );
+    }
+
+    octreeGraph[0]->setEnabled( true );
+
+    //loadPointCloud();
 
     polyscope::state::userCallback = callback;
-    pointSetToPolyscope("point cloud", ps);
 
     polyscope::show();
 
     delete ps;
     delete octree;
+    delete quad;
 
     return 0;
 }

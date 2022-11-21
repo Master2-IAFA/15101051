@@ -60,6 +60,16 @@ std::vector<glm::vec3> build_cube_from_minmax(glm::vec3 min, glm::vec3 max) {
     return cube ;
 }
 
+std::vector<glm::vec2> build_square_from_minmax(glm::vec2 min, glm::vec2 max) {
+    std::vector<glm::vec2> square;
+    square.emplace_back(min);
+    square.emplace_back(min[0], max[1]);
+    square.emplace_back(max[0], min[1]);
+    square.emplace_back(max);
+
+    return square;
+}
+
 void generate_gaussian () {
     std::ofstream file ("gaussian_spike_norm.ply");
 
@@ -159,6 +169,18 @@ void test_basic_polyscope () {
     polyscope::show();
 }
 
+void drawSquare(std::string name, glm::vec2 min, glm::vec2 max) {
+    std::vector<std::array<size_t, 2>> edges;
+    std::vector<glm::vec2> square = build_square_from_minmax(min, max);
+
+    edges.push_back({0, 1});
+    edges.push_back({0, 2});
+    edges.push_back({1, 3});
+    edges.push_back({2, 3});
+
+    polyscope::registerCurveNetwork(name, square, edges);
+}
+
 void drawCube(std::string name, glm::vec3 min, glm::vec3 max)
 {
   std::vector<std::array<size_t, 2>> edges ;
@@ -232,6 +254,26 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<Octree<statist
   return polyscope::registerCurveNetwork(name, nodes, edges);
 }
 
+polyscope::CurveNetwork* drawQuadtree (std::string name, std::vector<Octree<statistics2d, glm::vec2> *> octree){
+    std::vector<std::array<int, 2>> edges ;
+    std::vector<glm::vec2> nodes;
+
+    for(int i = 0; i < octree.size(); i++){
+        auto min = octree[i]->getMin();
+        auto max = octree[i]->getMax();
+        auto square = build_square_from_minmax( glm::vec2(min[0], min[1]), glm::vec2(max[0], max[1]) );
+        for(int j = 0; j < 4; j++)
+            nodes.push_back( square[j] );
+
+        edges.push_back({0 + 4 * i, 1 + 4 * i});
+        edges.push_back({2 + 4 * i, 3 + 4 * i});
+
+        edges.push_back({0 + 4 * i, 2 + 4 * i});
+        edges.push_back({1 + 4 * i, 3 + 4 * i});
+    }
+    return polyscope::registerCurveNetwork(name, nodes, edges);
+}
+
 PointSet<point2d> generate2dGaussian () {
     std::vector<point2d> ps;
     point2d p;
@@ -250,6 +292,5 @@ PointSet<point2d> generate2dGaussian () {
     }
 
     auto pc = PointSet<point2d>(ps);
-    std::cout << "4" << std::endl;
     return pc;
 }

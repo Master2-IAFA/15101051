@@ -51,7 +51,7 @@ void fitInputOctree( int max_depth, Octree<statistics, VecType>* octree, std::ve
 template<typename statistics, typename point>
 void statisticsAdd(statistics *stat, point p) {
     stat->area += 1;
-    stat->norm += glm::l2Norm(p.pos) * glm::l2Norm(p.pos);
+    stat->norm += glm::dot(p.pos, p.pos);
     stat->pdn += glm::dot(p.pos, p.norm);
     for ( int i = 0 ; i < p.pos.length() ; ++i ) {
         stat->normal[i] += p.norm[i];

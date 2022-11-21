@@ -45,8 +45,14 @@ void test_basic_polyscope ();
  */
 void drawCube(std::string name, glm::vec3 min, glm::vec3 max);
 
+void drawSquare(std::string name, glm::vec2 min, glm::vec2 max) ;
+
+std::vector<glm::vec2> build_square_from_minmax(glm::vec2 min, glm::vec2 max);
+
 void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max);
 
 polyscope::CurveNetwork* drawOctree(std::string name, std::vector<Octree<statistics3d, glm::vec3> *> octree);
+
+polyscope::CurveNetwork* drawQuadtree (std::string name, std::vector<Octree<statistics2d, glm::vec2> *> octree);
 
 PointSet<point2d> generate2dGaussian ();
