@@ -60,15 +60,6 @@ std::vector<glm::vec3> build_cube_from_minmax(glm::vec3 min, glm::vec3 max) {
     return cube ;
 }
 
-std::vector<glm::vec2> build_square_from_minmax(glm::vec2 min, glm::vec2 max) {
-    std::vector<glm::vec2> square;
-    square.emplace_back(min[0], max[1]);
-    square.emplace_back(min[0], max[1]);
-    square.emplace_back(max[0], min[1]);
-    square.emplace_back(max[0], max[1]);
-
-    return square;
-}
 
 void generate_gaussian () {
     std::ofstream file ("gaussian_spike_norm.ply");
@@ -169,10 +160,23 @@ void test_basic_polyscope () {
     polyscope::show();
 }
 
+std::vector<glm::vec2> build_square_from_minmax(glm::vec2 min, glm::vec2 max) {
+    std::vector<glm::vec2> square;
+    square.emplace_back(min.x, min.y);
+    square.emplace_back(min.x, max.y);
+    square.emplace_back(max.x, min.y);
+    square.emplace_back(max.x, max.y);
+
+    return square;
+}
+
 void drawSquare(std::string name, glm::vec2 min, glm::vec2 max) {
     std::vector<std::array<size_t, 2>> edges;
+
+    std::cout << "1" << std::endl;
     std::vector<glm::vec2> square = build_square_from_minmax(min, max);
 
+    std::cout << "2" << std::endl;
     edges.push_back({0, 1});
     edges.push_back({0, 2});
     edges.push_back({1, 3});
@@ -180,7 +184,8 @@ void drawSquare(std::string name, glm::vec2 min, glm::vec2 max) {
 
     polyscope::view::style = polyscope::view::NavigateStyle::Planar;
 
-    polyscope::registerCurveNetwork(name, square, edges);
+    std::cout << "3" << std::endl;
+    polyscope::registerCurveNetwork2D(name, square, edges);
 }
 
 void drawCube(std::string name, glm::vec3 min, glm::vec3 max)
@@ -264,17 +269,19 @@ polyscope::CurveNetwork* drawQuadtree (std::string name, std::vector<Octree<stat
         auto min = octree[i]->getMin();
         auto max = octree[i]->getMax();
         drawSquare("name" + std::to_string(i), min, max);
-//        auto square = build_square_from_minmax( min, max );
-//        for(int j = 0; j < 4; j++)
-//            nodes.push_back( square[j] );
+        auto square = build_square_from_minmax( min, max );
+        for(int j = 0; j < 4; j++)
+            nodes.push_back( square[j] );
 
-//        edges.push_back({0 + 4 * i, 1 + 4 * i});
-//        edges.push_back({2 + 4 * i, 3 + 4 * i});
+        edges.push_back({0 + 4 * i, 1 + 4 * i});
+        edges.push_back({2 + 4 * i, 3 + 4 * i});
 
-//        edges.push_back({0 + 4 * i, 2 + 4 * i});
-//        edges.push_back({1 + 4 * i, 3 + 4 * i});
+        edges.push_back({0 + 4 * i, 2 + 4 * i});
+        edges.push_back({1 + 4 * i, 3 + 4 * i});
     }
-    //return polyscope::registerCurveNetwork(name, nodes, edges);
+    polyscope::view::style = polyscope::view::NavigateStyle::Planar;
+
+    return polyscope::registerCurveNetwork2D(name, nodes, edges);
 }
 
 PointSet<point2d> generate2dGaussian () {

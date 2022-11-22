@@ -42,22 +42,23 @@ int main () {
     quad = generateInputOctree<statistics2d, point2d, glm::vec2>( MAX_DEPTH, &ps2d );
 
     pointSet2dToPolyscope("point cloud", &ps2d);
-//    for( int i = 0; i < MAX_DEPTH; i++ ) {
-//        std::cout << "1" << std::endl;
-//        auto o = quad->getAtDepth( i );
-//        std::cout << "2" << std::endl;
-//        octreeGraph[i] = drawQuadtree( std::to_string(i), o );
-//        std::cout << "3" << std::endl;
-//        octreeGraph[i]->setEnabled( false );
-//        std::cout << "4" << std::endl;
-//    }
-    drawSquare("charabia", glm::vec2(1, 0), glm::vec2(0, 1));
+    for( int i = 0; i < MAX_DEPTH; i++ ) {
+        std::cout << "1" << std::endl;
+        auto o = quad->getAtDepth( i );
+        std::cout << "2" << std::endl;
+        octreeGraph[i] = drawQuadtree( std::to_string(i), o );
+        std::cout << "3" << std::endl;
+        octreeGraph[i]->setEnabled( false );
+        std::cout << "4" << std::endl;
+    }
+    //drawSquare("charabia", glm::vec2(1, 0), glm::vec2(0, 1));
 
-    //octreeGraph[0]->setEnabled( true );
+    octreeGraph[0]->setEnabled( true );
 
     //loadPointCloud();
 
-    //polyscope::state::userCallback = callback;
+    polyscope::state::userCallback = callback;
+    std::cout << "4" << std::endl;
 
     polyscope::show();
 
@@ -79,8 +80,8 @@ bool fileGetter(void *data, int index, const char** output)
 void callback(){
     ImGui::PushItemWidth( 100 );
     if(ImGui::SliderInt( "profondeur", &depthToShow, 0, MAX_DEPTH - 1 )) showAtDepth( depthToShow );
-    if(ImGui::ListBox("files", &current_item, fileGetter, &files, files.size())){ path = files[current_item]; };
-    if(ImGui::Button("load file")) loadPointCloud();
+   // if(ImGui::ListBox("files", &current_item, fileGetter, &files, files.size())){ path = files[current_item]; };
+   // if(ImGui::Button("load file")) loadPointCloud();
 }
 
 void showAtDepth( int depth ){
