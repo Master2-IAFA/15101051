@@ -309,7 +309,7 @@ void draw_traverseOctree_onePoint(Octree<statistics3d, glm::vec3> * oct, PointSe
   glm::vec3 q = glm::vec3(bb_mid.x+rand_x, bb_mid.y+rand_y, bb_mid.z+rand_z);
 
   // This pair contains the information of the sphere where we're gonna project the point q : the center and its radius (.first, .second).
-  std::pair<glm::vec3, float> sphere = projection<statistics3d, point3d, glm::vec3>(oct, gaussian_mixture, q);
+  std::pair<glm::vec3, float> sphere = projection<statistics3d, point3d, glm::vec3>(oct, rational_kernel, q);
 
   //CQFD
   display_sphere(sphere.first, sphere.second);
@@ -332,7 +332,7 @@ void draw_traverseOctree_onePoint(Octree<statistics3d, glm::vec3> * oct, PointSe
   std::vector<glm::vec3> pc_projected;
   for (auto p : ps->getPoints()){
     glm::vec3 current_p = p.pos;
-    std::pair<glm::vec3, float> sphere = projection<statistics3d, point3d, glm::vec3>(oct, gaussian_mixture, current_p);
+    std::pair<glm::vec3, float> sphere = projection<statistics3d, point3d, glm::vec3>(oct, rational_kernel, current_p);
     glm::vec3 current_p_projected = project_point(sphere, current_p);
     pc_projected.push_back(current_p_projected);
   }
