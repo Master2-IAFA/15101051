@@ -61,7 +61,7 @@ bool fileGetter(void *data, int index, const char** output)
 }
 
 void callback(){
-    ImGui::PushItemWidth( 100 );
+    ImGui::PushItemWidth( 200 );
     if(ImGui::SliderInt( "profondeur", &depthToShow, 0, MAX_DEPTH - 1 )) showAtDepth( depthToShow );
     if(ImGui::ListBox("files", &current_item, fileGetter, &files, files.size())){ path = files[current_item]; };
     if(ImGui::Button("load file")) loadPointCloud();

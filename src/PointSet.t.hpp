@@ -79,7 +79,7 @@ void PointSet<point>::readOpenMesh (string filename) {
     }
 
     // If the file did not provide vertex normals, then calculate them
-    if ( !opt.check( OpenMesh::IO::Options::VertexNormal ) )
+    if ( !opt.check( OpenMesh::IO::Options::VertexNormal) )
     {
         std::cout << "The file doesn't contain normal informations." << std::endl;
         std::cout << "Try to create them thanks to face normals." << std::endl;

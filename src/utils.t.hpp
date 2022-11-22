@@ -89,11 +89,11 @@ template<typename VecType>
 float get_radius(float m_uc, VecType m_ul, float m_uq, VecType c)
 {
     float b = m_uc / m_uq;
-    auto cTc = c.t * c;
-    auto r = sqrt(cTc - b);
+    auto cTc = glm::dot(c,c);
+    float r = sqrt(cTc - b);
     std::cout << "r" << std::endl;
     float radius = sqrt(glm::pow(glm::l2Norm((-0.5f*b)*m_ul), 2) - m_uc*b );
-    return radius ;
+    return r ;
 }
 
 template<typename VecType>
