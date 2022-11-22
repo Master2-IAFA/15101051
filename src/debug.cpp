@@ -62,10 +62,10 @@ std::vector<glm::vec3> build_cube_from_minmax(glm::vec3 min, glm::vec3 max) {
 
 std::vector<glm::vec2> build_square_from_minmax(glm::vec2 min, glm::vec2 max) {
     std::vector<glm::vec2> square;
-    square.emplace_back(min);
+    square.emplace_back(min[0], max[1]);
     square.emplace_back(min[0], max[1]);
     square.emplace_back(max[0], min[1]);
-    square.emplace_back(max);
+    square.emplace_back(max[0], max[1]);
 
     return square;
 }
@@ -178,6 +178,8 @@ void drawSquare(std::string name, glm::vec2 min, glm::vec2 max) {
     edges.push_back({1, 3});
     edges.push_back({2, 3});
 
+    polyscope::view::style = polyscope::view::NavigateStyle::Planar;
+
     polyscope::registerCurveNetwork(name, square, edges);
 }
 
@@ -261,17 +263,18 @@ polyscope::CurveNetwork* drawQuadtree (std::string name, std::vector<Octree<stat
     for(int i = 0; i < octree.size(); i++){
         auto min = octree[i]->getMin();
         auto max = octree[i]->getMax();
-        auto square = build_square_from_minmax( glm::vec2(min[0], min[1]), glm::vec2(max[0], max[1]) );
-        for(int j = 0; j < 4; j++)
-            nodes.push_back( square[j] );
+        drawSquare("name" + std::to_string(i), min, max);
+//        auto square = build_square_from_minmax( min, max );
+//        for(int j = 0; j < 4; j++)
+//            nodes.push_back( square[j] );
 
-        edges.push_back({0 + 4 * i, 1 + 4 * i});
-        edges.push_back({2 + 4 * i, 3 + 4 * i});
+//        edges.push_back({0 + 4 * i, 1 + 4 * i});
+//        edges.push_back({2 + 4 * i, 3 + 4 * i});
 
-        edges.push_back({0 + 4 * i, 2 + 4 * i});
-        edges.push_back({1 + 4 * i, 3 + 4 * i});
+//        edges.push_back({0 + 4 * i, 2 + 4 * i});
+//        edges.push_back({1 + 4 * i, 3 + 4 * i});
     }
-    return polyscope::registerCurveNetwork(name, nodes, edges);
+    //return polyscope::registerCurveNetwork(name, nodes, edges);
 }
 
 PointSet<point2d> generate2dGaussian () {

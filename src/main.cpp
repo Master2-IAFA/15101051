@@ -12,7 +12,7 @@
 #include "utils.t.hpp"
 #include "debug.hpp"
 
-#define MAX_DEPTH 7
+#define MAX_DEPTH 3
 
 namespace fs = std::filesystem;
 
@@ -22,7 +22,7 @@ std::vector<string> files;
 int current_item = 0;
 int depthToShow = 0;
 PointSet<point3d> *ps;
-PointSet<point2d> *ps2d;
+PointSet<point2d> ps2d;
 Octree<statistics3d, glm::vec3> *octree;
 Octree<statistics2d, glm::vec2> *quad;
 std::array< polyscope::CurveNetwork*, MAX_DEPTH > octreeGraph;
@@ -32,27 +32,32 @@ void loadPointCloud();
 void callback();
 
 int main () {
-    for (const auto & entry : fs::directory_iterator(pathToDirectory)){
-        std::string s = entry.path();
-        files.push_back( s );
-    }
+//    for (const auto & entry : fs::directory_iterator(pathToDirectory)){
+//        std::string s = entry.path();
+//        files.push_back( s );
+//    }
 
     polyscope::init();
-    *ps2d = generate2dGaussian();
-    quad = generateInputOctree<statistics2d, point2d, glm::vec2>( MAX_DEPTH, ps2d );
+    ps2d = generate2dGaussian();
+    quad = generateInputOctree<statistics2d, point2d, glm::vec2>( MAX_DEPTH, &ps2d );
 
-    pointSet2dToPolyscope("point cloud", ps2d);
-    for( int i = 0; i < MAX_DEPTH; i++ ){
-        auto o = quad->getAtDepth( i );
-        octreeGraph[i] = drawQuadtree( std::to_string(i), o );
-        octreeGraph[i]->setEnabled( false );
-    }
+    pointSet2dToPolyscope("point cloud", &ps2d);
+//    for( int i = 0; i < MAX_DEPTH; i++ ) {
+//        std::cout << "1" << std::endl;
+//        auto o = quad->getAtDepth( i );
+//        std::cout << "2" << std::endl;
+//        octreeGraph[i] = drawQuadtree( std::to_string(i), o );
+//        std::cout << "3" << std::endl;
+//        octreeGraph[i]->setEnabled( false );
+//        std::cout << "4" << std::endl;
+//    }
+    drawSquare("charabia", glm::vec2(1, 0), glm::vec2(0, 1));
 
-    octreeGraph[0]->setEnabled( true );
+    //octreeGraph[0]->setEnabled( true );
 
     //loadPointCloud();
 
-    polyscope::state::userCallback = callback;
+    //polyscope::state::userCallback = callback;
 
     polyscope::show();
 
