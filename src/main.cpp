@@ -43,7 +43,6 @@ int main () {
 
     pointSet2dToPolyscope("point cloud", &ps2d);
     for( int i = 0; i < MAX_DEPTH; i++ ) {
-        std::cout << "1" << std::endl;
         auto o = quad->getAtDepth( i );
         std::cout << "2" << std::endl;
         octreeGraph[i] = drawQuadtree( std::to_string(i), o );

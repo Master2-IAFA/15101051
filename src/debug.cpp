@@ -268,7 +268,7 @@ polyscope::CurveNetwork* drawQuadtree (std::string name, std::vector<Octree<stat
     for(int i = 0; i < octree.size(); i++){
         auto min = octree[i]->getMin();
         auto max = octree[i]->getMax();
-        drawSquare("name" + std::to_string(i), min, max);
+        //drawSquare("name" + std::to_string(i), min, max);
         auto square = build_square_from_minmax( min, max );
         for(int j = 0; j < 4; j++)
             nodes.push_back( square[j] );
