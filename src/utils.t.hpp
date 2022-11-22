@@ -54,6 +54,10 @@ void fitInputOctree( int max_depth, Octree<statistics, VecType>* octree, std::ve
     }
 }
 
+/**
+ * @brief This function updates the given stats with the information of the given point.
+ *
+ */
 template<typename statistics, typename point>
 void statisticsAdd(statistics *stat, point p) {
     // sigma
@@ -69,7 +73,9 @@ void statisticsAdd(statistics *stat, point p) {
     }
 }
 
-
+/**
+ * @brief this function prints the informations contained in this stats.
+ */
 template <typename statistics> 
 void display_statistics (statistics stats){
     if (stats.position.length() == 2) {
@@ -85,25 +91,34 @@ void display_statistics (statistics stats){
     std::cout << "Pdn : " << stats.pdn << std::endl;
 }
 
+/**
+ * @brief This function takes algebraic parameters and returns the radius of the geometric sphere.
+ */
 template<typename VecType>
-float get_radius(float m_uc, VecType m_ul, float m_uq, VecType c)
+float get_radius(float u0, VecType u123, float u4, VecType c)
 {
-    float b = m_uc / m_uq;
+    float b = u0 / u4;
     auto cTc = glm::dot(c,c);
     float r = sqrt(cTc - b);
-    std::cout << "r" << std::endl;
-    float radius = sqrt(glm::pow(glm::l2Norm((-0.5f*b)*m_ul), 2) - m_uc*b );
-    return r ;
+    // float radius = sqrt(glm::pow(glm::l2Norm((-0.5f*b)*m_ul), 2) - m_uc*b );
+    return max(0, r);
 }
 
+/**
+ * @brief This function takes algebraic parameters and returns the center of the geometric sphere.
+ */
 template<typename VecType>
-VecType get_center(float m_uc, VecType m_ul, float m_uq)
-{
-    float b = - 1.0f / (2 * m_uq);
-    VecType center = b*m_ul ;
+VecType get_center(float u0, VecType u123, float u4)
+{   
+    float b = - 1.0f / (2 * u4);
+    VecType center = b*u123 ;
     return center ;
 }
 
+/**
+ * @brief This function takes statistics of a node or aggregated statistics and returns the geometric parameters of the sphere.
+ * @return : The pair représente in x.first the center of the geometric sphere, and in x.second the radius of it.
+ */
 template<typename statistics, typename VecType>
 std::pair<VecType, float> fit_algebraic_sphere(statistics stat, VecType q, float (*kernel)(VecType&,VecType&)){
 
@@ -123,22 +138,33 @@ std::pair<VecType, float> fit_algebraic_sphere(statistics stat, VecType q, float
     float denom = norm - (glm::pow(glm::l2Norm(pi),2) / area);
     float u4 = (num/denom)/2;
 
-    std::cout << "U4 = " << u4 << std::endl;
-
     VecType num_vec = ni - 2*u4*(pi);
     VecType u123 = num_vec/area;
 
     num = glm::dot(pi, u123) + u4 * norm;
     float u0 = - num / area;
 
-    //check if sphere fits points
     VecType center = get_center(u0, u123, u4);
-    // center += to_Kernel;
     float radius = get_radius(u0, u123, u4, center);
-    if (center.length() == 3)
-        std::cout << "center =" << center.x << "," << center.y  << "," << center.z << "\n" ;
-    else
-        std::cout << "center =" << center.x << "," << center.y  << "\n" ;
-    std::cout << "radius =" << radius << "\n" ;
     return std::pair<VecType, float>(center, radius);
+}
+
+/**
+ * @brief This function takes the geometric parameters of the sphere and a point to project on it, and returns the new projected point.
+ */
+template<typename VecType>
+VecType project_point (std::pair<VecType, float> sphereInfos, VecType q){
+    VecType projectedPoint;
+
+    for (int i = 0; i < q.length(); i++)
+        projectedPoint[i] =  q[i] - sphereInfos.first[i];
+    
+    float factor = (glm::l2Norm(projectedPoint));
+    projectedPoint = (projectedPoint / factor);
+
+    float distance_factor = sphereInfos.second;
+
+    projectedPoint = (projectedPoint * distance_factor) + sphereInfos.first;
+
+    return projectedPoint;
 }

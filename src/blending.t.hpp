@@ -9,8 +9,27 @@
  */
 template<typename VecType>
 float gaussian_mixture (VecType& p, VecType& q){
-    // I don't understand all of we need to do.
-    return 0.0f;
+    float out = 0;
+    float base_sigma = 1;
+    
+    // This parameters could be changed.
+    // WE MUST TRY DIFFERENTS PARAMETERS.
+    // This parameter k makes reference to the sum of i => k >= 1.
+    int k = 1;
+    float a = 1;
+
+    // I think that if K is tiny (like 1 or average) the response is an interpolation.
+
+    // Here, it tries to implement the effective strategy to set appropriate parameters
+    // With this king of thing : sigma_i = a^i * sigma with a > 1; 
+    for (int i = 0; i < k; i++){
+        float sigma = pow(a, i) * base_sigma;
+        float num = -glm::pow(glm::l2Norm(q-p),2);
+        float denom = 2 * pow(sigma,2);
+        float fact = (pow(sigma,-3) * exp(num/denom));
+        out += fact;
+    }
+    return out;
 }
 
 /**
@@ -22,12 +41,12 @@ float gaussian_mixture (VecType& p, VecType& q){
 template <typename VecType>
 float rational_kernel (VecType& p, VecType& q){
     // Interpolation : Epsilon = 0.0f
-    // approximatin surfaces : Epsilon > 0.0f
+    // approximation surfaces : Epsilon > 0.0f
     float epsilon = 0.5f;
     float dist = glm::pow(glm::distance(p, q),2);
 
     // Try to find a good k
-    int k = 1;
+    float k = 1.5;
 
     float res = glm::pow((dist + epsilon), (-k/2));
     return res;
@@ -71,6 +90,10 @@ bool is_InProtectionSphere (Octree<statistics, VecType> *node, VecType& q){
     return (! (signedDistanceToSphere (node, q) > 0));
 }
 
+
+/**
+ * @brief This function computes the summation of two given statistics.
+ */
 template <typename statistics>
 statistics sum_statistics (const statistics& a, const statistics& b){
     statistics sum_stats;
@@ -82,6 +105,9 @@ statistics sum_statistics (const statistics& a, const statistics& b){
     return sum_stats;
 }
 
+/**
+ * @brief This function returns the statistics given in input, multiplied by the factor w.
+ */
 template<typename statistics>
 statistics weighted_statistics (statistics stats, float w) {
     statistics w_stats;
@@ -93,6 +119,18 @@ statistics weighted_statistics (statistics stats, float w) {
     return w_stats;
 }
 
+
+/**
+ *
+ * @brief This function takes the father's node and one of its children and returns 
+ * the gamma function (Equation (7) in the MLoD's paper).
+ * It calculates the distance between q and the protection sphere of each node (father and child).
+ *
+ * @param node : This is the current node that we treat.
+ * @param child : This is the child node that we treat too.
+ * @param q : This is the point that we want to project.
+ *
+ */
 template<typename statistics, typename VecType>
 float gamma_maj (Octree<statistics, VecType> *node, Octree<statistics, VecType> *child, VecType q){
     float distance_to_node = signedDistanceToSphere(node, q);
@@ -126,17 +164,10 @@ statistics cumul_stats(Octree<statistics, VecType> *node, float (*kernel)(VecTyp
     // If node is a leaf :
     if ( ! node->hasChildren() ){
         float weight = 0.0f;
-        // [A revoir]
         // Accumulate statistics over points in the leaf.
         for (VecType p : node->getPoints()){
             weight += kernel (q, p); 
         }
-        std::cout << "Je stop sur une feuille avec les stats : " << std::endl;
-        std::cout << "Stats avant : " << std::endl;
-        display_statistics(father_stats);
-        std::cout << "Weigth : " << weight << std::endl;
-        display_statistics(weighted_statistics(father_stats, weight));
-        std::cout << "==============================" << std::endl;
         return weighted_statistics(father_stats, weight);
     }
     // float sigma_n_toFloat = round(sigma_n * pow(10, 7)) / pow(10, 7);
@@ -146,12 +177,6 @@ statistics cumul_stats(Octree<statistics, VecType> *node, float (*kernel)(VecTyp
     // Case q isn't in the node
     if (! is_InProtectionSphere(node, q)){
         statistics far_away = weighted_statistics(father_stats, weight_averagePos);
-        std::cout << "Je stop car je ne suis pas dans un noeud : " << std::endl;
-        std::cout << "Stats avant : " << std::endl;
-        display_statistics(father_stats);
-        std::cout << "Weigth : " << weight_averagePos << std::endl;
-        display_statistics(weighted_statistics(father_stats, weight_averagePos));
-        std::cout << "==============================" << std::endl;
         return weighted_statistics(father_stats, weight_averagePos);  
     }
     // Let's blend statistics between n and its children
@@ -166,8 +191,6 @@ statistics cumul_stats(Octree<statistics, VecType> *node, float (*kernel)(VecTyp
         node_stats = sum_statistics(node_stats, weighted_statistics(child_stats, (1-gamma)));
         node_stats = sum_statistics(node_stats, weighted_statistics(child_stats, weight));
     }
-    // std::cout << "Stats of this node : " << std::endl;
-    // display_statistics(node_stats);
     return node_stats;
 }
 
@@ -180,11 +203,8 @@ statistics cumul_stats(Octree<statistics, VecType> *node, float (*kernel)(VecTyp
 template<typename statistics, typename point, typename VecType>
 std::pair<VecType, float> projection (Octree<statistics, VecType> *octree, float (*kernel)(VecType&,VecType&) ,VecType& q){
     statistics stats = cumul_stats (octree, kernel, q);
-    std::cout << "Stats : pos X = " << stats.position[0] << " Y = " << stats.position[1] << " Z = " << stats.position[2] << std::endl;
     std::pair<VecType, float> sphere = fit_algebraic_sphere(stats, q, kernel);
     return sphere;
-
-    // // ONLY TO RETURNING SOMETHING
     // point new_q;
     // new_q.pos = VecType(0.0f);
     // new_q.norm = VecType(0.0f);

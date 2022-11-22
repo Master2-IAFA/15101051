@@ -254,6 +254,10 @@ PointSet<point2d> generate2dGaussian () {
     return pc;
 }
 
+/**
+ * @brief This function calculates the traversed node and display only used nodes of the octree.
+ *
+ */
 void _traverse_for_fake_blending (Octree<statistics3d, glm::vec3> *current_node_octree, glm::vec3& q, std::vector<std::array<int, 2>>* edges, std::vector<glm::vec3>* nodes) {
   if (!current_node_octree->hasChildren())
     return;
@@ -287,7 +291,7 @@ void _traverse_for_fake_blending (Octree<statistics3d, glm::vec3> *current_node_
   
 }
 
-void draw_traverseOctree_onePoint(Octree<statistics3d, glm::vec3> * oct) {
+void draw_traverseOctree_onePoint(Octree<statistics3d, glm::vec3> * oct, PointSet<point3d> *ps) {
 
   std::vector<std::array<int, 2>> edges ;
   std::vector<glm::vec3> nodes;
@@ -298,27 +302,41 @@ void draw_traverseOctree_onePoint(Octree<statistics3d, glm::vec3> * oct) {
   glm::vec3 bb_mid = midpoint<glm::vec3>(bb_min, bb_max);
   float radius_protectionSphere = (glm::distance(bb_mid, bb_max) * LAMBDA)/2;
 
+  //Creation of a random point into the bounding box.
   float rand_x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
   float rand_y = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
   float rand_z = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
-
   glm::vec3 q = glm::vec3(bb_mid.x+rand_x, bb_mid.y+rand_y, bb_mid.z+rand_z);
 
-  // point3d p_proj = projection<statistics3d, point3d, glm::vec3>(oct, rational_kernel, q);
-  std::pair<glm::vec3, float> sphere = projection<statistics3d, point3d, glm::vec3>(oct, rational_kernel, q);
+  // This pair contains the information of the sphere where we're gonna project the point q : the center and its radius (.first, .second).
+  std::pair<glm::vec3, float> sphere = projection<statistics3d, point3d, glm::vec3>(oct, gaussian_mixture, q);
 
+  //CQFD
   display_sphere(sphere.first, sphere.second);
 
+  // Get the projected point.
+  glm::vec3 projectedPoint = project_point(sphere, q);
+
+  // Displaying it.
   std::vector<glm::vec3> pc_only_one_point;
   pc_only_one_point.push_back(q); 
-  // pc_only_one_point.push_back(p_proj.pos);
+  pc_only_one_point.push_back(projectedPoint); 
   polyscope::PointCloud *pointCloud = polyscope::registerPointCloud("just_a_simple_point", pc_only_one_point);
   pointCloud->setPointRadius(0.02f);
   
+  // Display only nodes that we traverse.
   _traverse_for_fake_blending(oct ,q ,&edges, &nodes);
-
   polyscope::registerCurveNetwork("Traversing", nodes, edges);
 
+  // Now, we compute the projection with the entire point cloud.
+  std::vector<glm::vec3> pc_projected;
+  for (auto p : ps->getPoints()){
+    glm::vec3 current_p = p.pos;
+    std::pair<glm::vec3, float> sphere = projection<statistics3d, point3d, glm::vec3>(oct, gaussian_mixture, current_p);
+    glm::vec3 current_p_projected = project_point(sphere, current_p);
+    pc_projected.push_back(current_p_projected);
+  }
+  polyscope::PointCloud *pointCloud_projected = polyscope::registerPointCloud("point_cloud_projected", pc_projected);
 }
 
 void display_sphere(glm::vec3 center, float radius)

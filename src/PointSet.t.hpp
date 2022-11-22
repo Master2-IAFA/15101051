@@ -49,7 +49,7 @@ std::pair<point, point> PointSet<point>::getBoundingBox() {
     point p1, p2;
     for ( size_t i = 0 ; i < min_vec.size() ; ++i ) {
         p1.pos[i] = min_vec[i];
-        p2.pos[i] = max_vec[i];
+        p2.pos[i] = min_vec[i] + max_val;
     }
 
     return std::make_pair(p1, p2);
@@ -63,7 +63,7 @@ void PointSet<point>::readOpenMesh (string filename) {
 
     // request vertex normals, so the mesh reader can use normal information
     // if available
-    mesh.release_vertex_colors();
+    // mesh.release_vertex_colors();
     mesh.request_vertex_normals();
     // assure we have vertex normals
     if (!mesh.has_vertex_normals())

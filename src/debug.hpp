@@ -41,9 +41,11 @@ void test_debug_bounding_box(std::vector<glm::vec3> points);
 /**
  *
  * @brief This function draws the nodes traversed for 1 random point.
+ * MOREOVER : It creates a random point into the bounding box, and try to project it into the octree, in order to create the new projected point.
+ * MOREOVER : It takes all of the point cloud and try to project all of its points into the octree, and creates a new point cloud (the projected one).
  *
  */
-void draw_traverseOctree_onePoint (Octree<statistics3d, glm::vec3> *oct);
+void draw_traverseOctree_onePoint (Octree<statistics3d, glm::vec3> *oct, PointSet<point3d> *ps);
 
 
 void test_basic_polyscope ();

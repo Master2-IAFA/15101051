@@ -80,7 +80,7 @@ void loadPointCloud(){
     delete octree;
 
     octree = generateInputOctree<statistics3d, point3d, glm::vec3>( MAX_DEPTH, ps );
-    draw_traverseOctree_onePoint(octree);
+    draw_traverseOctree_onePoint(octree, ps);
 
     for( int i = 0; i < MAX_DEPTH; i++ ){
         auto o = octree->getAtDepth( i );
