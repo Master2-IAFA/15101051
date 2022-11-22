@@ -324,22 +324,10 @@ void draw_traverseOctree_onePoint(Octree<statistics3d, glm::vec3> * oct) {
 void display_sphere(glm::vec3 center, float radius)
 {
   std::vector<glm::vec3> sphere_pos ;
-  glm::vec3 other_points_rad1 = glm::vec3(center[0]+radius, center[1], center[2]);
-  glm::vec3 other_points_rad2 = glm::vec3(center[0], center[1]+radius, center[2]);
-  glm::vec3 other_points_rad3 = glm::vec3(center[0], center[1], center[2]+radius);
-  glm::vec3 other_points_rad4 = glm::vec3(center[0]-radius, center[1], center[2]);
-  glm::vec3 other_points_rad5 = glm::vec3(center[0], center[1]-radius, center[2]);
-  glm::vec3 other_points_rad6 = glm::vec3(center[0], center[1], center[2]-radius);
 
   sphere_pos.push_back(center) ;
-  sphere_pos.push_back(other_points_rad1);
-  sphere_pos.push_back(other_points_rad2);
-  sphere_pos.push_back(other_points_rad3);
-  sphere_pos.push_back(other_points_rad4);
-  sphere_pos.push_back(other_points_rad5);
-  sphere_pos.push_back(other_points_rad6);
 
   polyscope::PointCloud *pointCloud = polyscope::registerPointCloud("sphere", sphere_pos);
-  pointCloud->setPointRadius(0.005f);
+  pointCloud->setPointRadius(radius, false);
 
 }
