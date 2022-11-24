@@ -7,8 +7,6 @@
 #include "polyscope/point_cloud.h"
 #include "polyscope/curve_network.h"
 #include "utils.t.hpp"
-#include "debug.hpp"
-
 // #include "blending.t.hpp"
 
 polyscope::PointCloud * pointSetToPolyscope(std::string name, PointSet<point3d> *ps);
@@ -71,7 +69,7 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<Octree<statist
 
 
 void show_GUI();
-=======
+
 /**
  * @brief function to vizualise points sliding accross their translation
  */

@@ -1,9 +1,20 @@
-#include "main.hpp"
+#include "utils.t.hpp"
+#include "blending.t.hpp"
+#include "debug.hpp"
 
-namespace fs = std::filesystem;
+#include <iostream>
+#include <string>
+#include <filesystem>
 
-<<<<<<< HEAD
-=======
+#include "polyscope/messages.h"
+#include "polyscope/point_cloud.h"
+#include "polyscope/pick.h"
+#include "polyscope/polyscope.h"
+
+#include "glm/gtx/string_cast.hpp"
+
+#define MAX_DEPTH 7
+
 std::string pathToDirectory{ "../assets/" };
 std::string path{"../assets/Head Sculpture.stl"};
 std::vector<string> files;
@@ -13,14 +24,18 @@ PointSet<point3d> *ps;
 Octree<statistics3d, glm::vec3> *octree;
 std::array< polyscope::CurveNetwork*, MAX_DEPTH > octreeGraph;
 
+// Displaying it.
+polyscope::PointCloud * ps_projected ;
+polyscope::PointCloud * pc ;
 
+
+namespace fs = std::filesystem;
 int projected_points_slider = 0 ;
 
 void showAtDepth( int depth );
 void loadPointCloud();
 void callback();
 
->>>>>>> fitting_sphere_slider
 int main () {
     for (const auto & entry : fs::directory_iterator(pathToDirectory)){
         std::string s = entry.path();
@@ -59,7 +74,7 @@ void callback(){
     if(ImGui::SliderInt( "profondeur", &depthToShow, 0, MAX_DEPTH - 1 )) showAtDepth( depthToShow );
     if(ImGui::ListBox("files", &current_item, fileGetter, &files, files.size())){ path = files[current_item]; };
     if(ImGui::Button("load file")) loadPointCloud();
-    if(ImGui::SliderInt( "projected_points", &projected_points_slider, 0, 10 )) 
+    if(ImGui::SliderInt( "projected_points", &projected_points_slider, 0, 10 ))
     {
         slide_points(pc, ps_projected, 10, projected_points_slider) ;
     }
