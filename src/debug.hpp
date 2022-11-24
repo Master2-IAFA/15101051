@@ -7,6 +7,7 @@
 #include "polyscope/point_cloud.h"
 #include "polyscope/curve_network.h"
 #include "utils.t.hpp"
+#include "debug.hpp"
 
 // #include "blending.t.hpp"
 
