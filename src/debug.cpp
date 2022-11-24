@@ -1,7 +1,6 @@
 #include "debug.hpp"
 
 void pointSetToPolyscope( std::string name, PointSet<point3d> *ps ){
-
     std::vector<point3d> points = ps->getPoints();
 
     std::vector<glm::vec3> position ( points.size() );
@@ -9,8 +8,8 @@ void pointSetToPolyscope( std::string name, PointSet<point3d> *ps ){
 
     #pragma omp parallel for
     for(int i = 0; i < points.size(); i++){
-        position[i] = glm::vec3(points[i].pos[0], points[i].pos[1], points[i].pos[2]) ;
-        normal[i] = glm::vec3(points[i].norm[0], points[i].norm[1], points[i].norm[2]);
+        position[i] = points[i].pos;
+        normal[i] = points[i].norm;
     }
 
     polyscope::PointCloud *pointCloud = polyscope::registerPointCloud(name, position);
@@ -23,9 +22,10 @@ void pointSet2dToPolyscope (std::string name, PointSet<point2d> *ps) {
     std::vector<glm::vec2> position ( points.size() );
     std::vector<glm::vec2> normal ( points.size() );
 
+    #pragma omp parallel for
     for ( int i = 0 ; i < points.size() ; ++i ) {
-        position[i] = glm::vec2( points[i].pos[0], points[i].pos[1] );
-        normal[i] = glm::vec2( points[i].norm[0], points[i].norm[1] );
+        position[i] = points[i].pos;
+        normal[i] = points[i].norm;
     }
 
     polyscope::view::style = polyscope::view::NavigateStyle::Planar;
@@ -34,29 +34,33 @@ void pointSet2dToPolyscope (std::string name, PointSet<point2d> *ps) {
     polyscope::getPointCloud(name)->addVectorQuantity2D(name + " normal", normal);
 }
 
-//function that takes minmax of a cube a returns 8 coordinates of cube
 std::vector<glm::vec3> build_cube_from_minmax(glm::vec3 min, glm::vec3 max) {
-    //float len_body_diag = (max-min).length() ;
-    //float a = len_body_diag/sqrt(3) ;
+    std::vector<glm::vec3> cube;
 
-    glm::vec3 tfl = glm::vec3(min.x, max.y, min.z ) ;
-    glm::vec3 tfr = glm::vec3(max.x, max.y, min.z) ;
-    glm::vec3 tbl = glm::vec3(min.x, max.y, max.z ) ;
-    glm::vec3 tbr = glm::vec3(max.x, max.y, max.z) ;
-    glm::vec3 bfl = glm::vec3(min.x, min.y, min.z) ;
-    glm::vec3 bfr =glm::vec3(max.x, min.y, min.z) ;
-    glm::vec3 bbl  = glm::vec3(min.x, min.y, max.z) ;
-    glm::vec3 bbr = glm::vec3(max.x, min.y, max.z) ;
+    //top front left
+    cube.emplace_back(min.x, max.y, min.z);
 
-    std::vector<glm::vec3> cube ;
-    cube.push_back(tfl);
-    cube.push_back(tfr);
-    cube.push_back(tbl);
-    cube.push_back(tbr);
-    cube.push_back(bfl);
-    cube.push_back(bfr);
-    cube.push_back(bbl);
-    cube.push_back(bbr);
+    //top front right
+    cube.emplace_back(max.x, max.y, min.z);
+
+    //top back left
+    cube.emplace_back(min.x, max.y, max.z);
+
+    //top back right
+    cube.emplace_back(max.x, max.y, max.z);
+
+    //bottom front left
+    cube.emplace_back(min.x, min.y, min.z);
+
+    //bottom front right
+    cube.emplace_back(max.x, min.y, min.z);
+
+    //bottom back left
+    cube.emplace_back(min.x, min.y, max.z);
+
+    //bottom back right
+    cube.emplace_back(max.x, min.y, max.z);
+
     return cube ;
 }
 
@@ -173,10 +177,8 @@ std::vector<glm::vec2> build_square_from_minmax(glm::vec2 min, glm::vec2 max) {
 void drawSquare(std::string name, glm::vec2 min, glm::vec2 max) {
     std::vector<std::array<size_t, 2>> edges;
 
-    std::cout << "1" << std::endl;
     std::vector<glm::vec2> square = build_square_from_minmax(min, max);
 
-    std::cout << "2" << std::endl;
     edges.push_back({0, 1});
     edges.push_back({0, 2});
     edges.push_back({1, 3});
@@ -184,90 +186,80 @@ void drawSquare(std::string name, glm::vec2 min, glm::vec2 max) {
 
     polyscope::view::style = polyscope::view::NavigateStyle::Planar;
 
-    std::cout << "3" << std::endl;
     polyscope::registerCurveNetwork2D(name, square, edges);
 }
 
-void drawCube(std::string name, glm::vec3 min, glm::vec3 max)
-{
-  std::vector<std::array<size_t, 2>> edges ;
+void drawCube(std::string name, glm::vec3 min, glm::vec3 max) {
+    std::vector<std::array<size_t, 2>> edges;
 
-  std::vector<glm::vec3> nodes = build_cube_from_minmax(min, max);
+    std::vector<glm::vec3> nodes = build_cube_from_minmax(min, max);
 
-  edges.push_back({0, 1});
-  edges.push_back({2, 3});
-  edges.push_back({4, 5});
-  edges.push_back({6, 7});
+    edges.push_back({0, 1});
+    edges.push_back({2, 3});
+    edges.push_back({4, 5});
+    edges.push_back({6, 7});
 
-  edges.push_back({0, 2});
-  edges.push_back({1, 3});
-  edges.push_back({4, 6});
-  edges.push_back({5, 7});
+    edges.push_back({0, 2});
+    edges.push_back({1, 3});
+    edges.push_back({4, 6});
+    edges.push_back({5, 7});
 
-  edges.push_back({0, 4});
-  edges.push_back({1, 5});
-  edges.push_back({2, 6});
-  edges.push_back({3, 7});
+    edges.push_back({0, 4});
+    edges.push_back({1, 5});
+    edges.push_back({2, 6});
+    edges.push_back({3, 7});
 
-  //polyscope::init();
-
-  // Add the curve network
-  polyscope::registerCurveNetwork(name, nodes, edges);
-
-  // visualize!
-  //polyscope::show();
+    polyscope::registerCurveNetwork(name, nodes, edges);
 }
 
-void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max)
-{
-  std::vector<std::array<size_t, 2>> edges ;
-  std::vector<glm::vec3> nodes ;
+void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max) {
+    std::vector<std::array<size_t, 2>> edges ;
+    std::vector<glm::vec3> nodes ;
 
-  nodes.push_back(min) ;
-  nodes.push_back(max) ;
+    nodes.push_back(min) ;
+    nodes.push_back(max) ;
 
-  edges.push_back({0, 1});
+    edges.push_back({0, 1});
 
-  polyscope::registerCurveNetwork(name, nodes, edges);
+    polyscope::registerCurveNetwork(name, nodes, edges);
 }
 
-polyscope::CurveNetwork* drawOctree(std::string name, std::vector<Octree<statistics3d, glm::vec3> *> octree){
+polyscope::CurveNetwork* drawOctree(std::string name, std::vector<Octree<statistics3d, glm::vec3> *> octree) {
+    std::vector<std::array<int, 2>> edges ;
+    std::vector<glm::vec3> nodes;
 
-  std::vector<std::array<int, 2>> edges ;
-  std::vector<glm::vec3> nodes;
+    for(int i = 0; i < octree.size(); i++) {
+        auto min = octree[i]->getMin();
+        auto max = octree[i]->getMax();
+        auto cube = build_cube_from_minmax( min, max );
+        for(int j = 0; j < 8; j++)
+             nodes.push_back( cube[j] );
 
-  for(int i = 0; i < octree.size(); i++){
-    auto min = octree[i]->getMin();
-    auto max = octree[i]->getMax();
-    auto cube = build_cube_from_minmax( glm::vec3(min[0], min[1], min[2]), glm::vec3(max[0], max[1], max[2]) );
-    for(int j = 0; j < 8; j++)
-      nodes.push_back( cube[j] );
+        edges.push_back({0 + 8 * i, 1 + 8 * i});
+        edges.push_back({2 + 8 * i, 3 + 8 * i});
+        edges.push_back({4 + 8 * i, 5 + 8 * i});
+        edges.push_back({6 + 8 * i, 7 + 8 * i});
 
-    edges.push_back({0 + 8 * i, 1 + 8 * i});
-    edges.push_back({2 + 8 * i, 3 + 8 * i});
-    edges.push_back({4 + 8 * i, 5 + 8 * i});
-    edges.push_back({6 + 8 * i, 7 + 8 * i});
+        edges.push_back({0 + 8 * i, 2 + 8 * i});
+        edges.push_back({1 + 8 * i, 3 + 8 * i});
+        edges.push_back({4 + 8 * i, 6 + 8 * i});
+        edges.push_back({5 + 8 * i, 7 + 8 * i});
 
-    edges.push_back({0 + 8 * i, 2 + 8 * i});
-    edges.push_back({1 + 8 * i, 3 + 8 * i});
-    edges.push_back({4 + 8 * i, 6 + 8 * i});
-    edges.push_back({5 + 8 * i, 7 + 8 * i});
-
-    edges.push_back({0 + 8 * i, 4 + 8 * i});
-    edges.push_back({1 + 8 * i, 5 + 8 * i});
-    edges.push_back({2 + 8 * i, 6 + 8 * i});
-    edges.push_back({3 + 8 * i, 7 + 8 * i});
-  }
-  return polyscope::registerCurveNetwork(name, nodes, edges);
+        edges.push_back({0 + 8 * i, 4 + 8 * i});
+        edges.push_back({1 + 8 * i, 5 + 8 * i});
+        edges.push_back({2 + 8 * i, 6 + 8 * i});
+        edges.push_back({3 + 8 * i, 7 + 8 * i});
+    }
+    return polyscope::registerCurveNetwork(name, nodes, edges);
 }
 
-polyscope::CurveNetwork* drawQuadtree (std::string name, std::vector<Octree<statistics2d, glm::vec2> *> octree){
+polyscope::CurveNetwork* drawQuadtree (std::string name, std::vector<Octree<statistics2d, glm::vec2> *> quad){
     std::vector<std::array<int, 2>> edges ;
     std::vector<glm::vec2> nodes;
 
-    for(int i = 0; i < octree.size(); i++){
-        auto min = octree[i]->getMin();
-        auto max = octree[i]->getMax();
+    for(int i = 0; i < quad.size(); i++){
+        auto min = quad[i]->getMin();
+        auto max = quad[i]->getMax();
         //drawSquare("name" + std::to_string(i), min, max);
         auto square = build_square_from_minmax( min, max );
         for(int j = 0; j < 4; j++)
