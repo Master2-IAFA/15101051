@@ -349,3 +349,12 @@ void display_sphere(glm::vec3 center, float radius)
   pointCloud->setPointRadius(radius, false);
 
 }
+
+void show_GUI()
+{
+  //ImGui::PushItemWidth( 200 );
+  //if(ImGui::SliderInt( "profondeur", &depthToShow, 0, MAX_DEPTH - 1 )) showAtDepth( depthToShow );
+  //if(ImGui::ListBox("files", &current_item, fileGetter, &files, files.size())){ path = files[current_item]; };
+  //if(ImGui::Button("load file")) loadPointCloud();
+
+}

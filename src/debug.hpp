@@ -7,6 +7,7 @@
 #include "polyscope/point_cloud.h"
 #include "polyscope/curve_network.h"
 #include "utils.t.hpp"
+
 // #include "blending.t.hpp"
 
 void pointSetToPolyscope(std::string name, PointSet<point3d> *ps);
@@ -66,3 +67,5 @@ void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max);
 void display_sphere(glm::vec3 center, float radius) ;
 
 polyscope::CurveNetwork* drawOctree(std::string name, std::vector<Octree<statistics3d, glm::vec3> *> octree);
+
+void show_GUI();

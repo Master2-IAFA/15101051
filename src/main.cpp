@@ -1,34 +1,6 @@
-#include <iostream>
-#include <string>
-#include <filesystem>
-
-#include "polyscope/messages.h"
-#include "polyscope/point_cloud.h"
-#include "polyscope/pick.h"
-#include "polyscope/polyscope.h"
-
-#include "glm/gtx/string_cast.hpp"
-
-#include "utils.t.hpp"
-#include "debug.hpp"
-#include "blending.t.hpp"
-
-#define MAX_DEPTH 7
+#include "main.hpp"
 
 namespace fs = std::filesystem;
-
-std::string pathToDirectory{ "../assets/" };
-std::string path{"../assets/Head Sculpture.stl"};
-std::vector<string> files;
-int current_item = 0;
-int depthToShow = 0;
-PointSet<point3d> *ps;
-Octree<statistics3d, glm::vec3> *octree;
-std::array< polyscope::CurveNetwork*, MAX_DEPTH > octreeGraph;
-
-void showAtDepth( int depth );
-void loadPointCloud();
-void callback();
 
 int main () {
     for (const auto & entry : fs::directory_iterator(pathToDirectory)){
