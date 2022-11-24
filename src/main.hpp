@@ -25,6 +25,12 @@ PointSet<point3d> *ps;
 Octree<statistics3d, glm::vec3> *octree;
 std::array< polyscope::CurveNetwork*, MAX_DEPTH > octreeGraph;
 
+// Displaying it.
+polyscope::PointCloud * ps_projected ;
+polyscope::PointCloud * pc ;
+
+int projected_points_slider = 0 ;
+
 void showAtDepth( int depth );
 void loadPointCloud();
 void callback();

@@ -36,8 +36,8 @@ template <typename statistics, typename VecType>
 float signedDistanceToSphere (Octree <statistics, VecType> *node, VecType& q);
 
 /**
- * 
- * @brief This function takes a node of an octree and a point and returns a boolean 
+ *
+ * @brief This function takes a node of an octree and a point and returns a boolean
  * to say if this point is in the protection sphere
  */
 template<typename statistics, typename VecType>
@@ -57,7 +57,7 @@ statistics weighted_statistics (statistics stats, float w);
 
 /**
  *
- * @brief This function takes the father's node and one of its children and returns 
+ * @brief This function takes the father's node and one of its children and returns
  * the gamma function (Equation (7) in the MLoD's paper).
  * It calculates the distance between q and the protection sphere of each node (father and child).
  *
