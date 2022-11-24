@@ -1,3 +1,6 @@
+#include "utils.t.hpp"
+#include "debug.hpp"
+
 #include <iostream>
 #include <string>
 #include <filesystem>
@@ -8,9 +11,6 @@
 #include "polyscope/polyscope.h"
 
 #include "glm/gtx/string_cast.hpp"
-
-#include "utils.t.hpp"
-#include "debug.hpp"
 
 #define MAX_DEPTH 7
 

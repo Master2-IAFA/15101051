@@ -39,12 +39,12 @@ public:
 
     /** compute the bounding box of current point cloud
      *
-     * bounding box: cuboïd that contains all points of the point cloud
+     * bounding box: cuboï¿½d that contains all points of the point cloud
      * @return min/max points (down left front/up right back corner points) of the box
      */
     std::pair<point, point> getBoundingBox ();
     void addPoint(point p) { m_points.push_back(p); }
 
 private:
-  vector<point> m_points;
+    vector<point> m_points;
 };

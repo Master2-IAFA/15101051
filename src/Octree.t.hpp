@@ -73,6 +73,11 @@ template<class Data, typename VecType>
 std::vector<Octree<Data, VecType>*> Octree<Data, VecType>::getAtDepth(int depth){
     std::vector<Octree<Data, VecType>*> octree;
     std::vector<Octree<Data, VecType>*> stack;
+
+    if( depth == 0 ){
+      octree.push_back( this );
+      return octree;
+    }
     stack.push_back( this );
 
     while( !stack.empty() ) {
