@@ -18,8 +18,10 @@
 
 namespace fs = std::filesystem;
 
+std::pair<polyscope::Structure*, size_t> t = std::pair<polyscope::Structure*, size_t> (nullptr, -1) ;
+
 std::string pathToDirectory{ "../assets/" };
-std::string path{"../assets/bunny_norm.ply"};
+std::string path{"../assets/gaussian_spike_norm.ply"};
 std::vector<string> files;
 int current_item = 0;
 int depthToShow = 0;
@@ -41,7 +43,7 @@ int main(int argc, char **argv){
     ps = new PointSet();
     ps->readOpenMesh( path );
     loadPointCloud();
-    //polyscope::state::userCallback = callback;
+    polyscope::state::userCallback = callback;
     polyscope::show();
 
     delete ps;
@@ -64,6 +66,23 @@ void callback(){
   if(ImGui::SliderInt( "profondeur", &depthToShow, 0, MAX_DEPTH - 1 )) showAtDepth( depthToShow );
   if(ImGui::ListBox("files", &current_item, fileGetter, &files, files.size())){ path = files[current_item]; };
   if(ImGui::Button("load file")) loadPointCloud();
+
+  polyscope::view::resetCameraToHomeView();
+
+  if(polyscope::pick::haveSelection()){
+      if (t != polyscope::pick::getSelection())
+      {
+        t = polyscope::pick::getSelection();
+        std::cout << "have selection !" << t.first << t.second << "\n" ;
+        //t.first->remove() ;
+         std::vector<glm::vec3> newPositions ;
+         float mouseX = 0.0f ;
+         mouseX = ImGui::GetMousePos().x - ImGui::GetCursorScreenPos().x - ImGui::GetScrollX();
+         std::cout << "mouseX= " << mouseX ;
+         //t.first->updatePointPositions(newPositions);
+      }
+
+  }
 }
 
 void showAtDepth( int depth ){
@@ -81,7 +100,7 @@ void loadPointCloud(){
     //debug Lou fit sphere
     auto o = octree->getAtDepth( 2 );
     Sphere * sphere = new Sphere() ;
-    sphere->fit_sphere_on_node(o[2], ps, glm::vec3(1.0, 1.0, 1.0));
+    sphere->fit_sphere_on_node(o[0], ps, glm::vec3(1.0, 1.0, 1.0));
     //  fit_sphere_on_node(o[2], ps, glm::vec3(1.0, 1.0, 1.0));
     /*for(int i = 0; i < o.size(); i++){
         fit_sphere_on_node(o[i]);
@@ -97,5 +116,4 @@ void loadPointCloud(){
 
     //octreeGraph[0]->setEnabled( true );
 
-    polyscope::view::resetCameraToHomeView();
 }

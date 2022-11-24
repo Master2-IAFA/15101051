@@ -55,7 +55,7 @@ float Sphere::get_radius()
  void Sphere::fit_sphere_on_node(InputOctree * octree, PointSet * ps, glm::vec3 q)
 {
   //draw q for debug
-  //display_sphere(0.02, q);
+  display_sphere(0.02, q);
 
   //draww cube for debug
   drawCube("node sphere fitting", octree->getMin(), octree->getMax());
@@ -95,6 +95,6 @@ float Sphere::get_radius()
   this->radius = get_radius() ;
   std::cout << "center =" << this->center.x << "," << this->center.y  << "," << this->center.z << "\n" ;
   std::cout << "radius =" << radius << "\n" ;
-  display_sphere(radius, center) ;
+  //display_sphere(radius, center) ;
 
  }
