@@ -11,7 +11,7 @@ template<typename VecType>
 float gaussian_mixture (VecType& p, VecType& q){
     float out = 0;
     float base_sigma = 1;
-    
+
     // This parameters could be changed.
     // WE MUST TRY DIFFERENTS PARAMETERS.
     // This parameter k makes reference to the sum of i => k >= 1.
@@ -21,7 +21,7 @@ float gaussian_mixture (VecType& p, VecType& q){
     // I think that if K is tiny (like 1 or average) the response is an interpolation.
 
     // Here, it tries to implement the effective strategy to set appropriate parameters
-    // With this king of thing : sigma_i = a^i * sigma with a > 1; 
+    // With this king of thing : sigma_i = a^i * sigma with a > 1;
     for (int i = 0; i < k; i++){
         float sigma = pow(a, i) * base_sigma;
         float num = -glm::pow(glm::l2Norm(q-p),2);
@@ -71,7 +71,7 @@ template <typename statistics, typename VecType>
 float signedDistanceToSphere (Octree <statistics, VecType> *node, VecType& q){
     VecType min = node->getMin();
     VecType max = node->getMax();
-    
+
     float radius_protectionSphere = (glm::distance(min, max) / 2) * LAMBDA;
     VecType mid = midpoint<VecType>(min, max);
     return glm::distance(mid, q) - radius_protectionSphere;
@@ -79,7 +79,7 @@ float signedDistanceToSphere (Octree <statistics, VecType> *node, VecType& q){
 }
 
 /**
- * @brief This function takes a node of an octree and a point and returns a boolean 
+ * @brief This function takes a node of an octree and a point and returns a boolean
  * to say if this point is in the protection sphere
  *
  *
@@ -122,7 +122,7 @@ statistics weighted_statistics (statistics stats, float w) {
 
 /**
  *
- * @brief This function takes the father's node and one of its children and returns 
+ * @brief This function takes the father's node and one of its children and returns
  * the gamma function (Equation (7) in the MLoD's paper).
  * It calculates the distance between q and the protection sphere of each node (father and child).
  *
@@ -160,13 +160,13 @@ statistics cumul_stats(Octree<statistics, VecType> *node, float (*kernel)(VecTyp
     statistics father_stats = node->getData();
     double sigma_n = father_stats.area;
     double sigma_nu;
-    
+
     // If node is a leaf :
     if ( ! node->hasChildren() ){
         float weight = 0.0f;
         // Accumulate statistics over points in the leaf.
         for (VecType p : node->getPoints()){
-            weight += kernel (q, p); 
+            weight += kernel (q, p);
         }
         return weighted_statistics(father_stats, weight);
     }
@@ -177,7 +177,7 @@ statistics cumul_stats(Octree<statistics, VecType> *node, float (*kernel)(VecTyp
     // Case q isn't in the node
     if (! is_InProtectionSphere(node, q)){
         statistics far_away = weighted_statistics(father_stats, weight_averagePos);
-        return weighted_statistics(father_stats, weight_averagePos);  
+        return weighted_statistics(father_stats, weight_averagePos);
     }
     // Let's blend statistics between n and its children
     statistics node_stats;

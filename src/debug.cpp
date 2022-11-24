@@ -1,6 +1,6 @@
 #include "debug.hpp"
 
-void pointSetToPolyscope( std::string name, PointSet<point3d> *ps ){
+polyscope::PointCloud * pointSetToPolyscope( std::string name, PointSet<point3d> *ps ){
 
     std::vector<point3d> points = ps->getPoints();
 
@@ -15,6 +15,7 @@ void pointSetToPolyscope( std::string name, PointSet<point3d> *ps ){
 
     polyscope::PointCloud *pointCloud = polyscope::registerPointCloud(name, position);
     pointCloud->addVectorQuantity("normal", normal);
+    return pointCloud ;
 }
 
 void pointSet2dToPolyscope (std::string name, PointSet<point2d> *ps) {
@@ -82,6 +83,36 @@ void generate_gaussian () {
         }
     }
     file.close();
+}
+
+
+void slide_points(polyscope::PointCloud *pc_init, polyscope::PointCloud * pc_final, int nb_slider_max, int nb_slider)
+{
+  //get points pos in pc_init and pc_final
+  std::vector<glm::vec3> final_pos_list = pc_final->points ;
+  std::vector<glm::vec3> init_pos_list = pc_init->points ;
+
+  std::vector<glm::vec3> newPositions ;
+  
+  if (nb_slider_max == nb_slider)
+  {
+    pc_init->updatePointPositions(final_pos_list);
+  }
+  
+  else
+  {
+    for (int i = 0 ; i <  init_pos_list.size() ; ++i)
+    {
+      //difference between the 2 pos
+      glm::vec3 diff = final_pos_list.at(i) - init_pos_list.at(i) ;
+    
+      glm::vec3 new_pos = (float(nb_slider)/float(nb_slider_max)) * diff ;
+      newPositions.push_back(init_pos_list.at(i) + new_pos);
+    }
+    pc_init->updatePointPositions(newPositions);
+  } 
+  //pc_init->updatePointPositions(final_pos_list);
+ 
 }
 
 void test_debug_readPly () {
@@ -268,7 +299,7 @@ void _traverse_for_fake_blending (Octree<statistics3d, glm::vec3> *current_node_
 
   for(int j = 0; j < 8; j++)
       nodes->push_back( cube[j] );
-  
+
     edges->push_back({nodes_size,   nodes_size+1});
     edges->push_back({nodes_size+2, nodes_size+3});
     edges->push_back({nodes_size+4, nodes_size+5});
@@ -288,10 +319,11 @@ void _traverse_for_fake_blending (Octree<statistics3d, glm::vec3> *current_node_
       if (is_InProtectionSphere<statistics3d, glm::vec3>(children[i], q))
           _traverse_for_fake_blending(children[i], q, edges, nodes);
   }
-  
+
 }
 
-void draw_traverseOctree_onePoint(Octree<statistics3d, glm::vec3> * oct, PointSet<point3d> *ps) {
+
+polyscope::PointCloud * draw_traverseOctree_onePoint(Octree<statistics3d, glm::vec3> * oct, PointSet<point3d> *ps) {
 
   std::vector<std::array<int, 2>> edges ;
   std::vector<glm::vec3> nodes;
@@ -319,11 +351,11 @@ void draw_traverseOctree_onePoint(Octree<statistics3d, glm::vec3> * oct, PointSe
 
   // Displaying it.
   std::vector<glm::vec3> pc_only_one_point;
-  pc_only_one_point.push_back(q); 
-  pc_only_one_point.push_back(projectedPoint); 
+  pc_only_one_point.push_back(q);
+  pc_only_one_point.push_back(projectedPoint);
   polyscope::PointCloud *pointCloud = polyscope::registerPointCloud("just_a_simple_point", pc_only_one_point);
   pointCloud->setPointRadius(0.02f);
-  
+
   // Display only nodes that we traverse.
   _traverse_for_fake_blending(oct ,q ,&edges, &nodes);
   polyscope::registerCurveNetwork("Traversing", nodes, edges);
@@ -337,6 +369,8 @@ void draw_traverseOctree_onePoint(Octree<statistics3d, glm::vec3> * oct, PointSe
     pc_projected.push_back(current_p_projected);
   }
   polyscope::PointCloud *pointCloud_projected = polyscope::registerPointCloud("point_cloud_projected", pc_projected);
+  pointCloud_projected->setEnabled(false) ;
+  return pointCloud_projected ;
 }
 
 void display_sphere(glm::vec3 center, float radius)

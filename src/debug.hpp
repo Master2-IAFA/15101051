@@ -9,7 +9,7 @@
 #include "utils.t.hpp"
 // #include "blending.t.hpp"
 
-void pointSetToPolyscope(std::string name, PointSet<point3d> *ps);
+polyscope::PointCloud * pointSetToPolyscope(std::string name, PointSet<point3d> *ps);
 void pointSet2dToPolyscope (std::string name, PointSet<point2d> *ps);
 
 /**
@@ -45,7 +45,7 @@ void test_debug_bounding_box(std::vector<glm::vec3> points);
  * MOREOVER : It takes all of the point cloud and try to project all of its points into the octree, and creates a new point cloud (the projected one).
  *
  */
-void draw_traverseOctree_onePoint (Octree<statistics3d, glm::vec3> *oct, PointSet<point3d> *ps);
+polyscope::PointCloud * draw_traverseOctree_onePoint (Octree<statistics3d, glm::vec3> *oct, PointSet<point3d> *ps);
 
 
 void test_basic_polyscope ();
@@ -66,3 +66,8 @@ void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max);
 void display_sphere(glm::vec3 center, float radius) ;
 
 polyscope::CurveNetwork* drawOctree(std::string name, std::vector<Octree<statistics3d, glm::vec3> *> octree);
+
+/**
+ * @brief function to vizualise points sliding accross their translation
+ */
+void slide_points(polyscope::PointCloud *, polyscope::PointCloud * pc_final, int nb_slider_max, int nb_slider) ;
