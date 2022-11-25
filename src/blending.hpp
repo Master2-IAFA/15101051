@@ -3,9 +3,10 @@
 #include <iostream>
 #include <glm/glm.hpp>
 #include "utils.t.hpp"
+#include "AlgebraicSphere.t.hpp"
 
 // This parameter LAMBDA is used as a factor to multiply the radius of the bounding sphere, in order to obtain the protection sphere.
-#define LAMBDA 1.0f
+#define LAMBDA 1.3f
 
 /**
  * @brief Kernel used into the projection process it takes 2 points and return a scalar
@@ -83,5 +84,5 @@ statistics cumul_stats(Octree<statistics, VecType>* child, float (*kernel)(VecTy
  * @param q : Point q that we want to project into the octree
  */
 template<typename statistics, typename VecType, typename point>
-std::pair<VecType, float> projection (Octree<statistics, VecType>* octree, float (*kernel)(VecType& ,VecType& ) ,VecType& q);
+AlgebraicSphere<VecType, statistics> projection (Octree<statistics, VecType>* octree, float (*kernel)(VecType& ,VecType& ) ,VecType& q);
 // point projection (Octree<statistics, VecType>* octree, float (*kernel)(VecType& ,VecType& ) ,VecType& q);

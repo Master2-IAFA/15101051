@@ -201,9 +201,11 @@ statistics cumul_stats(Octree<statistics, VecType> *node, float (*kernel)(VecTyp
  */
 //  point projection (Octree<statistics, VecType>* octree, float (*kernel)(VecType& ,VecType& ) ,VecType& q);
 template<typename statistics, typename point, typename VecType>
-std::pair<VecType, float> projection (Octree<statistics, VecType> *octree, float (*kernel)(VecType&,VecType&) ,VecType& q){
+AlgebraicSphere<VecType, statistics> projection (Octree<statistics, VecType> *octree, float (*kernel)(VecType&,VecType&) ,VecType& q){
     statistics stats = cumul_stats (octree, kernel, q);
-    std::pair<VecType, float> sphere = fit_algebraic_sphere(stats, q, kernel);
+    //std::pair<VecType, float> sphere = fit_algebraic_sphere(stats, q, kernel);
+    AlgebraicSphere<VecType, statistics> sphere;
+    sphere.fitSphere( stats, q, &rational_kernel );
     return sphere;
     // point new_q;
     // new_q.pos = VecType(0.0f);
