@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
+#include <functional>
 
 #include "polyscope/messages.h"
 #include "polyscope/point_cloud.h"
@@ -12,6 +13,7 @@
 #include "utils.t.hpp"
 #include "debug.hpp"
 #include "blending.t.hpp"
+#include "AlgebraicSphere.t.hpp"
 
 #define MAX_DEPTH 7
 
@@ -48,10 +50,19 @@ int main () {
 
     loadPointCloud();
 
+    auto node = octree->getAtDepth(2)[8];
+    glm::vec3 q( 10, 10, 10 );
+    AlgebraicSphere<glm::vec3, statistics3d> sphere;
+    auto stat = cumul_stats( node, &rational_kernel, q);
+    sphere.fitSphere( stat, q, &rational_kernel );
+
+    display_sphere( "FIT", sphere.getCenter(), sphere.getRadius() );
+    display_sphere( "PointToProject", q, 3.f );
+    display_sphere( "ProjectedPoint", sphere.project( q ), 3.f );
+    drawCube( "cube", node->getMin(), node->getMax() );
+
     pc = pointSetToPolyscope("point cloud", ps);
     polyscope::state::userCallback = callback;
-
-
 
     polyscope::show();
 
@@ -71,7 +82,7 @@ bool fileGetter(void *data, int index, const char** output)
 
 void callback(){
     ImGui::PushItemWidth( 200 );
-    if(ImGui::SliderInt( "profondeur", &depthToShow, 0, MAX_DEPTH - 1 )) showAtDepth( depthToShow );
+    //if(ImGui::SliderInt( "profondeur", &depthToShow, 0, MAX_DEPTH - 1 )) showAtDepth( depthToShow );
     if(ImGui::ListBox("files", &current_item, fileGetter, &files, files.size())){ path = files[current_item]; };
     if(ImGui::Button("load file")) loadPointCloud();
     if(ImGui::SliderInt( "projected_points", &projected_points_slider, 0, 10 )) 
@@ -93,17 +104,17 @@ void loadPointCloud(){
     delete octree;
 
     octree = generateInputOctree<statistics3d, point3d, glm::vec3>( MAX_DEPTH, ps );
-    ps_projected = draw_traverseOctree_onePoint(octree, ps);
+    //ps_projected = draw_traverseOctree_onePoint(octree, ps);
 
-    for( int i = 0; i < MAX_DEPTH; i++ ){
+    /*for( int i = 0; i < MAX_DEPTH; i++ ){
         auto o = octree->getAtDepth( i );
-        octreeGraph[i] = drawOctree( std::to_string(i), o );
-        octreeGraph[i]->setEnabled( false );
-    }
+        octreeGraph[ i ] = drawOctree( std::to_string(i), o );
+        octreeGraph[ i ]->setEnabled( false );
+    }*/
 
-    pointSetToPolyscope("point cloud", ps);
+    //pointSetToPolyscope( "point cloud", ps );
 
-    octreeGraph[0]->setEnabled( true );
+    //octreeGraph[0]->setEnabled( true );
 
     polyscope::view::resetCameraToHomeView();
 }

@@ -344,7 +344,7 @@ polyscope::PointCloud * draw_traverseOctree_onePoint(Octree<statistics3d, glm::v
   std::pair<glm::vec3, float> sphere = projection<statistics3d, point3d, glm::vec3>(oct, rational_kernel, q);
 
   //CQFD
-  display_sphere(sphere.first, sphere.second);
+  display_sphere("sphere", sphere.first, sphere.second);
 
   // Get the projected point.
   glm::vec3 projectedPoint = project_point(sphere, q);
@@ -373,13 +373,13 @@ polyscope::PointCloud * draw_traverseOctree_onePoint(Octree<statistics3d, glm::v
   return pointCloud_projected ;
 }
 
-void display_sphere(glm::vec3 center, float radius)
+void display_sphere( std::string name, glm::vec3 center, float radius)
 {
   std::vector<glm::vec3> sphere_pos ;
 
   sphere_pos.push_back(center) ;
 
-  polyscope::PointCloud *pointCloud = polyscope::registerPointCloud("sphere", sphere_pos);
+  polyscope::PointCloud *pointCloud = polyscope::registerPointCloud( name, sphere_pos);
   pointCloud->setPointRadius(radius, false);
 
 }
