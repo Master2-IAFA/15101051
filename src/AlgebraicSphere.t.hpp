@@ -1,3 +1,4 @@
+#pragma once 
 #include "AlgebraicSphere.hpp"
 
 template< class VecType, class StatType >
@@ -19,8 +20,8 @@ void AlgebraicSphere< VecType, StatType >::fitSphere( StatType stat, VecType poi
     float pi_ni = weight_wi * stat.pdn;
     float norm = weight_wi * stat.norm; 
 
-    float num = pi_ni - glm::dot(pi, ni)/area;
-    float denom = norm - ( glm::dot(pi, pi) / area );
+    float num = pi_ni - glm::dot( pi, ni )/area;
+    float denom = norm - ( glm::dot( pi, pi ) / area );
     m_u4 = ( num / denom ) / 2;
 
     VecType num_vec = ni - VecType( 2.0 ) * VecType( m_u4 ) * pi ;
@@ -37,17 +38,8 @@ template< class VecType, class StatType >
 VecType AlgebraicSphere< VecType, StatType >::project( VecType point ){
 
     VecType projectedPoint;
-
-    for (int i = 0; i < point.length(); i++)
-        projectedPoint[i] =  point[i] - m_center[i];
-    
-    float factor = (glm::l2Norm(projectedPoint));
-    projectedPoint = (projectedPoint / factor);
-
-    float distance_factor = m_radius;
-
-    projectedPoint = (projectedPoint * distance_factor) + m_center;
-
+    projectedPoint =  glm::normalize( point - m_center );
+    projectedPoint = projectedPoint * VecType( m_radius ) + m_center;
     return projectedPoint;
 
 }

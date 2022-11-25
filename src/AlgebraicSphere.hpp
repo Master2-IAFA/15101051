@@ -14,11 +14,16 @@ class AlgebraicSphere{
         */
         void fitSphere( StatType stat, VecType point, float (*kernel)(VecType&,VecType&) );
 
+        /**
+         * @brief project a point on the sphere
+         * 
+         * @param point: the point to project
+         * @return VecType: the projected point
+         */
         VecType project( VecType point );
 
         inline VecType getCenter(){ return m_center; }
         inline double getRadius(){ return m_radius; }
-
 
     private:
 
