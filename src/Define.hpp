@@ -9,14 +9,20 @@
 
 #include "utils.t.hpp"
 
-typedef InputOctree< glm::vec3, statistics3d, point3d > InputOctree3D;
-typedef InputOctree< glm::vec2, statistics2d, point2d > InputOctree2D;
+using InputOctree3D = InputOctree< glm::vec3, statistics3d, point3d >;
+using InputOctree2D = InputOctree< glm::vec2, statistics2d, point2d >;
 
-typedef Octree< statistics3d, glm::vec3 > Octree3D;
-typedef Octree< statistics2d, glm::vec2 > Octree2D;
+using Octree3D = Octree< statistics3d, glm::vec3 >;
+using Octree2D = Octree< statistics2d, glm::vec2 >;
 
-typedef AlgebraicSphere< glm::vec3, statistics3d > AlgebraicSphere3D;
-typedef AlgebraicSphere< glm::vec2, statistics2d > AlgebraicSphere2D;
+template< class T >
+using BaseOctree3D = BaseOctree< statistics3d, glm::vec3, T >;
 
-typedef PointSet< point3d > PointSet3D;
-typedef PointSet< point2d > PointSet2D;
+template< class T >
+using BaseOctree2D = BaseOctree< statistics2d, glm::vec2, T >;
+
+using AlgebraicSphere3D = AlgebraicSphere< glm::vec3, statistics3d >;
+using AlgebraicSphere2D = AlgebraicSphere< glm::vec2, statistics2d >;
+
+using PointSet3D = PointSet< point3d >;
+using PointSet2D = PointSet< point2d >;
