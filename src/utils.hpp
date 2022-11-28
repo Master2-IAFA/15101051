@@ -1,11 +1,5 @@
 #pragma once
 
-#include "glm/gtx/norm.hpp"
-#include "Octree.t.hpp"
-#include "PointSet.t.hpp"
-#include "blending.t.hpp"
-
-
 typedef struct {
   // P_alpha
   glm::vec3 position = glm::vec3 (0.0f);
@@ -39,21 +33,11 @@ typedef struct  {
     glm::vec2 norm;
 } point2d;
 
-// template <typename statistics, typename VecType>
-// void init_statistics (statistics *s);
-
-
 /**
  * @brief this function prints the informations contained in this stats.
  */
 template <typename statistics> 
 void display_statistics (statistics stats);
-
-template<typename statistics, typename point, typename VecType>
-Octree<statistics, VecType>* generateInputOctree( int max_depth, PointSet<point> *pc );
-
-template<typename statistics, typename point, typename VecType>
-void fitInputOctree( int max_depth, Octree<statistics, VecType> *octree, std::vector<point> *points );
 
 /**
  * @brief This function updates the given stats with the information of the given point.
@@ -61,3 +45,15 @@ void fitInputOctree( int max_depth, Octree<statistics, VecType> *octree, std::ve
  */
 template<typename statistics, typename point>
 void statisticsAdd( statistics *stat, point p );
+
+/**
+ * @brief This function computes the summation of two given statistics.
+ */
+template <typename statistics>
+statistics sum_statistics (const statistics& a, const statistics& b);
+
+/**
+ * @brief This function returns the statistics given in input, multiplied by the factor w.
+ */
+template<typename statistics>
+statistics weighted_statistics (statistics stats, float w);

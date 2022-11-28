@@ -11,23 +11,24 @@
  * 
  * @tparam Data: the type of data the octree can take.
  */
-template<typename Data, typename VecType>
-class Octree{
+template<typename Data, typename VecType, typename OctreeType>
+class BaseOctree{
 
 public:
-    Octree (int _depth, VecType _min, VecType _max);
+    BaseOctree ( OctreeType *_father, int _depth, VecType _min, VecType _max );
+    BaseOctree ( int _depth, VecType _min, VecType _max );
 
-    ~Octree ();
+    virtual ~BaseOctree ();
 
     /**
     * @brief split the octree into 8 childrens, and link it as their father.
     */
-    void subDivide ();
+    virtual void subDivide ();
 
     /**
     * @brief get all the octrees at the given depth
     */
-    std::vector<Octree<Data, VecType>*> getAtDepth ( int depth );
+    std::vector<OctreeType*> getAtDepth ( int depth );
 
     /**
     * @brief check if the given point is inside the octree using it's min/max points
@@ -43,7 +44,7 @@ public:
     bool hasChildren () { return !(m_children[0] == nullptr); }
 
     /***** setters ******/
-    inline void setFather ( Octree<Data, VecType>* _father ) { m_father = _father; }
+    void setFather ( OctreeType* _father ) { m_father = _father; }
     inline void setData ( Data& _data ) { m_data = _data; }
     inline void setPoints (std::vector<VecType> _points) { m_points = _points; }
 
@@ -52,19 +53,20 @@ public:
     inline const VecType& getMin () const { return m_min; }
     inline const VecType& getMax () const { return m_max; }
     inline const int getDepth () const { return m_depth; }
-    inline std::vector<Octree<Data, VecType>*>& getChildren () { return m_children; }
+    inline std::vector<OctreeType*>& getChildren () { return m_children; }
     inline const int getDim () const { return m_dim; }
     inline std::vector<VecType> getPoints () { return m_points; }
 
 private:
-    std::vector<Octree<Data, VecType>*> pGetAtDepth(int depth, std::vector<Octree<Data, VecType>*> vector);
+    std::vector<OctreeType*> pGetAtDepth(int depth, std::vector<OctreeType*> vector);
+    void init();
 
-private:
+protected:
     /**
      * nullptr for root
      */
-    Octree<Data, VecType>* m_father { nullptr };
-    std::vector<Octree<Data, VecType>*> m_children;
+    OctreeType* m_father { nullptr };
+    std::vector<OctreeType*> m_children;
     int m_depth { 0 };
     VecType m_min ;
     VecType m_max ;

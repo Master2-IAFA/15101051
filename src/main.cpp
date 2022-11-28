@@ -2,6 +2,7 @@
 #include <string>
 #include <filesystem>
 #include <functional>
+#include <omp.h>
 
 #include "polyscope/messages.h"
 #include "polyscope/point_cloud.h"
@@ -11,9 +12,13 @@
 #include "glm/gtx/string_cast.hpp"
 
 #include "utils.t.hpp"
-#include "debug.hpp"
-#include "blending.t.hpp"
+#include "debug.t.hpp"
+#include "kernels.t.hpp"
 #include "AlgebraicSphere.t.hpp"
+#include "Octree/InputOctree.t.hpp"
+#include "PointSet.t.hpp"
+#include "Define.hpp"
+
 
 #define MAX_DEPTH 7
 
@@ -24,13 +29,13 @@ std::string path{"../assets/Head Sculpture.stl"};
 std::vector<string> files;
 int current_item = 0;
 int depthToShow = 0;
-PointSet<point3d> *ps;
-Octree<statistics3d, glm::vec3> *octree;
+
+PointSet3D *ps;
+InputOctree3D *octree;
 std::array< polyscope::CurveNetwork*, MAX_DEPTH > octreeGraph;
 
-// Displaying it.
-polyscope::PointCloud * ps_projected ;
-polyscope::PointCloud * pc ;
+polyscope::PointCloud *pc_projected;
+polyscope::PointCloud *pc;
 
 
 int projected_points_slider = 0 ;
@@ -40,8 +45,9 @@ void loadPointCloud();
 void callback();
 
 int main () {
+
     for (const auto & entry : fs::directory_iterator(pathToDirectory)){
-        std::string s = entry.path();
+        std::string s = entry.path().string();
         files.push_back( s );
     }
 
@@ -49,18 +55,25 @@ int main () {
     ps = new PointSet<point3d>();
 
     loadPointCloud();
+    
+    std::vector<point3d> proj_p( ps->getPoints().size() );
+    
+    #pragma omp parallel for num_threads( 6 )
+    for( int i = 0; i < ps->getPoints().size(); i++ ){
+        point3d q = ps->getPoints()[ i ];
+        AlgebraicSphere<glm::vec3, statistics3d> sphere;
+        auto stat = octree->getBlendedStat( q, &gaussian_mixture );
+        sphere.fitSphere( stat, q.pos, &gaussian_mixture );
+        auto projected_q = sphere.project( q.pos );
+        point3d p;
+        p.pos = projected_q;
+        p.norm = q.norm;
+        proj_p[ i ] = p;
+    }
 
-    auto node = octree->getAtDepth(2)[8];
-    glm::vec3 q( 10, 10, 10 );
-    AlgebraicSphere<glm::vec3, statistics3d> sphere;
-    auto stat = cumul_stats( node, &rational_kernel, q);
-    sphere.fitSphere( stat, q, &rational_kernel );
+    PointSet<point3d> projected_pointSet( proj_p );
 
-    display_sphere( "FIT", sphere.getCenter(), sphere.getRadius() );
-    display_sphere( "PointToProject", q, 3.f );
-    display_sphere( "ProjectedPoint", sphere.project( q ), 3.f );
-    drawCube( "cube", node->getMin(), node->getMax() );
-
+    auto ppc = pointSetToPolyscope( "projected point cloud", &projected_pointSet);
     pc = pointSetToPolyscope("point cloud", ps);
     polyscope::state::userCallback = callback;
 
@@ -83,12 +96,12 @@ bool fileGetter(void *data, int index, const char** output)
 void callback(){
     ImGui::PushItemWidth( 200 );
     //if(ImGui::SliderInt( "profondeur", &depthToShow, 0, MAX_DEPTH - 1 )) showAtDepth( depthToShow );
-    if(ImGui::ListBox("files", &current_item, fileGetter, &files, files.size())){ path = files[current_item]; };
-    if(ImGui::Button("load file")) loadPointCloud();
-    if(ImGui::SliderInt( "projected_points", &projected_points_slider, 0, 10 )) 
-    {
-        slide_points(pc, ps_projected, 10, projected_points_slider) ;
-    }
+    // if(ImGui::ListBox("files", &current_item, fileGetter, &files, files.size())){ path = files[current_item]; };
+    // if(ImGui::Button("load file")) loadPointCloud();
+    // if(ImGui::SliderInt( "projected_points", &projected_points_slider, 0, 10 )) 
+    // {
+    //     slide_points(pc, ps_projected, 10, projected_points_slider) ;
+    // }
 }
 
 
@@ -103,14 +116,32 @@ void loadPointCloud(){
     ps->readOpenMesh( std::string( path ) );
     delete octree;
 
-    octree = generateInputOctree<statistics3d, point3d, glm::vec3>( MAX_DEPTH, ps );
+    octree = new InputOctree<glm::vec3, statistics3d, point3d>( ps );
+    octree->fit( 7, 0 );
+
+    //InputOctree<glm::vec3, statistics3d, point3d> inputOctree( ps );
+    //inputOctree.fit( 7, 0 );
+    //std::cout << "fitted" << std::endl;
+    //octree = static_cast<BaseOctree*>( inputOctree );
+
+    auto d = octree->getAtDepth( 4 );
+    auto di = std::vector< BaseOctree< statistics3d, glm::vec3, InputOctree< glm::vec3, statistics3d, point3d> >* >( d.begin(), d.end() );
+    //auto dc = std::vector< BaseOctree<statistics3d, glm::vec3, InputOctree< glm::vec3, statistics3d, point3d> >( d.begin(), d.end() );
+    drawOctree( "octree", di );
+
+    std::cout << d.size() << std::endl;
+    std::cout << di.size() << std::endl;
+    std::cout << "min: " << di[2]->getMin().x << " max: " << di[2]->getMin().x  << std::endl;
+    
+
+    //octree = generateInputOctree<statistics3d, point3d, glm::vec3>( MAX_DEPTH, ps );
     //ps_projected = draw_traverseOctree_onePoint(octree, ps);
 
-    /*for( int i = 0; i < MAX_DEPTH; i++ ){
-        auto o = octree->getAtDepth( i );
-        octreeGraph[ i ] = drawOctree( std::to_string(i), o );
-        octreeGraph[ i ]->setEnabled( false );
-    }*/
+    // for( int i = 0; i < MAX_DEPTH; i++ ){
+    //     auto o = inputOctree.getAtDepth( i );
+    //     octreeGraph[ i ] = drawOctree( std::to_string(i), o );
+    //     octreeGraph[ i ]->setEnabled( false );
+    // }
 
     //pointSetToPolyscope( "point cloud", ps );
 

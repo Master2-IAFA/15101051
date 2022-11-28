@@ -1,59 +1,6 @@
 #pragma once
 #include "utils.hpp"
 
-
-template<typename statistics, typename point, typename VecType>
-Octree<statistics, VecType>* generateInputOctree( int max_depth, PointSet<point> *pc ) {
-    std::pair<point, point> aabb = pc->getBoundingBox();
-    Octree<statistics, VecType>* octree = new Octree<statistics, VecType>(0, aabb.first.pos, aabb.second.pos);
-    std::vector<point> points = pc->getPoints();
-
-    statistics root_stats;
-    for (auto p : points)
-        statisticsAdd( &root_stats, p );
-    octree->setData ( root_stats );
-
-    fitInputOctree<statistics, point, VecType>( max_depth, octree, &points );
-    return octree;
-}
-
-template<typename statistics, typename point, typename VecType>
-void fitInputOctree( int max_depth, Octree<statistics, VecType>* octree, std::vector<point> *points ) {
-    if ( max_depth == 0 ){
-        std::vector<VecType> vecTypePoints;
-        for (auto x : *points)
-            vecTypePoints.emplace_back(x.pos);
-        octree->setPoints(vecTypePoints) ;
-        octree->getChildren()[0] = nullptr;
-        return;
-    }
-
-    octree->subDivide();
-
-    auto children = octree->getChildren();
-    bool hasPoint = false;
-
-    for ( int i = 0; i < int(pow(2, octree->getDim())); i++ ) {
-        std::vector<point> children_points;
-        statistics stat;
-
-        hasPoint = false;
-
-        for ( int j = 0; j < points->size(); ++j ) {
-            if ( children[i]->isPointIn( points->at(j).pos ) ) {
-                children_points.emplace_back( points->at(j) );
-                statisticsAdd( &stat, points->at(j) );
-                hasPoint = true;
-            }
-        }
-
-        if (hasPoint) {
-            children[i]->setData( stat );
-            fitInputOctree( max_depth - 1, children[i], &children_points );
-        }
-    }
-}
-
 /**
  * @brief This function updates the given stats with the information of the given point.
  *
@@ -63,7 +10,7 @@ void statisticsAdd(statistics *stat, point p) {
     // sigma
     stat->area += 1;
     // P_beta
-    stat->norm += glm::pow(glm::l2Norm(p.pos),2);
+    stat->norm += glm::dot( p.pos, p.pos );
     // Pn_beta
     stat->pdn += glm::dot(p.pos, p.norm);
     // P and N _alpha
@@ -89,4 +36,32 @@ void display_statistics (statistics stats){
     std::cout << "Norm : " << stats.norm << std::endl;
     std::cout << "Area : " << stats.area << std::endl;
     std::cout << "Pdn : " << stats.pdn << std::endl;
+}
+
+/**
+ * @brief This function computes the summation of two given statistics.
+ */
+template <typename statistics>
+statistics sum_statistics (const statistics& a, const statistics& b){
+    statistics sum_stats;
+    sum_stats.position = a.position + b.position;
+    sum_stats.normal = a.normal + b.normal;
+    sum_stats.norm = a.norm + b.norm;
+    sum_stats.area = a.area + b.area;
+    sum_stats.pdn = a.pdn + b.pdn;
+    return sum_stats;
+}
+
+/**
+ * @brief This function returns the statistics given in input, multiplied by the factor w.
+ */
+template<typename statistics>
+statistics weighted_statistics (statistics stats, float w) {
+    statistics w_stats;
+    w_stats.position = stats.position * w;
+    w_stats.normal = stats.normal * w;
+    w_stats.norm = stats.norm * w;
+    w_stats.area = stats.area * w;
+    w_stats.pdn = stats.pdn * w;
+    return w_stats;
 }

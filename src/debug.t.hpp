@@ -1,3 +1,4 @@
+#pragma once
 #include "debug.hpp"
 
 polyscope::PointCloud * pointSetToPolyscope( std::string name, PointSet<point3d> *ps ){
@@ -233,7 +234,8 @@ void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max)
   polyscope::registerCurveNetwork(name, nodes, edges);
 }
 
-polyscope::CurveNetwork* drawOctree(std::string name, std::vector<Octree<statistics3d, glm::vec3> *> octree){
+template<typename Data, typename VecType, typename OctreeType>
+polyscope::CurveNetwork* drawOctree(std::string name, std::vector<BaseOctree<Data, VecType, OctreeType> *> octree){
 
   std::vector<std::array<int, 2>> edges ;
   std::vector<glm::vec3> nodes;
@@ -289,7 +291,8 @@ PointSet<point2d> generate2dGaussian () {
  * @brief This function calculates the traversed node and display only used nodes of the octree.
  *
  */
-void _traverse_for_fake_blending (Octree<statistics3d, glm::vec3> *current_node_octree, glm::vec3& q, std::vector<std::array<int, 2>>* edges, std::vector<glm::vec3>* nodes) {
+template< class VecType, class StatType, class PointType >
+void _traverse_for_fake_blending (InputOctree<VecType, StatType, PointType> *current_node_octree, glm::vec3& q, std::vector<std::array<int, 2>>* edges, std::vector<glm::vec3>* nodes) {
   if (!current_node_octree->hasChildren())
     return;
   auto children = current_node_octree->getChildren();
@@ -316,14 +319,27 @@ void _traverse_for_fake_blending (Octree<statistics3d, glm::vec3> *current_node_
     edges->push_back({nodes_size+3, nodes_size+7});
 
   for (int i = 0; i < 8; i++){
-      if (is_InProtectionSphere<statistics3d, glm::vec3>(children[i], q))
+      if (children[i]->is_InProtectionSphere( q))
           _traverse_for_fake_blending(children[i], q, edges, nodes);
   }
 
 }
 
+template<typename statistics, typename point, typename VecType, typename PointType>
+AlgebraicSphere<VecType, statistics> projection (InputOctree<VecType, statistics, PointType> *octree, float (*kernel)(VecType&,VecType&) ,VecType& q){
+    statistics stats = cumul_stats (octree, kernel, q);
+    //std::pair<VecType, float> sphere = fit_algebraic_sphere(stats, q, kernel);
+    AlgebraicSphere<VecType, statistics> sphere;
+    sphere.fitSphere( stats, q, &rational_kernel );
+    return sphere;
+    // point new_q;
+    // new_q.pos = VecType(0.0f);
+    // new_q.norm = VecType(0.0f);
+    // return new_q;
+}
 
-polyscope::PointCloud * draw_traverseOctree_onePoint(Octree<statistics3d, glm::vec3> * oct, PointSet<point3d> *ps) {
+template< class VecType, class StatType, class PointType >
+polyscope::PointCloud * draw_traverseOctree_onePoint(InputOctree<VecType, StatType, PointType> * oct, PointSet<point3d> *ps) {
 
   std::vector<std::array<int, 2>> edges ;
   std::vector<glm::vec3> nodes;
@@ -331,8 +347,8 @@ polyscope::PointCloud * draw_traverseOctree_onePoint(Octree<statistics3d, glm::v
   glm::vec3 bb_min = oct->getMin();
   glm::vec3 bb_max = oct->getMax();
 
-  glm::vec3 bb_mid = midpoint<glm::vec3>(bb_min, bb_max);
-  float radius_protectionSphere = (glm::distance(bb_mid, bb_max) * LAMBDA)/2;
+  glm::vec3 bb_mid = ( bb_min + bb_max ) / VecType( 2.0 );
+  float radius_protectionSphere = (glm::distance(bb_mid, bb_max) * oct->getProtectionSphere())/2;
 
   //Creation of a random point into the bounding box.
   float rand_x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));

@@ -1,3 +1,4 @@
+#pragma once
 #include "PointSet.hpp"
 
 #include <stdlib.h>

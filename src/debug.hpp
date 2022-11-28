@@ -7,7 +7,12 @@
 #include "polyscope/point_cloud.h"
 #include "polyscope/curve_network.h"
 #include "utils.t.hpp"
-// #include "blending.t.hpp"
+#include "PointSet.t.hpp"
+#include "Octree/BaseOctree.t.hpp"
+#include "Octree/Octree.t.hpp"
+#include "Octree/InputOctree.t.hpp"
+#include "AlgebraicSphere.t.hpp"
+#include "kernels.t.hpp"
 
 polyscope::PointCloud * pointSetToPolyscope(std::string name, PointSet<point3d> *ps);
 void pointSet2dToPolyscope (std::string name, PointSet<point2d> *ps);
@@ -38,6 +43,16 @@ void test_debug_subdivide ();
 
 
 void test_debug_bounding_box(std::vector<glm::vec3> points);
+
+
+/**
+ * @brief Implementation of the projection methode from the MLoD paper.
+ * @param octree : Root octree of the input point cloud
+ * @param q : Point q that we want to project into the octree
+ */
+template<typename statistics, typename VecType, typename point, typename PointType>
+AlgebraicSphere<VecType, statistics> projection (InputOctree<VecType, statistics, PointType>* octree, float (*kernel)(VecType& ,VecType& ) ,VecType& q);
+
 /**
  *
  * @brief This function draws the nodes traversed for 1 random point.
@@ -65,7 +80,8 @@ void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max);
  */
 void display_sphere( std::string name, glm::vec3 center, float radius) ;
 
-polyscope::CurveNetwork* drawOctree(std::string name, std::vector<Octree<statistics3d, glm::vec3> *> octree);
+template<typename Data, typename VecType, typename OctreeType>
+polyscope::CurveNetwork* drawOctree(std::string name, std::vector<BaseOctree<Data, VecType, OctreeType>*> octree);
 
 /**
  * @brief function to vizualise points sliding accross their translation

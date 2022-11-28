@@ -22,8 +22,8 @@ class AlgebraicSphere{
          */
         VecType project( VecType point );
 
-        inline VecType getCenter(){ return m_center; }
-        inline double getRadius(){ return m_radius; }
+        inline VecType& getCenter() const { return m_center; }
+        inline double getRadius() const { return m_radius; }
 
     private:
 
