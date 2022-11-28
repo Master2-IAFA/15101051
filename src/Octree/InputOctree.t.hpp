@@ -6,7 +6,7 @@ template< class VecType, class StatType, class PointType >
 void InputOctree< VecType, StatType, PointType>::fit( int max_depth, int max_points ){
 
     if( m_pointSet == nullptr ) return;
-    
+
     std::vector< PointType > points = m_pointSet->getPoints();
     StatType root_stats;
     for (auto p : points){
@@ -14,6 +14,7 @@ void InputOctree< VecType, StatType, PointType>::fit( int max_depth, int max_poi
     }
     this->setData( root_stats );
     this->subDivide();
+
     recursiveFit( max_depth, &points );
 
 }
@@ -62,7 +63,7 @@ template< class VecType, class StatType, class PointType >
 float InputOctree< VecType, StatType, PointType>::signedDistanceToProtectionSphere( VecType point ){
     VecType min = this->getMin();
     VecType max = this->getMax();
-    float radius_protectionSphere = (glm::distance(min, max) / 2) * m_protectionSphere;
+    float radius_protectionSphere = (glm::distance(min, max) / 2) * (*m_protectionSphere);
     VecType mid = ( min + max ) / VecType ( 2.0 );
     return glm::distance(mid, point) - radius_protectionSphere;
 }

@@ -15,15 +15,12 @@ template< class VecType, class StatType, class PointType >
 class InputOctree: public BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >{
 
     public:
-        InputOctree( PointSet<PointType> *pointSet ): 
-            BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >( 0, pointSet->getBoundingBox().first.pos, pointSet->getBoundingBox().second.pos )
-            { m_pointSet = pointSet; }
-
-
-        InputOctree( InputOctree< VecType, StatType, PointType > *father, int _depth, VecType _min, VecType _max): 
-            BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >( father, _depth, _min, _max ) {}
-
-        InputOctree( int _depth, VecType _min, VecType _max): BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >( _depth, _min, _max ){}
+        InputOctree( PointSet<PointType> *pointSet ):
+             BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >( 0, pointSet->getBoundingBox().first.pos, pointSet->getBoundingBox().second.pos),
+             m_pointSet( pointSet )
+             {
+                m_protectionSphere = std::make_shared< float >( 1.3 );
+             }
 
         /**
          * @brief fit the octree on the given pointSet
@@ -48,16 +45,32 @@ class InputOctree: public BaseOctree< StatType, VecType, InputOctree< VecType, S
 
         float signedDistanceToProtectionSphere( VecType point );
 
-        inline void setProtectionSphere( float protectionSphere ){ m_protectionSphere = protectionSphere; }
-        inline float getProtectionSphere(){ return m_protectionSphere; }
+        inline void setProtectionSphere( float protectionSphere ){ *m_protectionSphere = protectionSphere; }
+        inline float getProtectionSphere(){ return *m_protectionSphere; }
+
+        inline std::shared_ptr< float > const getProtectionSpherePtr(){ return m_protectionSphere; }
 
     
     private:
 
+        //private Constructor that are used by the BaseOctree class ( in subdivide function )
+        InputOctree( InputOctree< VecType, StatType, PointType > *father, int _depth, VecType _min, VecType _max): 
+            BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >( father, _depth, _min, _max ),
+            m_protectionSphere( father->m_protectionSphere )
+            {}
+
+        InputOctree( int _depth, VecType _min, VecType _max): BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >( _depth, _min, _max ){}
+
         void recursiveFit( int depth, std::vector<PointType> *points );
+
+        inline void linkProtectionSphere(){ m_protectionSphere = this->m_father->getProtectionSpherePtr(); }
 
         float gamma_maj ( InputOctree<VecType, StatType, PointType> *child, VecType q );
 
-        float m_protectionSphere{ 1.3 };
+        std::shared_ptr< float > m_protectionSphere;
         PointSet<PointType> *m_pointSet;
+    
+    
+    //let the BaseOctree class call the private constructor
+    friend class BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >;
 };

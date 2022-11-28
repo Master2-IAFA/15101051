@@ -69,12 +69,10 @@ void BaseOctree<Data, VecType, OctreeType>::subDivide(){
                 max[j] = m_max[j];
             }
         }
-        m_children.emplace_back( new OctreeType( m_depth + 1, min, max ) );
+        m_children.emplace_back( new OctreeType( dynamic_cast<OctreeType*>( this ), m_depth + 1, min, max ) );
     }
 
-    for ( int  i = 0 ; i < int(pow( 2, m_dim )) ; ++i ) {
-         m_children[i]->setFather( dynamic_cast<OctreeType*>( this ) );
-     }
+
 }
 
 template<class Data, typename VecType, typename OctreeType>
