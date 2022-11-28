@@ -2,7 +2,7 @@
 
 #include "BaseOctree.t.hpp"
 #include "../PointSet.t.hpp"
-#include "../utils.t.hpp"
+//#include "../utils.t.hpp"
 
 /**
  * @brief The inputOctree, is an octree that fit to a pointSet and compute statistics in each node
@@ -48,8 +48,6 @@ class InputOctree: public BaseOctree< StatType, VecType, InputOctree< VecType, S
         inline void setProtectionSphere( float protectionSphere ){ *m_protectionSphere = protectionSphere; }
         inline float getProtectionSphere(){ return *m_protectionSphere; }
 
-        inline std::shared_ptr< float > const getProtectionSpherePtr(){ return m_protectionSphere; }
-
     
     private:
 
@@ -62,8 +60,6 @@ class InputOctree: public BaseOctree< StatType, VecType, InputOctree< VecType, S
         InputOctree( int _depth, VecType _min, VecType _max): BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >( _depth, _min, _max ){}
 
         void recursiveFit( int depth, std::vector<PointType> *points );
-
-        inline void linkProtectionSphere(){ m_protectionSphere = this->m_father->getProtectionSpherePtr(); }
 
         float gamma_maj ( InputOctree<VecType, StatType, PointType> *child, VecType q );
 

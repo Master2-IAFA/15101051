@@ -55,5 +55,5 @@ void AlgebraicSphere< VecType, StatType >::computeRadius(){
     float b = m_u0 / m_u4;
     auto cTc = glm::dot( m_center, m_center );
     double r = sqrt( cTc - b );
-    m_radius = max( 0, r );
+    m_radius = std::max( 0.0 , r );
 }

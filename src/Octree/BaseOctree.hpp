@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <polyscope/polyscope.h>
+#include <algorithm>
 #include <cmath>
 
 /**
@@ -56,6 +56,7 @@ public:
     inline std::vector<OctreeType*>& getChildren () { return m_children; }
     inline const int getDim () const { return m_dim; }
     inline std::vector<VecType> getPoints () { return m_points; }
+    inline int getMaxDepth();
 
 private:
     std::vector<OctreeType*> pGetAtDepth(int depth, std::vector<OctreeType*> vector);

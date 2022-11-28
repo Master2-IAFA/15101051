@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <algorithm>
 
 template< class VecType, class StatType >
 class AlgebraicSphere{

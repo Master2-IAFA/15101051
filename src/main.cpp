@@ -12,17 +12,23 @@
 #include "glm/gtx/string_cast.hpp"
 
 #include "utils.t.hpp"
-#include "debug.t.hpp"
+
 #include "kernels.t.hpp"
 #include "AlgebraicSphere.t.hpp"
 #include "Octree/InputOctree.t.hpp"
 #include "PointSet.t.hpp"
 #include "Define.hpp"
 
+#include "Debug/ImguiInputOctreeDebug.t.hpp"
+#include "ImguiDebug.t.hpp"
+
+
 
 #define MAX_DEPTH 7
 
 namespace fs = std::filesystem;
+
+ImguiInputOctreeDebug *debug;
 
 std::string pathToDirectory{ "../assets/" };
 std::string path{"../assets/Head Sculpture.stl"};
@@ -54,7 +60,10 @@ int main () {
     polyscope::init();
     ps = new PointSet<point3d>();
 
+    
+
     loadPointCloud();
+    debug = new ImguiInputOctreeDebug( std::make_shared<InputOctree3D>( *octree ));
     
     std::vector<point3d> proj_p( ps->getPoints().size() );
     
@@ -73,8 +82,8 @@ int main () {
 
     PointSet<point3d> projected_pointSet( proj_p );
 
-    auto ppc = pointSetToPolyscope( "projected point cloud", &projected_pointSet);
-    pc = pointSetToPolyscope("point cloud", ps);
+    // auto ppc = pointSetToPolyscope( "projected point cloud", &projected_pointSet);
+    // pc = pointSetToPolyscope("point cloud", ps);
     polyscope::state::userCallback = callback;
 
     polyscope::show();
@@ -95,6 +104,7 @@ bool fileGetter(void *data, int index, const char** output)
 
 void callback(){
     ImGui::PushItemWidth( 200 );
+    debug->draw();
     //if(ImGui::SliderInt( "profondeur", &depthToShow, 0, MAX_DEPTH - 1 )) showAtDepth( depthToShow );
     // if(ImGui::ListBox("files", &current_item, fileGetter, &files, files.size())){ path = files[current_item]; };
     // if(ImGui::Button("load file")) loadPointCloud();
@@ -116,8 +126,14 @@ void loadPointCloud(){
     ps->readOpenMesh( std::string( path ) );
     delete octree;
 
-    octree = new InputOctree<glm::vec3, statistics3d, point3d>( ps );
+    octree = new InputOctree3D( ps );
     octree->fit( 7, 0 );
+
+    std::cout << "Protection sphere: " << octree->getProtectionSphere() << std::endl;
+    std::cout << "Protection sphere: " << octree->getChildren()[0]->getChildren()[0]->getProtectionSphere() << std::endl;
+    octree->getChildren()[0]->getChildren()[0]->setProtectionSphere( 1.4 );
+    std::cout << "Protection sphere: " << octree->getProtectionSphere() << std::endl;
+    std::cout << "Protection sphere: " << octree->getChildren()[0]->getChildren()[0]->getProtectionSphere() << std::endl;
 
     //InputOctree<glm::vec3, statistics3d, point3d> inputOctree( ps );
     //inputOctree.fit( 7, 0 );
@@ -125,11 +141,11 @@ void loadPointCloud(){
     //octree = static_cast<BaseOctree*>( inputOctree );
 
     auto d = octree->getAtDepth( 4 );
-    auto di = std::vector< BaseOctree< statistics3d, glm::vec3, InputOctree< glm::vec3, statistics3d, point3d> >* >( d.begin(), d.end() );
+    auto di = std::vector< BaseOctree3D< InputOctree3D >* >( d.begin(), d.end() );
     //auto dc = std::vector< BaseOctree<statistics3d, glm::vec3, InputOctree< glm::vec3, statistics3d, point3d> >( d.begin(), d.end() );
-    drawOctree( "octree", di );
+    // drawOctree( "octree", di );
 
-    std::cout << d.size() << std::endl;
+    std::cout << octree->getMaxDepth() << std::endl;
     std::cout << di.size() << std::endl;
     std::cout << "min: " << di[2]->getMin().x << " max: " << di[2]->getMin().x  << std::endl;
     

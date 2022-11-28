@@ -385,17 +385,17 @@ polyscope::PointCloud * draw_traverseOctree_onePoint(InputOctree<VecType, StatTy
     pc_projected.push_back(current_p_projected);
   }
   polyscope::PointCloud *pointCloud_projected = polyscope::registerPointCloud("point_cloud_projected", pc_projected);
-  pointCloud_projected->setEnabled(false) ;
-  return pointCloud_projected ;
+  pointCloud_projected->setEnabled(false);
+  return pointCloud_projected;
 }
 
 void display_sphere( std::string name, glm::vec3 center, float radius)
 {
-  std::vector<glm::vec3> sphere_pos ;
+  std::vector<glm::vec3> sphere_pos;
 
-  sphere_pos.push_back(center) ;
+  sphere_pos.push_back( center );
 
-  polyscope::PointCloud *pointCloud = polyscope::registerPointCloud( name, sphere_pos);
+  polyscope::PointCloud *pointCloud = polyscope::registerPointCloud( name, sphere_pos );
   pointCloud->setPointRadius(radius, false);
 
 }

@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 #include "BaseOctree.t.hpp"
 
 template< class Data, class VecType >

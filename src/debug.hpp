@@ -15,6 +15,7 @@
 #include "kernels.t.hpp"
 
 polyscope::PointCloud * pointSetToPolyscope(std::string name, PointSet<point3d> *ps);
+
 void pointSet2dToPolyscope (std::string name, PointSet<point2d> *ps);
 
 /**

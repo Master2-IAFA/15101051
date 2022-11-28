@@ -16,10 +16,18 @@ BaseOctree<Data, VecType, OctreeType>::BaseOctree( int _depth, VecType _min, Vec
     m_min = _min;
     m_depth = _depth;
     m_max = _max;
-    init();
-    
+    init(); 
 }
 
+template<class Data, typename VecType, typename OctreeType>
+BaseOctree<Data, VecType, OctreeType>::~BaseOctree(){
+    m_father = nullptr;
+    m_points.clear();
+    //delete _data;
+    for(int i = 0; i < int(pow( 2, m_dim )); i++){
+        delete m_children[i];
+    }
+}
 
 template<class Data, typename VecType, typename OctreeType>
 void BaseOctree<Data, VecType, OctreeType>::init(){
@@ -35,15 +43,6 @@ void BaseOctree<Data, VecType, OctreeType>::init(){
     }
 }
 
-template<class Data, typename VecType, typename OctreeType>
-BaseOctree<Data, VecType, OctreeType>::~BaseOctree(){
-    m_father = nullptr;
-    m_points.clear();
-    //delete _data;
-    for(int i = 0; i < int(pow( 2, m_dim )); i++){
-        delete m_children[i];
-    }
-}
 
 template<class Data, typename VecType, typename OctreeType>
 void BaseOctree<Data, VecType, OctreeType>::subDivide(){
@@ -116,5 +115,15 @@ std::vector<OctreeType*> BaseOctree<Data, VecType, OctreeType>::getAtDepth(int d
     }
 
     return octree;
+}
+
+template<class Data, typename VecType, typename OctreeType>
+int BaseOctree<Data, VecType, OctreeType>::getMaxDepth(){
+    if( !hasChildren() ) return 0;
+    int maxi = 0;
+    for( auto child : m_children ){
+        maxi = std::max( maxi, child->getMaxDepth() );
+    }
+    return 1 + maxi;
 }
 

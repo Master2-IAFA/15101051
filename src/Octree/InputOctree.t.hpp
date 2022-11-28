@@ -7,6 +7,14 @@ void InputOctree< VecType, StatType, PointType>::fit( int max_depth, int max_poi
 
     if( m_pointSet == nullptr ) return;
 
+    if( this->hasChildren() ){
+        for(int i = 0; i < 8; i++){
+            delete this->m_children[ i ];
+            this->m_children[ i ] = nullptr;
+        }
+        this->m_children.clear();
+    }
+
     std::vector< PointType > points = m_pointSet->getPoints();
     StatType root_stats;
     for (auto p : points){
