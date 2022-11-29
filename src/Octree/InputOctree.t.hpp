@@ -31,6 +31,7 @@ void InputOctree< VecType, StatType, PointType>::fit( int max_depth, int max_poi
 template< class VecType, class StatType, class PointType >
 StatType InputOctree< VecType, StatType, PointType>::getBlendedStat( PointType point, float (*kernel)(VecType&,VecType&) ){
     StatType father_stats = this->getData();
+
     double sigma_n = father_stats.area;
     double sigma_nu;
 
@@ -41,9 +42,11 @@ StatType InputOctree< VecType, StatType, PointType>::getBlendedStat( PointType p
         for (VecType p : this->getPoints()){
             weight += kernel(point.pos, p);
         }
+
         return weighted_statistics(father_stats, weight);
     }
     // float sigma_n_toFloat = round(sigma_n * pow(10, 7)) / pow(10, 7);
+    //sigma_n = sigma_n == 0? 1 : sigma_n;
     VecType averagePosition = father_stats.position / ((float)sigma_n);
     float weight_averagePos = kernel (point.pos, averagePosition);
 
@@ -52,6 +55,8 @@ StatType InputOctree< VecType, StatType, PointType>::getBlendedStat( PointType p
         StatType far_away = weighted_statistics(father_stats, weight_averagePos);
         return weighted_statistics(father_stats, weight_averagePos);
     }
+
+    
     // Let's blend statistics between n and its children
     StatType node_stats;
     auto children = this->getChildren();
@@ -64,6 +69,18 @@ StatType InputOctree< VecType, StatType, PointType>::getBlendedStat( PointType p
         node_stats = sum_statistics(node_stats, weighted_statistics(child_stats, (1-gamma)));
         node_stats = sum_statistics(node_stats, weighted_statistics(child_stats, weight));
     }
+
+    // for( auto child : children ){
+    //     auto a = child->getBlendedStat( point, kernel );
+    //     a = weighted_statistics( a, ( 1.0 - gamma_maj( child, point.pos ) ));
+    //     node_stats = sum_statistics( node_stats, a);
+    // }
+
+    // for( auto child : children ){
+    //     auto a = gamma_maj( child, point.pos ) * kernel( point.pos, averagePosition );
+    //     auto b = weighted_statistics( child->getData(), a );
+    //     node_stats = sum_statistics( node_stats, b );
+    // }
     return node_stats;
 }
 
@@ -71,7 +88,7 @@ template< class VecType, class StatType, class PointType >
 float InputOctree< VecType, StatType, PointType>::signedDistanceToProtectionSphere( VecType point ){
     VecType min = this->getMin();
     VecType max = this->getMax();
-    float radius_protectionSphere = (glm::distance(min, max) / 2) * (*m_protectionSphere);
+    float radius_protectionSphere = (glm::distance(min, max) / 2.0) * (*m_protectionSphere);
     VecType mid = ( min + max ) / VecType ( 2.0 );
     return glm::distance(mid, point) - radius_protectionSphere;
 }
@@ -80,7 +97,7 @@ float InputOctree< VecType, StatType, PointType>::signedDistanceToProtectionSphe
 
 template< class VecType, class StatType, class PointType >
 bool InputOctree< VecType, StatType, PointType>::isInProtectionSphere( VecType point ){
-    return (!(signedDistanceToProtectionSphere ( point ) > 0));
+    return signedDistanceToProtectionSphere( point ) <= 0;
 }
 
 template< class VecType, class StatType, class PointType >
@@ -92,7 +109,7 @@ void InputOctree< VecType, StatType, PointType>::recursiveFit( int depth, std::v
             vecTypePoints.emplace_back(p.pos);
         this->setPoints(vecTypePoints) ;
         this->getChildren()[0] = nullptr;
-        return;
+        return ;
     }
 
     this->subDivide();
@@ -109,7 +126,6 @@ void InputOctree< VecType, StatType, PointType>::recursiveFit( int depth, std::v
         for ( int j = 0; j < points->size(); ++j ) {
             if ( children[i]->isPointIn( points->at(j).pos ) ) {
                 children_points.emplace_back( points->at(j) );
-                statisticsAdd( &stat, points->at(j) );
                 hasPoint = true;
             }
         }
@@ -134,5 +150,5 @@ float InputOctree< VecType, StatType, PointType>::gamma_maj (InputOctree<VecType
         return 1;
     }
     float u = (distance_to_child / (distance_to_child - distance_to_node));
-    return exp(-exp(1/(u-1)) / pow(u,2));
+    return exp(-exp(1.0/(u-1.0)) / pow(u, 2));
 }

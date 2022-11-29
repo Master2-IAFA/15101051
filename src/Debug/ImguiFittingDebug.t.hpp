@@ -25,7 +25,7 @@ void ImguiFittingDebug::slidePoints(){
         glm::vec3 end = m_endPosition[ i ];
         auto direction =  glm::normalize( end - start );
         auto length = glm::length( end - start );
-        m_middlePosition[ i ] = k>0.5f? m_endPosition[i] : m_startPosition[ i ];
+        m_middlePosition[ i ] = m_startPosition[ i ] + k * ( end - start );
     }
     m_pointCloud = polyscope::registerPointCloud( "Random Points", m_middlePosition );
 }
@@ -37,10 +37,8 @@ void ImguiFittingDebug::fit(){
         point.pos = glm::vec3( m_startPosition[ i ] );
         point.norm = glm::vec3( 0, 0, 0 );
         statistics3d stat = m_inputOctree->getBlendedStat( point, &gaussian_mixture );
-        display_statistics( stat );
         sphere.fitSphere( stat, point.pos, &gaussian_mixture );
         m_endPosition[ i ] = sphere.project( point.pos );
-        std::cout << m_endPosition[ i ].x << " " << m_endPosition[ i ].y << " " << m_endPosition[ i ].z << std::endl;
     }
 
     m_fitted = true;

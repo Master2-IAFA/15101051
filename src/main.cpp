@@ -63,7 +63,7 @@ int main () {
     ps = new PointSet<point3d>();
 
     
-
+    
     loadPointCloud();
     debug = new ImguiInputOctreeDebug( std::make_shared<InputOctree3D>( *octree ));
     deebug = new ImguiFittingDebug( std::make_shared<InputOctree3D>( *octree) );
@@ -83,10 +83,12 @@ int main () {
         proj_p[ i ] = p;
     }
 
+
+
     PointSet<point3d> projected_pointSet( proj_p );
 
     //auto ppc = pointSetToPolyscope( "projected point cloud", &projected_pointSet);
-    //pc = pointSetToPolyscope("point cloud", ps);
+    pc = pointSetToPolyscope("point cloud", ps);
     polyscope::state::userCallback = callback;
 
     polyscope::show();
@@ -132,27 +134,16 @@ void loadPointCloud(){
     delete octree;
 
     octree = new InputOctree3D( ps );
-    octree->fit( 7, 0 );
+    octree->fit( 2, 0 );
+    std::cout << "...---..." << std::endl;
 
-    std::cout << "Protection sphere: " << octree->getProtectionSphere() << std::endl;
-    std::cout << "Protection sphere: " << octree->getChildren()[0]->getChildren()[0]->getProtectionSphere() << std::endl;
-    octree->getChildren()[0]->getChildren()[0]->setProtectionSphere( 1.4 );
-    std::cout << "Protection sphere: " << octree->getProtectionSphere() << std::endl;
-    std::cout << "Protection sphere: " << octree->getChildren()[0]->getChildren()[0]->getProtectionSphere() << std::endl;
 
     //InputOctree<glm::vec3, statistics3d, point3d> inputOctree( ps );
     //inputOctree.fit( 7, 0 );
     //std::cout << "fitted" << std::endl;
     //octree = static_cast<BaseOctree*>( inputOctree );
 
-    auto d = octree->getAtDepth( 4 );
-    auto di = std::vector< BaseOctree3D< InputOctree3D >* >( d.begin(), d.end() );
-    //auto dc = std::vector< BaseOctree<statistics3d, glm::vec3, InputOctree< glm::vec3, statistics3d, point3d> >( d.begin(), d.end() );
-    // drawOctree( "octree", di );
-
-    std::cout << octree->getMaxDepth() << std::endl;
-    std::cout << di.size() << std::endl;
-    std::cout << "min: " << di[2]->getMin().x << " max: " << di[2]->getMin().x  << std::endl;
+    
     
 
     //octree = generateInputOctree<statistics3d, point3d, glm::vec3>( MAX_DEPTH, ps );
