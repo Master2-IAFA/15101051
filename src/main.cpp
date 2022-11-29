@@ -20,6 +20,7 @@
 #include "Define.hpp"
 
 #include "Debug/ImguiInputOctreeDebug.t.hpp"
+#include "Debug/ImguiFittingDebug.t.hpp"
 #include "ImguiDebug.t.hpp"
 
 
@@ -29,6 +30,7 @@
 namespace fs = std::filesystem;
 
 ImguiInputOctreeDebug *debug;
+ImguiFittingDebug *deebug;
 
 std::string pathToDirectory{ "../assets/" };
 std::string path{"../assets/Head Sculpture.stl"};
@@ -64,11 +66,12 @@ int main () {
 
     loadPointCloud();
     debug = new ImguiInputOctreeDebug( std::make_shared<InputOctree3D>( *octree ));
-    
+    deebug = new ImguiFittingDebug( std::make_shared<InputOctree3D>( *octree) );
+
     std::vector<point3d> proj_p( ps->getPoints().size() );
     
     #pragma omp parallel for num_threads( 6 )
-    for( int i = 0; i < ps->getPoints().size(); i++ ){
+    for( int i = 0; i < ps->getPoints().size(); i+=500 ){
         point3d q = ps->getPoints()[ i ];
         AlgebraicSphere<glm::vec3, statistics3d> sphere;
         auto stat = octree->getBlendedStat( q, &gaussian_mixture );
@@ -82,8 +85,8 @@ int main () {
 
     PointSet<point3d> projected_pointSet( proj_p );
 
-    // auto ppc = pointSetToPolyscope( "projected point cloud", &projected_pointSet);
-    // pc = pointSetToPolyscope("point cloud", ps);
+    //auto ppc = pointSetToPolyscope( "projected point cloud", &projected_pointSet);
+    //pc = pointSetToPolyscope("point cloud", ps);
     polyscope::state::userCallback = callback;
 
     polyscope::show();
@@ -104,7 +107,9 @@ bool fileGetter(void *data, int index, const char** output)
 
 void callback(){
     ImGui::PushItemWidth( 200 );
-    debug->draw();
+    if( ImGui::CollapsingHeader("Octree parameters") ) debug->draw();
+
+    if( ImGui::CollapsingHeader("Fitting") ) deebug->draw();
     //if(ImGui::SliderInt( "profondeur", &depthToShow, 0, MAX_DEPTH - 1 )) showAtDepth( depthToShow );
     // if(ImGui::ListBox("files", &current_item, fileGetter, &files, files.size())){ path = files[current_item]; };
     // if(ImGui::Button("load file")) loadPointCloud();

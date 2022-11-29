@@ -2,18 +2,15 @@
 
 void ImguiInputOctreeDebug::draw(){
 
-    if( ImGui::CollapsingHeader("Octree parameters") ){
+    if( ImGui::SliderInt( "Depth", &m_octreeDepth, 0, m_octreeMaxDepth - 1 ) ) drawOctreeAtDepth();
 
-        if( ImGui::SliderInt( "Depth", &m_octreeDepth, 0, m_octreeMaxDepth - 1 ) ) drawOctreeAtDepth();
+    ImGui::SliderInt( "Max depth", &m_maxDepth, 1, 10 );
+    ImGui::SliderInt( "Max Point", &m_maxPoints, 1, 100);
 
-        ImGui::SliderInt( "Max depth", &m_maxDepth, 1, 10 );
-        ImGui::SliderInt( "Max Point", &m_maxPoints, 1, 100);
+    if( ImGui::Button("Fit") ) fitOctree();
+    ImGui::SameLine();
+    ImGui::Text(  (std::to_string( m_fitTime ) + " Ms").c_str() );
 
-        if( ImGui::Button("Fit") ) fitOctree();
-        ImGui::SameLine();
-        ImGui::Text(  (std::to_string( m_fitTime ) + " Ms").c_str() );
-
-    }
 }
 
 void ImguiInputOctreeDebug::drawOctreeAtDepth(){
