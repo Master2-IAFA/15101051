@@ -72,51 +72,28 @@ void PointSet<point>::readOpenMesh (string filename) {
         std::cerr << "ERROR: Standard vertex property 'Normals' not available!\n";
         exit(1);
     }
-    OpenMesh::IO::Options opt;
-    if ( ! OpenMesh::IO::read_mesh(mesh,filename, opt))
-    {
-        std::cerr << "Error loading mesh from file " << filename << std::endl;
-        exit(1);
-    }
-
-    // If the file did not provide vertex normals, then calculate them
-    if ( !opt.check( OpenMesh::IO::Options::VertexNormal) )
-    {
-        std::cout << "The file doesn't contain normal informations." << std::endl;
-        std::cout << "Try to create them thanks to face normals." << std::endl;
-        // we need face normals to update the vertex normals
-        mesh.request_face_normals();
-        // let the mesh update the normals
-        mesh.update_normals();
-        // dispose the face normals, as we don't need them anymore
-        mesh.release_face_normals();
-    }
-
-    for (auto v = mesh.vertices_sbegin(); v != mesh.vertices_end(); ++v) {
-        auto current_point = mesh.point(*v);
-        point p;
-
-        for (int i = 0;i < p.pos.length();++i) {
-            p.pos[i] = current_point[i];
+    OpenMesh::IO::Options opt (OpenMesh::IO::Options::VertexNormal);
+        if (!OpenMesh::IO::read_mesh(mesh, filename, opt)) {
+            return;
         }
 
-        if (mesh.has_vertex_normals()) {
+        for (auto v = mesh.vertices_sbegin(); v != mesh.vertices_end(); ++v) {
+            point p;
+
+            auto current_point = mesh.point(*v);
+            for (int i = 0;i < p.pos.length();++i) {
+                p.pos[i] = current_point[i];
+            }
+
             auto n = mesh.normal(*v);
             for (int i = 0;i < p.norm.length();++i) {
                 p.norm[i] = n[i];
             }
-        }
-        else {
-            p.norm[0] = 1;
-            for (int i = 1;i < p.norm.length();++i) {
-                p.norm[i] = 0;
-            }
+
+            this->m_points.emplace_back(p);
         }
 
-        this->m_points.emplace_back(p);
-    }
-
-    mesh.release_vertex_normals();
+        mesh.release_vertex_normals();
 }
 
 template<typename point>

@@ -23,8 +23,6 @@
 #include "Debug/ImguiFittingDebug.t.hpp"
 #include "ImguiDebug.t.hpp"
 
-
-
 #define MAX_DEPTH 7
 
 namespace fs = std::filesystem;
@@ -33,7 +31,7 @@ ImguiInputOctreeDebug *debug;
 ImguiFittingDebug *deebug;
 
 std::string pathToDirectory{ "../assets/" };
-std::string path{"../assets/Head Sculpture.stl"};
+std::string path{"../assets/bunny2.ply"};
 std::vector<string> files;
 int current_item = 0;
 int depthToShow = 0;
