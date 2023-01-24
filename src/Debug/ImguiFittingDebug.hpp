@@ -4,6 +4,8 @@
 #include <memory>
 #include <iostream>
 #include <stdlib.h> 
+#include <omp.h>
+#include <functional>
 
 #include "polyscope/messages.h"
 #include "polyscope/point_cloud.h"
@@ -29,7 +31,7 @@ class ImguiFittingDebug{
         
 
 
-    private:
+    private: 
 
         void drawFit();
 
@@ -50,5 +52,14 @@ class ImguiFittingDebug{
         polyscope::PointCloud *m_pointCloud;
 
         std::shared_ptr< InputOctree3D > m_inputOctree;
+
+        //gaussian mixture
+        bool m_gaussianKernel{ true };
+        bool m_rationnalKernel{ false };
+        float m_gaussianK{ 1.0 }; 
+        float m_gaussianA{ 1.0 };
+        float m_rationnalK{ 0.5 }; 
+        float m_rationnalEpsilon{ 1.5 };
+        std::function< float( glm::vec3, glm::vec3 ) > m_kernel;
         
 };

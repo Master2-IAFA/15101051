@@ -8,12 +8,13 @@ template< class VecType, class StatType >
 AlgebraicSphere< VecType, StatType >::~AlgebraicSphere(){}
 
 template< class VecType, class StatType >
-void AlgebraicSphere< VecType, StatType >::fitSphere( StatType stat, VecType point, float (*kernel)(VecType&,VecType&) ){
+void AlgebraicSphere< VecType, StatType >::fitSphere( StatType stat, VecType point, std::function< float( VecType&, VecType& ) > kernel ){
 
     VecType meanPosition = VecType( stat.position );
     meanPosition /= VecType( static_cast<float>(stat.area) );
 
     float weight_wi = kernel( point, meanPosition );
+
     VecType pi = weight_wi * stat.position;
     VecType ni = weight_wi * stat.normal;
     float area = weight_wi * stat.area;
@@ -30,6 +31,19 @@ void AlgebraicSphere< VecType, StatType >::fitSphere( StatType stat, VecType poi
     num = glm::dot( pi, m_u123 ) + m_u4 * norm;
     m_u0 = - num / area;
 
+    // float num = stat.pdn - ( glm::dot( stat.position, stat.normal ) / stat.area );
+    // float den = stat.norm - ( glm::dot( stat.position, stat.position ) / stat.area );
+
+    // m_u4 = 0.5 * ( num / den );
+
+    // m_u123 = ( stat.normal - VecType( 2.0 * m_u4 ) * stat.position ) / VecType( stat.area );
+
+    // m_u0 = - ( glm::dot( m_u123, stat.position ) + m_u4 * stat.norm ) / stat.area;
+
+    // std::cout << "u4: " << m_u4 << std::endl;
+    // std::cout << "u123: " << m_u123.x << " " << m_u123.y << " " << m_u123.z << std::endl;
+    // std::cout << "u0: " << m_u0 << std::endl;
+
     this->computeCenter();
     this->computeRadius();
 }
@@ -37,10 +51,15 @@ void AlgebraicSphere< VecType, StatType >::fitSphere( StatType stat, VecType poi
 template< class VecType, class StatType >
 VecType AlgebraicSphere< VecType, StatType >::project( VecType point ){
 
-    VecType projectedPoint;
-    projectedPoint =  glm::normalize( point - m_center );
-    projectedPoint = projectedPoint * VecType( m_radius ) + m_center;
-    return projectedPoint;
+    // VecType projectedPoint;
+    // projectedPoint =  glm::normalize( point - m_center );
+    // projectedPoint = projectedPoint * VecType( m_radius ) + m_center;
+    // return projectedPoint;
+
+    auto p = point - m_center;
+    auto l = glm::length( p );
+    auto q = VecType( m_radius / l ) * p;
+    return m_center + q;
 
 }
 

@@ -23,8 +23,6 @@
 #include "Debug/ImguiFittingDebug.t.hpp"
 #include "ImguiDebug.t.hpp"
 
-
-
 #define MAX_DEPTH 7
 
 namespace fs = std::filesystem;
@@ -33,7 +31,7 @@ ImguiInputOctreeDebug *debug;
 ImguiFittingDebug *deebug;
 
 std::string pathToDirectory{ "../assets/" };
-std::string path{"../assets/Head Sculpture.stl"};
+std::string path{ "../assets/bunny_30.ply" };
 std::vector<string> files;
 int current_item = 0;
 int depthToShow = 0;
@@ -44,7 +42,6 @@ std::array< polyscope::CurveNetwork*, MAX_DEPTH > octreeGraph;
 
 polyscope::PointCloud *pc_projected;
 polyscope::PointCloud *pc;
-
 
 int projected_points_slider = 0 ;
 
@@ -61,41 +58,17 @@ int main () {
 
     polyscope::init();
     ps = new PointSet<point3d>();
-
-    
-    
     loadPointCloud();
-    debug = new ImguiInputOctreeDebug( std::make_shared<InputOctree3D>( *octree ));
-    deebug = new ImguiFittingDebug( std::make_shared<InputOctree3D>( *octree) );
 
-    std::vector<point3d> proj_p( ps->getPoints().size() );
-    
-    #pragma omp parallel for num_threads( 6 )
-    for( int i = 0; i < ps->getPoints().size(); i+=500 ){
-        point3d q = ps->getPoints()[ i ];
-        AlgebraicSphere<glm::vec3, statistics3d> sphere;
-        auto stat = octree->getBlendedStat( q, &gaussian_mixture );
-        sphere.fitSphere( stat, q.pos, &gaussian_mixture );
-        auto projected_q = sphere.project( q.pos );
-        point3d p;
-        p.pos = projected_q;
-        p.norm = q.norm;
-        proj_p[ i ] = p;
-    }
+    debug = new ImguiInputOctreeDebug( std::make_shared<InputOctree3D>( *octree ) );
+    deebug = new ImguiFittingDebug( std::make_shared<InputOctree3D>( *octree ) );
 
-
-
-    PointSet<point3d> projected_pointSet( proj_p );
-
-    //auto ppc = pointSetToPolyscope( "projected point cloud", &projected_pointSet);
     pc = pointSetToPolyscope("point cloud", ps);
     polyscope::state::userCallback = callback;
-
     polyscope::show();
 
     delete ps;
     delete octree;
-
     return 0;
 }
 
@@ -134,30 +107,8 @@ void loadPointCloud(){
     delete octree;
 
     octree = new InputOctree3D( ps );
-    octree->fit( 2, 0 );
+    octree->fit( 7, 0 );
     std::cout << "...---..." << std::endl;
-
-
-    //InputOctree<glm::vec3, statistics3d, point3d> inputOctree( ps );
-    //inputOctree.fit( 7, 0 );
-    //std::cout << "fitted" << std::endl;
-    //octree = static_cast<BaseOctree*>( inputOctree );
-
-    
-    
-
-    //octree = generateInputOctree<statistics3d, point3d, glm::vec3>( MAX_DEPTH, ps );
-    //ps_projected = draw_traverseOctree_onePoint(octree, ps);
-
-    // for( int i = 0; i < MAX_DEPTH; i++ ){
-    //     auto o = inputOctree.getAtDepth( i );
-    //     octreeGraph[ i ] = drawOctree( std::to_string(i), o );
-    //     octreeGraph[ i ]->setEnabled( false );
-    // }
-
-    //pointSetToPolyscope( "point cloud", ps );
-
-    //octreeGraph[0]->setEnabled( true );
 
     polyscope::view::resetCameraToHomeView();
 }

@@ -7,6 +7,29 @@ void ImguiFittingDebug::draw(){
     ImGui::SliderInt("nb points", &m_numberOfPoints, 10, 50000 );
     ImGui::SameLine();
     if( ImGui::Button( "sample random points" ) ) samplePoints( m_numberOfPoints );
+
+    if( ImGui::RadioButton( "Gaussian_Kernel", m_gaussianKernel ) ){
+        m_gaussianKernel = true;
+        m_rationnalKernel = false;
+        m_kernel = [this]( glm::vec3 a, glm::vec3 b ){ return gaussian_mixture( a, b, m_gaussianK, m_gaussianA ); };
+    }
+    ImGui::SameLine();
+    if( ImGui::RadioButton( "Rationnal Kernel", !m_gaussianKernel ) ){
+        m_gaussianKernel = false;
+        m_rationnalKernel = true;
+        m_kernel = [this]( glm::vec3 a, glm::vec3 b ){ return rational_kernel( a, b, m_rationnalK, m_rationnalEpsilon ); };
+    }
+
+    if( m_gaussianKernel ){
+        ImGui::SliderFloat( "K", &m_gaussianK, 0.0, 5.0 );
+        ImGui::SameLine();
+        ImGui::SliderFloat( "A", &m_gaussianA, 0.0, 5.0 );
+    }else{
+        ImGui::SliderFloat( "K", &m_rationnalK, 0.0, 5.0 );
+        ImGui::SameLine();
+        ImGui::SliderFloat( "Epsilon", &m_rationnalEpsilon, 0.0, 5.0 );
+    }
+
     if( ImGui::Button( "fit" ) ) fit();
 
     if( m_fitted ) drawFit();
@@ -20,6 +43,7 @@ void ImguiFittingDebug::slidePoints(){
     float k = m_sliderStatut / 1000.0f;
     std::cout << k << std::endl;
     std::vector< glm::vec3 > p;
+    #pragma omp parallel for num_threads( 12 )
     for( int i = 0; i < m_middlePosition.size(); i++ ){
         glm::vec3 start = m_startPosition[ i ];
         glm::vec3 end = m_endPosition[ i ];
@@ -36,8 +60,9 @@ void ImguiFittingDebug::fit(){
         point3d point;
         point.pos = glm::vec3( m_startPosition[ i ] );
         point.norm = glm::vec3( 0, 0, 0 );
-        statistics3d stat = m_inputOctree->getBlendedStat( point, &gaussian_mixture );
-        sphere.fitSphere( stat, point.pos, &gaussian_mixture );
+        statistics3d stat = m_inputOctree->getBlendedStat( point,  [this]( glm::vec3 a, glm::vec3 b ){ return m_kernel( a, b );} );
+        //display_statistics( stat );
+        sphere.fitSphere( stat, point.pos, [this]( glm::vec3 a, glm::vec3 b ){ return m_kernel( a, b ); });
         m_endPosition[ i ] = sphere.project( point.pos );
     }
 

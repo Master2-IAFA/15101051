@@ -61,56 +61,24 @@ void PointSet<point>::readOpenMesh (string filename) {
     m_points.clear();
 
     OpenMesh::PolyMesh_ArrayKernelT<> mesh;
-
-    // request vertex normals, so the mesh reader can use normal information
-    // if available
-    // mesh.release_vertex_colors();
     mesh.request_vertex_normals();
-    // assure we have vertex normals
-    if (!mesh.has_vertex_normals())
-    {
-        std::cerr << "ERROR: Standard vertex property 'Normals' not available!\n";
-        exit(1);
-    }
-    OpenMesh::IO::Options opt;
-    if ( ! OpenMesh::IO::read_mesh(mesh,filename, opt))
-    {
-        std::cerr << "Error loading mesh from file " << filename << std::endl;
-        exit(1);
-    }
 
-    // If the file did not provide vertex normals, then calculate them
-    if ( !opt.check( OpenMesh::IO::Options::VertexNormal) )
-    {
-        std::cout << "The file doesn't contain normal informations." << std::endl;
-        std::cout << "Try to create them thanks to face normals." << std::endl;
-        // we need face normals to update the vertex normals
-        mesh.request_face_normals();
-        // let the mesh update the normals
-        mesh.update_normals();
-        // dispose the face normals, as we don't need them anymore
-        mesh.release_face_normals();
+    OpenMesh::IO::Options opt (OpenMesh::IO::Options::VertexNormal);
+    if (!OpenMesh::IO::read_mesh(mesh, filename, opt)) {
+        return;
     }
 
     for (auto v = mesh.vertices_sbegin(); v != mesh.vertices_end(); ++v) {
-        auto current_point = mesh.point(*v);
         point p;
 
+        auto current_point = mesh.point(*v);
         for (int i = 0;i < p.pos.length();++i) {
             p.pos[i] = current_point[i];
         }
 
-        if (mesh.has_vertex_normals()) {
-            auto n = mesh.normal(*v);
-            for (int i = 0;i < p.norm.length();++i) {
-                p.norm[i] = n[i];
-            }
-        }
-        else {
-            p.norm[0] = 1;
-            for (int i = 1;i < p.norm.length();++i) {
-                p.norm[i] = 0;
-            }
+        auto n = mesh.normal(*v);
+        for (int i = 0;i < p.norm.length();++i) {
+            p.norm[i] = n[i];
         }
 
         this->m_points.emplace_back(p);

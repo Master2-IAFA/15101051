@@ -13,7 +13,7 @@ class AlgebraicSphere{
         /**
          * @brief Compute the Algebraic sphere parameters based on the given statistics
         */
-        void fitSphere( StatType stat, VecType point, float (*kernel)(VecType&,VecType&) );
+        void fitSphere( StatType stat, VecType point, std::function< float(VecType&, VecType&) >kernel );
 
         /**
          * @brief project a point on the sphere
@@ -23,8 +23,8 @@ class AlgebraicSphere{
          */
         VecType project( VecType point );
 
-        inline VecType& getCenter() const { return m_center; }
-        inline double getRadius() const { return m_radius; }
+        inline VecType& getCenter() { return m_center; }
+        inline double getRadius() { return m_radius; }
 
     private:
 

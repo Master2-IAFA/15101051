@@ -5,8 +5,8 @@ property float x
 property float y
 property float z
 property float nx
-property float ny
 property float nz
+property float ny
 end_header
 0 0.135335 0 0.252784 0.252784 0.933917
 0 0.146373 0.02 0.27126 0.26041 0.926609

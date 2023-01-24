@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include "BaseOctree.t.hpp"
 #include "../PointSet.t.hpp"
 //#include "../utils.t.hpp"
@@ -16,7 +18,7 @@ class InputOctree: public BaseOctree< StatType, VecType, InputOctree< VecType, S
 
     public:
         InputOctree( PointSet<PointType> *pointSet ):
-             BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >( 0, pointSet->getBoundingBox().first.pos, pointSet->getBoundingBox().second.pos),
+             BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >( 0, pointSet->getBoundingBox().first.pos, pointSet->getBoundingBox().second.pos ),
              m_pointSet( pointSet )
              {
                 m_protectionSphere = std::make_shared< float >( 1.3 );
@@ -39,7 +41,7 @@ class InputOctree: public BaseOctree< StatType, VecType, InputOctree< VecType, S
          * @param kernel 
          * @return StatType 
          */
-        StatType getBlendedStat( PointType point, float (*kernel)(VecType&,VecType&) );
+        StatType getBlendedStat( PointType point, std::function< float( VecType&, VecType& ) > kernel );
 
         bool isInProtectionSphere( VecType point );
 
