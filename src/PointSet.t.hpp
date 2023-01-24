@@ -62,29 +62,37 @@ void PointSet<point>::readOpenMesh (string filename) {
 
     OpenMesh::PolyMesh_ArrayKernelT<> mesh;
     mesh.request_vertex_normals();
+   p.norm[i] = n[i];
 
+    // assure we have vertex normals
+    if (!mesh.has_vertex_normals())
+    {
+        std::cerr << "ERROR: Standard vertex property 'Normals' not available!\n";
+        exit(1);
+    }
     OpenMesh::IO::Options opt (OpenMesh::IO::Options::VertexNormal);
-    if (!OpenMesh::IO::read_mesh(mesh, filename, opt)) {
-        return;
-    }
-
-    for (auto v = mesh.vertices_sbegin(); v != mesh.vertices_end(); ++v) {
-        point p;
-
-        auto current_point = mesh.point(*v);
-        for (int i = 0;i < p.pos.length();++i) {
-            p.pos[i] = current_point[i];
+        if (!OpenMesh::IO::read_mesh(mesh, filename, opt)) {
+            return;
         }
 
-        auto n = mesh.normal(*v);
-        for (int i = 0;i < p.norm.length();++i) {
-            p.norm[i] = n[i];
+        for (auto v = mesh.vertices_sbegin(); v != mesh.vertices_end(); ++v) {
+            point p;
+
+            auto current_point = mesh.point(*v);
+            for (int i = 0;i < p.pos.length();++i) {
+                p.pos[i] = current_point[i];
+            }
+
+            auto n = mesh.normal(*v);
+            for (int i = 0;i < p.norm.length();++i) {
+                p.norm[i] = n[i];
+            }
+
+            this->m_points.emplace_back(p);
+
         }
 
-        this->m_points.emplace_back(p);
-    }
-
-    mesh.release_vertex_normals();
+        mesh.release_vertex_normals();
 }
 
 template<typename point>
