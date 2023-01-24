@@ -63,6 +63,8 @@ int main () {
     debug = new ImguiInputOctreeDebug( std::make_shared<InputOctree3D>( *octree ) );
     deebug = new ImguiFittingDebug( std::make_shared<InputOctree3D>( *octree ) );
 
+    node_stats_to_sphere("le_truc", octree, 1, 1);
+
     pc = pointSetToPolyscope("point cloud", ps);
     polyscope::state::userCallback = callback;
     polyscope::show();

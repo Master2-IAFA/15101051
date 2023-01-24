@@ -88,3 +88,8 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<BaseOctree<Dat
  * @brief function to vizualise points sliding accross their translation
  */
 void slide_points(polyscope::PointCloud *, polyscope::PointCloud * pc_final, int nb_slider_max, int nb_slider) ;
+
+
+
+template< class VecType, class StatType, class PointType >
+void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, PointType> * oct, int depth, int num_child);
