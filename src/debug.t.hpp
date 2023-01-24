@@ -399,3 +399,45 @@ void display_sphere( std::string name, glm::vec3 center, float radius)
   pointCloud->setPointRadius(radius, false);
 
 }
+
+template< class VecType, class StatType, class PointType >
+void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, PointType> * oct, int depth, int num_child){  
+  auto octree_depth_three = oct->getAtDepth (depth);
+  auto notre_node = octree_depth_three.at((num_child < 8 && num_child >= 0)?num_child:0);
+  auto stat = notre_node->getData();
+
+  float weight_wi = 1.0f;
+
+  glm::vec3 pi = weight_wi * stat.position;
+  glm::vec3 ni = weight_wi * stat.normal;
+  float area = weight_wi * stat.area;
+  float pi_ni = weight_wi * stat.pdn;
+  float norm = weight_wi * stat.norm; 
+
+  float num = pi_ni - glm::dot( pi, ni )/area;
+  float denom = norm - ( glm::dot( pi, pi ) / area );
+  float m_u4 = ( num / denom ) / 2;
+
+  VecType num_vec = ni - VecType( 2.0 ) * VecType( m_u4 ) * pi ;
+  glm::vec3 m_u123 = num_vec / area;
+
+  auto num_2 = glm::dot( pi, m_u123 ) + m_u4 * norm;
+  float m_u0 = - num_2 / area;
+
+  float b = 1.0f / m_u4;
+  glm::vec3 m_center = -0.5f * m_u123 * b;
+
+  b = m_u0 / m_u4;
+  auto cTc = glm::dot( m_center, m_center );
+  double r = sqrt( cTc - b );
+  float m_radius = std::max( 0.0 , r );
+
+  std::vector<glm::vec3> sphere_pos;
+
+  sphere_pos.push_back( m_center );
+
+  drawCube("Le cube", notre_node->getMin(), notre_node->getMax());
+
+  polyscope::PointCloud *pointCloud = polyscope::registerPointCloud( name, sphere_pos );
+  pointCloud->setPointRadius(m_radius, false);
+}
