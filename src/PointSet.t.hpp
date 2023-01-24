@@ -61,9 +61,11 @@ void PointSet<point>::readOpenMesh (string filename) {
     m_points.clear();
 
     OpenMesh::PolyMesh_ArrayKernelT<> mesh;
-    mesh.request_vertex_normals();
-   p.norm[i] = n[i];
 
+    // request vertex normals, so the mesh reader can use normal information
+    // if available
+    // mesh.release_vertex_colors();
+    mesh.request_vertex_normals();
     // assure we have vertex normals
     if (!mesh.has_vertex_normals())
     {
@@ -89,7 +91,6 @@ void PointSet<point>::readOpenMesh (string filename) {
             }
 
             this->m_points.emplace_back(p);
-
         }
 
         mesh.release_vertex_normals();
