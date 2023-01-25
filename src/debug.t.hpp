@@ -80,7 +80,9 @@ void generate_gaussian () {
         for( float j = 0; j < 50; j++) {
             float x = (i - 25) / 25.0f;
             float y = (j - 25) / 25.0f;
-            file << i/50.0f << " " << exp(-(x*x) - (y*y)) << " " << j/50.0f << " " << 1.0 << " " << 0.0 << " " << 0.0 << std::endl;
+            file << i/50.0f << " " << exp(-(x*x) - (y*y)) << " " << j/50.0f
+                 << " " <<  2 * x * exp(-(x*x) - (y*y)) << " " <<   j/50.0f << " " <<  2 * y * exp(-(x*x) - (y*y))
+                 << std::endl;
         }
     }
     file.close();
