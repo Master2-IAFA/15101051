@@ -42,7 +42,6 @@ StatType InputOctree< VecType, StatType, PointType>::getBlendedStat( PointType p
 
     // Case q isn't in the node
     if (! this->isInProtectionSphere(point.pos) ){
-        StatType far_away = weighted_statistics(father_stats, weight_averagePos);
         return weighted_statistics(father_stats, weight_averagePos);
     }
     // Let's blend statistics between n and its children
@@ -55,8 +54,10 @@ StatType InputOctree< VecType, StatType, PointType>::getBlendedStat( PointType p
         float weight = weight_averagePos * weight_area * gamma;
         StatType child_stats = child->getBlendedStat(point, kernel);
         node_stats = sum_statistics(node_stats, weighted_statistics(child_stats, (1-gamma)));
-        node_stats = sum_statistics(node_stats, weighted_statistics(child_stats, weight));
+        node_stats = sum_statistics(node_stats, weighted_statistics(father_stats, weight));
     }
+    // std::cout << "==========================" << std::endl;
+    // display_statistics(node_stats);
     return node_stats;
 }
 
@@ -113,8 +114,10 @@ void InputOctree< VecType, StatType, PointType>::recursiveFit( int depth, std::v
         }
     }
 }
-
-
+/**
+ * @brief EQUATION 7 DANS LE PAPIER
+ * 
+ */
 template< class VecType, class StatType, class PointType >
 float InputOctree< VecType, StatType, PointType>::gamma_maj (InputOctree<VecType, StatType, PointType> *child, VecType q){
     float distance_to_node = this->signedDistanceToProtectionSphere( q ); //signedDistanceToSphere(node, q);

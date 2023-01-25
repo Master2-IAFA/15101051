@@ -450,6 +450,7 @@ void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, Poi
   drawCube("Le cube", notre_node->getMin(), notre_node->getMax());
 
   polyscope::PointCloud *pointCloud = polyscope::registerPointCloud( name, sphere_pos );
+  pointCloud = polyscope::registerPointCloud( name, sphere_pos );
   pointCloud->setPointRadius(m_radius, false);
 }
 
