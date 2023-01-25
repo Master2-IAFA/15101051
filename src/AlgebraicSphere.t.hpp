@@ -58,9 +58,14 @@ VecType AlgebraicSphere< VecType, StatType >::project( VecType point ){
 
     auto p = point - m_center;
     auto l = glm::length( p );
+    
+    // Case where l is equal to 0, if we don't test it, we'll have a division by 0.
+    if (l == 0)
+        return m_center;
+    
     auto q = VecType( m_radius / l ) * p;
-    return m_center + q;
 
+    return m_center + q;
 }
 
 template< class VecType, class StatType >

@@ -41,7 +41,7 @@ class ImguiFittingDebug{
         void samplePoints( int n );
         void fit();
 
-        int m_numberOfPoints;
+        int m_numberOfPoints = 10;
         float m_sliderStatut{ 0.0 };
         bool m_fitted{ false };
 
@@ -49,6 +49,7 @@ class ImguiFittingDebug{
         std::vector<glm::vec3> m_endPosition;
         std::vector<glm::vec3> m_middlePosition;
 
+        std::string m_pointCloud_name = "Random Points";
         polyscope::PointCloud *m_pointCloud;
 
         std::shared_ptr< InputOctree3D > m_inputOctree;
@@ -60,6 +61,21 @@ class ImguiFittingDebug{
         float m_gaussianA{ 1.0 };
         float m_rationnalK{ 0.5 }; 
         float m_rationnalEpsilon{ 1.5 };
-        std::function< float( glm::vec3, glm::vec3 ) > m_kernel;
+        std::function< float( glm::vec3, glm::vec3 ) > m_kernel { [this]( glm::vec3 a, glm::vec3 b ){ return gaussian_mixture( a, b, m_gaussianK, m_gaussianA ); } };
         
+        ////////////////////////////////////////
+
+        // Test fitting with only one point
+        void fit_One_Point();
+        void slideSinglePoint();
+        bool m_single_fitted{ false };
+        glm::vec3 m_single_point { glm::vec3(0.0f) };
+        glm::vec3 m_single_point_fitted;
+
+        //Point moving between m_single_point(start pos) and m_single_point_fitted(ending pos);
+        glm::vec3 m_single_point_flying;
+        AlgebraicSphere3D m_sphere_single;
+
+        float m_sliderStatut_single{ 0.0 };
+
 };

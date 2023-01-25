@@ -52,6 +52,7 @@ float gaussian_mixture (VecType& p, VecType& q, float k, float a){
         float fact = (pow(sigma,-3) * exp(num/denom));
         out += fact;
     }
+
     return out;
 }
 
@@ -68,5 +69,6 @@ float rational_kernel (VecType& p, VecType& q, float k, float epsilon){
 
     float dist = glm::pow(glm::distance(p, q),2);
     float res = glm::pow((dist + epsilon), (-k/2));
-    return sqrt( glm::dot( q - p, q - p) );
+    // return sqrt( glm::dot( q - p, q - p) );
+    return res;
 }

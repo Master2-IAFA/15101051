@@ -452,3 +452,26 @@ void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, Poi
   polyscope::PointCloud *pointCloud = polyscope::registerPointCloud( name, sphere_pos );
   pointCloud->setPointRadius(m_radius, false);
 }
+
+/**
+ * @author Léo 
+ * 
+ * @brief This function takes a point and its fitted algebraic sphere to display the point, the sphere and its projection. 
+ * @param name name of the displayed sphere.
+ * @param point point that we want to fit a sphere.
+ * @param sphere fitted sphere.
+ */
+template< class VecType, class StatType >
+void point_and_stats_to_sphere (std::string point_name, std::string name, VecType point, VecType end, AlgebraicSphere<VecType, StatType> sphere){
+  std::vector<glm::vec3> pos;
+  std::vector<glm::vec3> pos_sphere;
+
+  pos.push_back(point);
+  pos.push_back(end);
+  pos_sphere.push_back(sphere.getCenter());
+
+  polyscope::PointCloud *pc_point = polyscope::registerPointCloud(point_name , pos);
+  pc_point->setPointRadius(0.02);
+  polyscope::PointCloud *pc_sphere = polyscope::registerPointCloud(name , pos_sphere);
+  pc_sphere->setPointRadius(sphere.getRadius(), false);
+}

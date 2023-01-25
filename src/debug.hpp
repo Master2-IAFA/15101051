@@ -101,3 +101,14 @@ void slide_points(polyscope::PointCloud *, polyscope::PointCloud * pc_final, int
  */
 template< class VecType, class StatType, class PointType >
 void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, PointType> * oct, int depth, int num_child);
+
+/**
+ * @author Léo 
+ * 
+ * @brief This function takes a point and its fitted algebraic sphere to display the point, the sphere and its projection. 
+ * @param name name of the displayed sphere.
+ * @param point point that we want to fit a sphere.
+ * @param sphere fitted sphere.
+ */
+template< class VecType, class StatType >
+void point_and_stats_to_sphere ( std::string point_name, std::string name, VecType point, VecType end, AlgebraicSphere<VecType, StatType> sphere);
