@@ -30,6 +30,12 @@ class ImguiInputOctreeDebug{
         void initVectorOctree();
         void drawOctreeAtDepth();
         void fitOctree();
+        /**
+         * @author Léo 
+         * 
+         * @brief Allow the user to see the algebraic sphere from stats of the given node (giving a depth and an idx of the node)
+         */
+        void drawSphereAtDepth();
 
         std::vector< polyscope::CurveNetwork * > m_vectorOctree;
         int m_octreeDepth{ 0 };
@@ -37,5 +43,7 @@ class ImguiInputOctreeDebug{
         int m_maxDepth{ 0 };
         int m_maxPoints{ 0 };
         float m_fitTime{ 0.0 };
+        int m_depth_forSphere{ 0 };
+        int m_idx_forSphere{ 0 };
         std::shared_ptr< InputOctree3D > m_inputOctree;
 };

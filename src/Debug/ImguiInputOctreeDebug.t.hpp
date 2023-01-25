@@ -11,6 +11,7 @@ void ImguiInputOctreeDebug::draw(){
     ImGui::SameLine();
     ImGui::Text(  (std::to_string( m_fitTime ) + " Ms").c_str() );
 
+    drawSphereAtDepth();
 }
 
 void ImguiInputOctreeDebug::drawOctreeAtDepth(){
@@ -41,4 +42,24 @@ void ImguiInputOctreeDebug::fitOctree(){
     m_octreeMaxDepth = m_inputOctree->getMaxDepth();
     auto stop = std::chrono::high_resolution_clock::now();
     m_fitTime = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
+}
+
+/**
+ * @author Léo 
+    * 
+    * @brief Allow the user to see the algebraic sphere from stats of the given node (giving a depth and an idx of the node)
+    */
+void ImguiInputOctreeDebug::drawSphereAtDepth(){
+
+    auto child = m_inputOctree->getAtDepth(m_depth_forSphere);
+    int num_child = 0;
+    if (m_depth_forSphere > 0)
+        num_child = child.size();
+    ImGui::Text("Display the algebraic sphere of a given node.");
+    ImGui::SliderInt("Depth of the octree", &m_depth_forSphere, 0, m_maxDepth);
+    ImGui::SliderInt("Idx of the octree", &m_idx_forSphere, 0, num_child);
+
+    if (ImGui::Button("Show sphere")) {
+        node_stats_to_sphere("Debug_the_node", m_inputOctree.get(), m_depth_forSphere, m_idx_forSphere);
+    }
 }

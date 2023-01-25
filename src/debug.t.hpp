@@ -400,10 +400,21 @@ void display_sphere( std::string name, glm::vec3 center, float radius)
 
 }
 
+
+/**
+ * @author Léo 
+ * 
+ * @brief This function take an octree, a depth and an idx for the node at the given depth and show its algebraic sphere. 
+ * @param name name of the displayed sphere.
+ * @param oct 
+ * @param depth Depth of the node we want
+ * @param num_child Num of the node for the given depth
+ */
 template< class VecType, class StatType, class PointType >
 void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, PointType> * oct, int depth, int num_child){  
   auto octree_depth_three = oct->getAtDepth (depth);
-  auto notre_node = octree_depth_three.at((num_child < 8 && num_child >= 0)?num_child:0);
+
+  auto notre_node = (depth == 0)?oct:octree_depth_three.at(num_child);
   auto stat = notre_node->getData();
 
   float weight_wi = 1.0f;

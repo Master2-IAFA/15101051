@@ -90,6 +90,14 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<BaseOctree<Dat
 void slide_points(polyscope::PointCloud *, polyscope::PointCloud * pc_final, int nb_slider_max, int nb_slider) ;
 
 
-
+/**
+ * @author Léo 
+ * 
+ * @brief This function take an octree, a depth and an idx for the node at the given depth and show its algebraic sphere. 
+ * @param name name of the displayed sphere.
+ * @param oct 
+ * @param depth Depth of the node we want
+ * @param num_child Num of the node for the given depth
+ */
 template< class VecType, class StatType, class PointType >
 void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, PointType> * oct, int depth, int num_child);
