@@ -47,7 +47,7 @@ float gaussian_mixture (VecType& p, VecType& q, float k, float a){
     // With this king of thing : sigma_i = a^i * sigma with a > 1;
     for (int i = 0; i < k; i++){
         float sigma = pow(a, i) * base_sigma;
-        float num = -glm::pow(glm::l2Norm(q-p),2);
+        float num = -glm::pow(glm::distance(p, q),2);
         float denom = 2 * pow(sigma,2);
         float fact = (pow(sigma,-3) * exp(num/denom));
         out += fact;

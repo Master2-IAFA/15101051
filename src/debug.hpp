@@ -14,9 +14,8 @@
 #include "AlgebraicSphere.t.hpp"
 #include "kernels.t.hpp"
 
-polyscope::PointCloud * pointSetToPolyscope(std::string name, PointSet<point3d> *ps);
-
-void pointSet2dToPolyscope (std::string name, PointSet<point2d> *ps);
+template<class VecType, class PointType>
+polyscope::PointCloud* pointSetToPolyscope(std::string name, PointSet<PointType> *ps);
 
 /**
  * @brief given min and max of a cube, returns vector of each point of the cube

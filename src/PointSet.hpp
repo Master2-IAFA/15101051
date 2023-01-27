@@ -45,5 +45,5 @@ public:
     void addPoint(point p) { m_points.push_back(p); }
 
 private:
-  vector<point> m_points;
+    vector<point> m_points;
 };

@@ -2,7 +2,8 @@
 
 #include "ImguiFittingDebug.hpp"
 
-void ImguiFittingDebug::draw(){
+template< class VecType, class StatType, class PointType >
+void ImguiFittingDebug<VecType, StatType, PointType>::draw(){
 
     ImGui::SliderInt("nb points", &m_numberOfPoints, 10, 50000 );
     ImGui::SameLine();
@@ -11,13 +12,13 @@ void ImguiFittingDebug::draw(){
     if( ImGui::RadioButton( "Gaussian_Kernel", m_gaussianKernel ) ){
         m_gaussianKernel = true;
         m_rationnalKernel = false;
-        m_kernel = [this]( glm::vec3 a, glm::vec3 b ){ return gaussian_mixture( a, b, m_gaussianK, m_gaussianA ); };
+        m_kernel = [this]( VecType a, VecType b ){ return gaussian_mixture( a, b, m_gaussianK, m_gaussianA ); };
     }
     ImGui::SameLine();
     if( ImGui::RadioButton( "Rationnal Kernel", !m_gaussianKernel ) ){
         m_gaussianKernel = false;
         m_rationnalKernel = true;
-        m_kernel = [this]( glm::vec3 a, glm::vec3 b ){ return rational_kernel( a, b, m_rationnalK, m_rationnalEpsilon ); };
+        m_kernel = [this]( VecType a, VecType b ){ return rational_kernel( a, b, m_rationnalK, m_rationnalEpsilon ); };
     }
 
     if( m_gaussianKernel ){
@@ -42,18 +43,20 @@ void ImguiFittingDebug::draw(){
     fit_One_Point();
 }
 
-void ImguiFittingDebug::drawFit(){
+template< class VecType, class StatType, class PointType >
+void ImguiFittingDebug<VecType, StatType, PointType>::drawFit(){
     if( ImGui::SliderFloat( "slide ", &m_sliderStatut, 0.0f, 1000.0f) ) slidePoints();
 }
 
-void ImguiFittingDebug::slidePoints(){
+template< class VecType, class StatType, class PointType >
+void ImguiFittingDebug<VecType, StatType, PointType>::slidePoints(){
     float k = m_sliderStatut / 1000.0f;
     std::cout << k << std::endl;
-    std::vector< glm::vec3 > p;
+    std::vector< VecType > p;
     #pragma omp parallel for num_threads( 12 )
     for( int i = 0; i < m_middlePosition.size(); i++ ){
-        glm::vec3 start = m_startPosition[ i ];
-        glm::vec3 end = m_endPosition[ i ];
+        VecType start = m_startPosition[ i ];
+        VecType end = m_endPosition[ i ];
         auto direction =  glm::normalize( end - start );
         auto length = glm::length( end - start );
         m_middlePosition[ i ] = m_startPosition[ i ] + k * ( end - start );
@@ -61,22 +64,24 @@ void ImguiFittingDebug::slidePoints(){
     m_pointCloud = polyscope::registerPointCloud( m_pointCloud_name, m_middlePosition );
 }
 
-void ImguiFittingDebug::fit(){
+template< class VecType, class StatType, class PointType >
+void ImguiFittingDebug<VecType, StatType, PointType>::fit(){
     for( int i = 0; i < m_startPosition.size(); i++ ){
-        AlgebraicSphere3D sphere;
-        point3d point;
-        point.pos = glm::vec3( m_startPosition[ i ] );
-        point.norm = glm::vec3( 0, 0, 0 );
-        statistics3d stat = m_inputOctree->getBlendedStat( point,  [this]( glm::vec3 a, glm::vec3 b ){ return m_kernel( a, b );} );
+        AlgebraicSphere<VecType, StatType> sphere;
+        PointType point;
+        point.pos = VecType( m_startPosition[ i ] );
+        point.norm = VecType( 0, 0, 0 );
+        StatType stat = m_inputOctree->getBlendedStat( point,  [this]( VecType a, VecType b ){ return m_kernel( a, b );} );
         //display_statistics( stat );
-        sphere.fitSphere( stat, point.pos, [this]( glm::vec3 a, glm::vec3 b ){ return m_kernel( a, b ); });
+        sphere.fitSphere( stat, point.pos, [this]( VecType a, VecType b ){ return m_kernel( a, b ); });
         m_endPosition[ i ] = sphere.project( point.pos );
     }
 
     m_fitted = true;
 }
 
-float ImguiFittingDebug::randomFloat( float a, float b ){
+template< class VecType, class StatType, class PointType >
+float ImguiFittingDebug<VecType, StatType, PointType>::randomFloat( float a, float b ){
     float random = ((float) rand()) / (float) RAND_MAX;
     float diff = b - a;
     float r = random * diff;
@@ -84,7 +89,8 @@ float ImguiFittingDebug::randomFloat( float a, float b ){
 }
 
 
-void ImguiFittingDebug::samplePoints( int n ){
+template< class VecType, class StatType, class PointType >
+void ImguiFittingDebug<VecType, StatType, PointType>::samplePoints( int n ){
 
     m_fitted = false;
     m_middlePosition.clear();
@@ -95,14 +101,26 @@ void ImguiFittingDebug::samplePoints( int n ){
     m_endPosition.resize( n );
     m_middlePosition.resize( n );
 
-    for( int i = 0; i < n; i++ ){
-        auto randX = randomFloat( m_inputOctree->getMin().x, m_inputOctree->getMax().x );
-        auto randY = randomFloat( m_inputOctree->getMin().y, m_inputOctree->getMax().y );
-        auto randZ = randomFloat( m_inputOctree->getMin().z, m_inputOctree->getMax().z );
-        m_startPosition[i] = glm::vec3( randX, randY, randZ );
-        m_middlePosition[i] = glm::vec3( randX, randY, randZ );
+    int vecLength = m_inputOctree->getMin().length();
+
+    for( int i = 0; i < n; ++i ){
+        std::vector<float> randNumber;
+        for (int j = 0;j < vecLength;++j) {
+            randNumber.emplace_back(randomFloat( m_inputOctree->getMin()[j], m_inputOctree->getMax()[j] ));
+        }
+        if (vecLength == 3) {
+            m_startPosition[i] = VecType( randNumber[0], randNumber[1], randNumber[2] );
+            m_middlePosition[i] = VecType( randNumber[0], randNumber[1], randNumber[2] );
+        }
+        else {
+            m_startPosition[i] = VecType( randNumber[0], randNumber[1] );
+            m_middlePosition[i] = VecType( randNumber[0], randNumber[1] );
+        }
     }
-    m_pointCloud = polyscope::registerPointCloud( m_pointCloud_name, m_middlePosition );
+    if (vecLength == 3)
+        m_pointCloud = polyscope::registerPointCloud( m_pointCloud_name, m_middlePosition );
+    else
+        m_pointCloud = polyscope::registerPointCloud2D( m_pointCloud_name, m_middlePosition );
 }
 
 /**
@@ -111,7 +129,8 @@ void ImguiFittingDebug::samplePoints( int n ){
  * @brief This function allows the user to test the fitting process with only one point. It shows you the point, the projected point and the algebraic sphere. 
  * 
  */
-void ImguiFittingDebug::fit_One_Point() {
+template< class VecType, class StatType, class PointType >
+void ImguiFittingDebug<VecType, StatType, PointType>::fit_One_Point() {
     auto point_name = "fitted_point";
     auto name = "algebraic_sphere_for_point";
 
@@ -119,17 +138,23 @@ void ImguiFittingDebug::fit_One_Point() {
 
     if (ImGui::Button( "Randomize and fit" )) {
         m_single_fitted = false;
-        auto randX = randomFloat( m_inputOctree->getMin().x, m_inputOctree->getMax().x );
-        auto randY = randomFloat( m_inputOctree->getMin().y, m_inputOctree->getMax().y );
-        auto randZ = randomFloat( m_inputOctree->getMin().z, m_inputOctree->getMax().z );
-        m_single_point = glm::vec3 (randX, randY, randZ);
+        int vecLength = m_inputOctree->getMin().length();
 
-        point3d point;
+        std::vector<float> randNumber;
+        for (int j = 0;j < vecLength;++j) {
+            randNumber.emplace_back(randomFloat( m_inputOctree->getMin()[j], m_inputOctree->getMax()[j] ));
+        }
+        if (vecLength == 3)
+            m_single_point = VecType( randNumber[0], randNumber[1], randNumber[2] );
+        else
+            m_single_point = VecType ( randNumber[0], randNumber[1] );
+
+        PointType point;
         point.pos = m_single_point;
-        point.norm = glm::vec3( 0, 0, 0 );
-        statistics3d stat = m_inputOctree->getBlendedStat( point,  [this]( glm::vec3 a, glm::vec3 b ){ return m_kernel( a, b );} );
+        point.norm = VecType( 0 );
+        StatType stat = m_inputOctree->getBlendedStat( point,  [this]( VecType a, VecType b ){ return m_kernel( a, b );} );
         //display_statistics( stat );
-        m_sphere_single.fitSphere( stat, point.pos, [this]( glm::vec3 a, glm::vec3 b ){ return m_kernel( a, b ); });
+        m_sphere_single.fitSphere( stat, point.pos, [this]( VecType a, VecType b ){ return m_kernel( a, b ); });
         m_single_point_fitted = m_sphere_single.project( point.pos );
         m_single_fitted = true;
     }
@@ -149,11 +174,12 @@ void ImguiFittingDebug::fit_One_Point() {
 
 }
 
-void ImguiFittingDebug::slideSinglePoint(){
+template< class VecType, class StatType, class PointType >
+void ImguiFittingDebug<VecType, StatType, PointType>::slideSinglePoint(){
     float k = m_sliderStatut_single / 1000.0f;
-    std::vector< glm::vec3 > p;
-    glm::vec3 start = m_single_point;
-    glm::vec3 end = m_single_point_fitted;
+    std::vector< VecType > p;
+    VecType start = m_single_point;
+    VecType end = m_single_point_fitted;
     auto direction =  glm::normalize( end - start );
     auto length = glm::length( end - start );
     m_single_point_flying = m_single_point + k * ( end - start );

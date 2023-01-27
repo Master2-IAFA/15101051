@@ -1,39 +1,26 @@
 #pragma once
 #include "debug.hpp"
 
-polyscope::PointCloud * pointSetToPolyscope( std::string name, PointSet<point3d> *ps ){
+template<class VecType, class PointType>
+polyscope::PointCloud* pointSetToPolyscope(std::string name, PointSet<PointType> *ps ){
+    std::vector<PointType> points = ps->getPoints();
 
-    std::vector<point3d> points = ps->getPoints();
-
-    std::vector<glm::vec3> position ( points.size() );
-    std::vector<glm::vec3> normal ( points.size() );
+    std::vector<VecType> position ( points.size() );
+    std::vector<VecType> normal ( points.size() );
 
     #pragma omp parallel for
-    for(int i = 0; i < points.size(); i++){
-        position[i] = glm::vec3(points[i].pos[0], points[i].pos[1], points[i].pos[2]) ;
-        normal[i] = glm::vec3(points[i].norm[0], points[i].norm[1], points[i].norm[2]);
+    for (int i = 0; i < points.size(); ++i) {
+        position[i] = points[i].pos;
+        normal[i] = points[i].norm;
     }
-
-    polyscope::PointCloud *pointCloud = polyscope::registerPointCloud(name, position);
+    polyscope::PointCloud* pointCloud;
+    if (points[0].pos.length() == 3)
+        pointCloud = polyscope::registerPointCloud(name, position);
+    else
+        pointCloud = polyscope::registerPointCloud2D(name, position);
     pointCloud->addVectorQuantity("normal", normal);
+
     return pointCloud ;
-}
-
-void pointSet2dToPolyscope (std::string name, PointSet<point2d> *ps) {
-    std::vector<point2d> points = ps->getPoints();
-
-    std::vector<glm::vec2> position ( points.size() );
-    std::vector<glm::vec2> normal ( points.size() );
-
-    for ( int i = 0 ; i < points.size() ; ++i ) {
-        position[i] = glm::vec2( points[i].pos[0], points[i].pos[1] );
-        normal[i] = glm::vec2( points[i].norm[0], points[i].norm[1] );
-    }
-
-    polyscope::view::style = polyscope::view::NavigateStyle::Planar;
-
-    polyscope::registerPointCloud2D(name, position);
-    polyscope::getPointCloud(name)->addVectorQuantity2D(name + " normal", normal);
 }
 
 //function that takes minmax of a cube a returns 8 coordinates of cube
@@ -63,7 +50,7 @@ std::vector<glm::vec3> build_cube_from_minmax(glm::vec3 min, glm::vec3 max) {
 }
 
 void generate_gaussian () {
-    std::ofstream file ("gaussian_spike_norm.ply");
+    std::ofstream file ("gaussian.ply");
 
     file << "ply" << std::endl;
     file << "format ascii 1.0" << std::endl;
@@ -88,14 +75,14 @@ void generate_gaussian () {
     file.close();
 }
 
-
+template<class VecType>
 void slide_points(polyscope::PointCloud *pc_init, polyscope::PointCloud * pc_final, int nb_slider_max, int nb_slider)
 {
   //get points pos in pc_init and pc_final
-  std::vector<glm::vec3> final_pos_list = pc_final->points ;
-  std::vector<glm::vec3> init_pos_list = pc_init->points ;
+  std::vector<VecType> final_pos_list = pc_final->points ;
+  std::vector<VecType> init_pos_list = pc_init->points ;
 
-  std::vector<glm::vec3> newPositions ;
+  std::vector<VecType> newPositions ;
   
   if (nb_slider_max == nb_slider)
   {
@@ -107,9 +94,9 @@ void slide_points(polyscope::PointCloud *pc_init, polyscope::PointCloud * pc_fin
     for (int i = 0 ; i <  init_pos_list.size() ; ++i)
     {
       //difference between the 2 pos
-      glm::vec3 diff = final_pos_list.at(i) - init_pos_list.at(i) ;
+      VecType diff = final_pos_list.at(i) - init_pos_list.at(i) ;
     
-      glm::vec3 new_pos = (float(nb_slider)/float(nb_slider_max)) * diff ;
+      VecType new_pos = (float(nb_slider)/float(nb_slider_max)) * diff ;
       newPositions.push_back(init_pos_list.at(i) + new_pos);
     }
     pc_init->updatePointPositions(newPositions);
@@ -118,33 +105,13 @@ void slide_points(polyscope::PointCloud *pc_init, polyscope::PointCloud * pc_fin
  
 }
 
-void test_debug_readPly () {
-    PointSet<point3d> p;
-    p.readPly("../assets/gaussian_spike_norm.ply");
-    polyscope::init();
-    pointSetToPolyscope( "gaussian", &p);
-    polyscope::show();
-}
-
-void test_debug_subdivide () {
-    glm::vec3 a (0, 0, 0);
-    glm::vec3 b (100, 100, 100);
-    Octree<int, glm::vec3>* tree = new Octree<int, glm::vec3>(0, a, b);
-
-    tree->subDivide();
-
-    auto children = tree->getChildren();
-    children[0]->subDivide();
-    //TODO display tree
-}
-
 //-----------------------------VIZUALISE BB OF POINT CLOUD----------------------
 void test_debug_bounding_box(std::vector<glm::vec3> points)
 {
   //------------------test getBoundingBox (Lou)
   vector<point3d> my_points ;
   std::vector<glm::vec3> colors;
-  //glm::vec3 useless_norm = (0.0, 0.0, 0.0);
+  //VecType useless_norm = (0.0, 0.0, 0.0);
   for (int i = 0 ; i < points.size() ; ++i)
   {
     point3d p;
@@ -195,38 +162,39 @@ void test_basic_polyscope () {
 
 void drawCube(std::string name, glm::vec3 min, glm::vec3 max)
 {
-  std::vector<std::array<size_t, 2>> edges ;
+    std::vector<std::array<size_t, 2>> edges ;
 
-  std::vector<glm::vec3> nodes = build_cube_from_minmax(min, max);
+    std::vector<glm::vec3> nodes = build_cube_from_minmax(min, max);
 
-  edges.push_back({0, 1});
-  edges.push_back({2, 3});
-  edges.push_back({4, 5});
-  edges.push_back({6, 7});
+    edges.push_back({0, 1});
+    edges.push_back({2, 3});
+    edges.push_back({4, 5});
+    edges.push_back({6, 7});
 
-  edges.push_back({0, 2});
-  edges.push_back({1, 3});
-  edges.push_back({4, 6});
-  edges.push_back({5, 7});
+    edges.push_back({0, 2});
+    edges.push_back({1, 3});
+    edges.push_back({4, 6});
+    edges.push_back({5, 7});
 
-  edges.push_back({0, 4});
-  edges.push_back({1, 5});
-  edges.push_back({2, 6});
-  edges.push_back({3, 7});
+    edges.push_back({0, 4});
+    edges.push_back({1, 5});
+    edges.push_back({2, 6});
+    edges.push_back({3, 7});
 
-  //polyscope::init();
+    //polyscope::init();
 
-  // Add the curve network
-  polyscope::registerCurveNetwork(name, nodes, edges);
+    // Add the curve network
+    polyscope::registerCurveNetwork(name, nodes, edges);
 
-  // visualize!
-  //polyscope::show();
+    // visualize!
+    //polyscope::show();
 }
 
-void draw_diagonal(std::string name, glm::vec3 min, glm::vec3 max)
+template<class VecType>
+void draw_diagonal(std::string name, VecType min, VecType max)
 {
   std::vector<std::array<size_t, 2>> edges ;
-  std::vector<glm::vec3> nodes ;
+  std::vector<VecType> nodes ;
 
   nodes.push_back(min) ;
   nodes.push_back(max) ;
@@ -240,12 +208,12 @@ template<typename Data, typename VecType, typename OctreeType>
 polyscope::CurveNetwork* drawOctree(std::string name, std::vector<BaseOctree<Data, VecType, OctreeType> *> octree){
 
   std::vector<std::array<int, 2>> edges ;
-  std::vector<glm::vec3> nodes;
+  std::vector<VecType> nodes;
 
   for(int i = 0; i < octree.size(); i++){
     auto min = octree[i]->getMin();
     auto max = octree[i]->getMax();
-    auto cube = build_cube_from_minmax( glm::vec3(min[0], min[1], min[2]), glm::vec3(max[0], max[1], max[2]) );
+    auto cube = build_cube_from_minmax( min , max );
     for(int j = 0; j < 8; j++)
       nodes.push_back( cube[j] );
 
@@ -294,7 +262,7 @@ PointSet<point2d> generate2dGaussian () {
  *
  */
 template< class VecType, class StatType, class PointType >
-void _traverse_for_fake_blending (InputOctree<VecType, StatType, PointType> *current_node_octree, glm::vec3& q, std::vector<std::array<int, 2>>* edges, std::vector<glm::vec3>* nodes) {
+void _traverse_for_fake_blending (InputOctree<VecType, StatType, PointType> *current_node_octree, VecType& q, std::vector<std::array<int, 2>>* edges, std::vector<VecType>* nodes) {
   if (!current_node_octree->hasChildren())
     return;
   auto children = current_node_octree->getChildren();
@@ -344,31 +312,31 @@ template< class VecType, class StatType, class PointType >
 polyscope::PointCloud * draw_traverseOctree_onePoint(InputOctree<VecType, StatType, PointType> * oct, PointSet<point3d> *ps) {
 
   std::vector<std::array<int, 2>> edges ;
-  std::vector<glm::vec3> nodes;
+  std::vector<VecType> nodes;
 
-  glm::vec3 bb_min = oct->getMin();
-  glm::vec3 bb_max = oct->getMax();
+  VecType bb_min = oct->getMin();
+  VecType bb_max = oct->getMax();
 
-  glm::vec3 bb_mid = ( bb_min + bb_max ) / VecType( 2.0 );
+  VecType bb_mid = ( bb_min + bb_max ) / VecType( 2.0 );
   float radius_protectionSphere = (glm::distance(bb_mid, bb_max) * oct->getProtectionSphere())/2;
 
   //Creation of a random point into the bounding box.
   float rand_x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
   float rand_y = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
   float rand_z = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
-  glm::vec3 q = glm::vec3(bb_mid.x+rand_x, bb_mid.y+rand_y, bb_mid.z+rand_z);
+  VecType q = VecType(bb_mid.x+rand_x, bb_mid.y+rand_y, bb_mid.z+rand_z);
 
   // This pair contains the information of the sphere where we're gonna project the point q : the center and its radius (.first, .second).
-  AlgebraicSphere<glm::vec3, statistics3d> sphere = projection<statistics3d, point3d, glm::vec3>(oct, rational_kernel, q);
+  AlgebraicSphere<VecType, statistics3d> sphere = projection<statistics3d, point3d, VecType>(oct, rational_kernel, q);
 
   //CQFD
   //display_sphere("sphere", sphere.first, sphere.second);
 
   // Get the projected point.
-  glm::vec3 projectedPoint = sphere.project( q );
+  VecType projectedPoint = sphere.project( q );
 
   // Displaying it.
-  std::vector<glm::vec3> pc_only_one_point;
+  std::vector<VecType> pc_only_one_point;
   pc_only_one_point.push_back(q);
   pc_only_one_point.push_back(projectedPoint);
   polyscope::PointCloud *pointCloud = polyscope::registerPointCloud("just_a_simple_point", pc_only_one_point);
@@ -379,11 +347,11 @@ polyscope::PointCloud * draw_traverseOctree_onePoint(InputOctree<VecType, StatTy
   polyscope::registerCurveNetwork("Traversing", nodes, edges);
 
   // Now, we compute the projection with the entire point cloud.
-  std::vector<glm::vec3> pc_projected;
+  std::vector<VecType> pc_projected;
   for (auto p : ps->getPoints()){
-    glm::vec3 current_p = p.pos;
-    auto sphere = projection<statistics3d, point3d, glm::vec3>(oct, rational_kernel, current_p);
-    glm::vec3 current_p_projected = sphere.project( current_p );
+    VecType current_p = p.pos;
+    auto sphere = projection<statistics3d, point3d, VecType>(oct, rational_kernel, current_p);
+    VecType current_p_projected = sphere.project( current_p );
     pc_projected.push_back(current_p_projected);
   }
   polyscope::PointCloud *pointCloud_projected = polyscope::registerPointCloud("point_cloud_projected", pc_projected);
@@ -414,46 +382,46 @@ void display_sphere( std::string name, glm::vec3 center, float radius)
  */
 template< class VecType, class StatType, class PointType >
 void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, PointType> * oct, int depth, int num_child){  
-  auto octree_depth_three = oct->getAtDepth (depth);
+    auto octree_depth_three = oct->getAtDepth (depth);
 
-  auto notre_node = (depth == 0)?oct:octree_depth_three.at(num_child);
-  auto stat = notre_node->getData();
+    auto notre_node = (depth == 0)?oct:octree_depth_three.at(num_child);
+    auto stat = notre_node->getData();
 
-  float weight_wi = 1.0f;
+    float weight_wi = 1.0f;
 
-  glm::vec3 pi = weight_wi * stat.position;
-  glm::vec3 ni = weight_wi * stat.normal;
-  float area = weight_wi * stat.area;
-  float pi_ni = weight_wi * stat.pdn;
-  float norm = weight_wi * stat.norm; 
+    VecType pi = weight_wi * stat.position;
+    VecType ni = weight_wi * stat.normal;
+    float area = weight_wi * stat.area;
+    float pi_ni = weight_wi * stat.pdn;
+    float norm = weight_wi * stat.norm;
 
-  float num = pi_ni - glm::dot( pi, ni )/area;
-  float denom = norm - ( glm::dot( pi, pi ) / area );
-  float m_u4 = ( num / denom ) / 2;
+    float num = pi_ni - glm::dot( pi, ni )/area;
+    float denom = norm - ( glm::dot( pi, pi ) / area );
+    float m_u4 = ( num / denom ) / 2;
 
-  VecType num_vec = ni - VecType( 2.0 ) * VecType( m_u4 ) * pi ;
-  glm::vec3 m_u123 = num_vec / area;
+    VecType num_vec = ni - VecType( 2.0 ) * VecType( m_u4 ) * pi ;
+    VecType m_u123 = num_vec / area;
 
-  auto num_2 = glm::dot( pi, m_u123 ) + m_u4 * norm;
-  float m_u0 = - num_2 / area;
+    auto num_2 = glm::dot( pi, m_u123 ) + m_u4 * norm;
+    float m_u0 = - num_2 / area;
 
-  float b = 1.0f / m_u4;
-  glm::vec3 m_center = -0.5f * m_u123 * b;
+    float b = 1.0f / m_u4;
+    VecType m_center = -0.5f * m_u123 * b;
 
-  b = m_u0 / m_u4;
-  auto cTc = glm::dot( m_center, m_center );
-  double r = sqrt( cTc - b );
-  float m_radius = std::max( 0.0 , r );
+    b = m_u0 / m_u4;
+    auto cTc = glm::dot( m_center, m_center );
+    double r = sqrt( cTc - b );
+    float m_radius = std::max( 0.0 , r );
 
-  std::vector<glm::vec3> sphere_pos;
+    std::vector<VecType> sphere_pos;
 
-  sphere_pos.push_back( m_center );
+    sphere_pos.push_back( m_center );
 
-  drawCube("Le cube", notre_node->getMin(), notre_node->getMax());
+    drawCube("Le cube", notre_node->getMin(), notre_node->getMax());
 
-  polyscope::PointCloud *pointCloud = polyscope::registerPointCloud( name, sphere_pos );
-  pointCloud = polyscope::registerPointCloud( name, sphere_pos );
-  pointCloud->setPointRadius(m_radius, false);
+    polyscope::PointCloud *pointCloud = polyscope::registerPointCloud( name, sphere_pos );
+    pointCloud = polyscope::registerPointCloud( name, sphere_pos );
+    pointCloud->setPointRadius(m_radius, false);
 }
 
 /**
@@ -466,8 +434,8 @@ void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, Poi
  */
 template< class VecType, class StatType >
 void point_and_stats_to_sphere (std::string point_name, std::string name, VecType point, VecType end, AlgebraicSphere<VecType, StatType> sphere){
-  std::vector<glm::vec3> pos;
-  std::vector<glm::vec3> pos_sphere;
+  std::vector<VecType> pos;
+  std::vector<VecType> pos_sphere;
 
   pos.push_back(point);
   pos.push_back(end);
