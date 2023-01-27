@@ -33,7 +33,7 @@ ImguiFittingDebug *deebug;
 ImguiFileSelection<glm::vec3, statistics3d, point3d> *imguiFileSelection;
 
 std::string pathToDirectory{ "../assets/" };
-std::string path{ "../assets/gaussian_spike_norm.ply" };
+std::string path{ "../assets/gaussian.ply" };
 std::vector<string> files;
 int current_item = 0;
 int depthToShow = 0;
