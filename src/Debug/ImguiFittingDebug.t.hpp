@@ -70,7 +70,7 @@ void ImguiFittingDebug<VecType, StatType, PointType>::fit(){
         AlgebraicSphere<VecType, StatType> sphere;
         PointType point;
         point.pos = VecType( m_startPosition[ i ] );
-        point.norm = VecType( 0, 0, 0 );
+        point.norm = VecType( 0.0f );
         StatType stat = m_inputOctree->getBlendedStat( point,  [this]( VecType a, VecType b ){ return m_kernel( a, b );} );
         //display_statistics( stat );
         sphere.fitSphere( stat, point.pos, [this]( VecType a, VecType b ){ return m_kernel( a, b ); });
@@ -103,18 +103,12 @@ void ImguiFittingDebug<VecType, StatType, PointType>::samplePoints( int n ){
 
     int vecLength = m_inputOctree->getMin().length();
 
-    for( int i = 0; i < n; ++i ){
-        std::vector<float> randNumber;
+    #pragma omp parallel for
+    for( int i = 0; i < n; ++i ) {
+        m_startPosition[i] = VecType(0.0f);
         for (int j = 0;j < vecLength;++j) {
-            randNumber.emplace_back(randomFloat( m_inputOctree->getMin()[j], m_inputOctree->getMax()[j] ));
-        }
-        if (vecLength == 3) {
-            m_startPosition[i] = VecType( randNumber[0], randNumber[1], randNumber[2] );
-            m_middlePosition[i] = VecType( randNumber[0], randNumber[1], randNumber[2] );
-        }
-        else {
-            m_startPosition[i] = VecType( randNumber[0], randNumber[1] );
-            m_middlePosition[i] = VecType( randNumber[0], randNumber[1] );
+            m_startPosition[i][j] = randomFloat( m_inputOctree->getMin()[j], m_inputOctree->getMax()[j] );
+            m_middlePosition[i][j] = randomFloat( m_inputOctree->getMin()[j], m_inputOctree->getMax()[j] );
         }
     }
     if (vecLength == 3)
@@ -140,14 +134,10 @@ void ImguiFittingDebug<VecType, StatType, PointType>::fit_One_Point() {
         m_single_fitted = false;
         int vecLength = m_inputOctree->getMin().length();
 
-        std::vector<float> randNumber;
+        m_single_point = VecType( 0.0f );
         for (int j = 0;j < vecLength;++j) {
-            randNumber.emplace_back(randomFloat( m_inputOctree->getMin()[j], m_inputOctree->getMax()[j] ));
+            m_single_point[j] = randomFloat( m_inputOctree->getMin()[j], m_inputOctree->getMax()[j] );
         }
-        if (vecLength == 3)
-            m_single_point = VecType( randNumber[0], randNumber[1], randNumber[2] );
-        else
-            m_single_point = VecType ( randNumber[0], randNumber[1] );
 
         PointType point;
         point.pos = m_single_point;

@@ -24,28 +24,23 @@ polyscope::PointCloud* pointSetToPolyscope(std::string name, PointSet<PointType>
 }
 
 //function that takes minmax of a cube a returns 8 coordinates of cube
-std::vector<glm::vec3> build_cube_from_minmax(glm::vec3 min, glm::vec3 max) {
-    //float len_body_diag = (max-min).length() ;
-    //float a = len_body_diag/sqrt(3) ;
+template< class VecType >
+std::vector<VecType> build_cube_from_minmax(VecType min, VecType max) {
+    std::vector<VecType> cube ;
 
-    glm::vec3 tfl = glm::vec3(min.x, max.y, min.z ) ;
-    glm::vec3 tfr = glm::vec3(max.x, max.y, min.z) ;
-    glm::vec3 tbl = glm::vec3(min.x, max.y, max.z ) ;
-    glm::vec3 tbr = glm::vec3(max.x, max.y, max.z) ;
-    glm::vec3 bfl = glm::vec3(min.x, min.y, min.z) ;
-    glm::vec3 bfr =glm::vec3(max.x, min.y, min.z) ;
-    glm::vec3 bbl  = glm::vec3(min.x, min.y, max.z) ;
-    glm::vec3 bbr = glm::vec3(max.x, min.y, max.z) ;
+    for ( int i = 0 ; i < int(pow( 2, min.length() )) ; ++i ) {
+        VecType temp = VecType(0);
+        for ( int j = 0 ; j < min.length() ; ++j ) {
+            if ( (i / int(pow( 2, j ))) % 2 == 0 ) {
+                temp[j] = min[j];
+            }
+            else {
+                temp[j] = max[j];
+            }
+            cube.emplace_back(temp);
+        }
+    }
 
-    std::vector<glm::vec3> cube ;
-    cube.push_back(tfl);
-    cube.push_back(tfr);
-    cube.push_back(tbl);
-    cube.push_back(tbr);
-    cube.push_back(bfl);
-    cube.push_back(bfr);
-    cube.push_back(bbl);
-    cube.push_back(bbr);
     return cube ;
 }
 
@@ -160,26 +155,20 @@ void test_basic_polyscope () {
     polyscope::show();
 }
 
-void drawCube(std::string name, glm::vec3 min, glm::vec3 max)
-{
+template< class VecType >
+void drawCube(std::string name, VecType min, VecType max) {
     std::vector<std::array<size_t, 2>> edges ;
 
-    std::vector<glm::vec3> nodes = build_cube_from_minmax(min, max);
+    std::vector<VecType> nodes = build_cube_from_minmax<VecType>(min, max);
 
-    edges.push_back({0, 1});
-    edges.push_back({2, 3});
-    edges.push_back({4, 5});
-    edges.push_back({6, 7});
-
-    edges.push_back({0, 2});
-    edges.push_back({1, 3});
-    edges.push_back({4, 6});
-    edges.push_back({5, 7});
-
-    edges.push_back({0, 4});
-    edges.push_back({1, 5});
-    edges.push_back({2, 6});
-    edges.push_back({3, 7});
+    for (int i = 0;i < pow(2, min.length());++i) {
+        for (int j = i + 1;j < pow(2, min.length());++j) {
+            double temp = log(j - i) / log(2);
+            if (temp == (int)temp) {
+                edges.push_back({i, j});
+            }
+        }
+    }
 
     //polyscope::init();
 
@@ -213,7 +202,7 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<BaseOctree<Dat
   for(int i = 0; i < octree.size(); i++){
     auto min = octree[i]->getMin();
     auto max = octree[i]->getMax();
-    auto cube = build_cube_from_minmax( min , max );
+    auto cube = build_cube_from_minmax<VecType>( min , max );
     for(int j = 0; j < 8; j++)
       nodes.push_back( cube[j] );
 
@@ -417,7 +406,7 @@ void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, Poi
 
     sphere_pos.push_back( m_center );
 
-    drawCube("Le cube", notre_node->getMin(), notre_node->getMax());
+    drawCube<VecType>("Le cube", notre_node->getMin(), notre_node->getMax());
 
     polyscope::PointCloud *pointCloud = polyscope::registerPointCloud( name, sphere_pos );
     pointCloud = polyscope::registerPointCloud( name, sphere_pos );
