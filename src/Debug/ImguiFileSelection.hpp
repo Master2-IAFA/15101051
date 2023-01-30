@@ -27,7 +27,6 @@ namespace fs = std::filesystem;
 template< class VecType, class StatType, class PointType >
 class ImguiFileSelection{
     public:
-
         ImguiFileSelection( PointSet<PointType> *pointSet, std::shared_ptr< InputOctree< VecType, StatType, PointType > > inputOctree, std::string pathToDirectory ): 
             m_pointSet( pointSet ),
             m_pathToDirectory( pathToDirectory ),
@@ -37,7 +36,6 @@ class ImguiFileSelection{
         void draw();
     
     private:
-
         void loadFile();
         void init();
 

@@ -19,6 +19,7 @@ void ImguiFileSelection<VecType, StatType, PointType>::loadFile() {
     pointSetToPolyscope<VecType, PointType>("point cloud", m_pointSet);
     *m_inputOctree =  InputOctree<VecType, StatType, PointType >( m_pointSet );
     m_inputOctree->fit( 1, 0 );
+    polyscope::view::resetCameraToHomeView();
 }
 
 template< class VecType, class StatType, class PointType >

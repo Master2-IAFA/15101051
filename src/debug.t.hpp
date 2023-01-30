@@ -246,10 +246,10 @@ PointSet<point2d> generate2dGaussian () {
         for( float j = 0 ; j < 50 ; ++j ) {
             float x = (i - 25) / 25.0f;
             float y = exp( -(x * x) );
-            float dy = -2 * x * exp( -(x * x) );
+            float dy = 2 * x * exp( -(x * x) );
 
-            p.pos = glm::vec2( x, y );
-            p.norm = glm::vec2( x, dy );
+            p.pos = glm::vec2( i/50.0f, y );
+            p.norm = glm::vec2( dy, i/50.0f );
 
             ps.emplace_back(p);
         }
