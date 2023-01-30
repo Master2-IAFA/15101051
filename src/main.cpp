@@ -1,5 +1,3 @@
-#include <iostream>
-#include <string>
 #include <filesystem>
 #include <functional>
 #include <omp.h>
@@ -28,9 +26,22 @@
 
 namespace fs = std::filesystem;
 
-ImguiInputOctreeDebug<glm::vec2, statistics2d, point2d> *debug;
-ImguiFittingDebug<glm::vec2, statistics2d, point2d> *deebug;
-ImguiFileSelection<glm::vec2, statistics2d, point2d> *imguiFileSelection;
+bool render2d = false;
+bool render3d = true;
+
+ImguiInputOctreeDebug<glm::vec3, statistics3d, point3d> *octreeGui;
+ImguiFittingDebug<glm::vec3, statistics3d, point3d> *fittingGui;
+ImguiFileSelection<glm::vec3, statistics3d, point3d> *imguiFileSelection;
+
+ImguiInputOctreeDebug<glm::vec2, statistics2d, point2d> *octreeGui2d;
+ImguiFittingDebug<glm::vec2, statistics2d, point2d> *fittingGui2d;
+ImguiFileSelection<glm::vec2, statistics2d, point2d> *imguiFileSelection2d;
+
+PointSet3D *ps;
+InputOctree3D *octree;
+
+PointSet2D *ps2d;
+InputOctree2D *quadtree;
 
 std::string pathToDirectory{ "../assets/" };
 std::string path{ "../assets/gaussian.ply" };
@@ -38,8 +49,6 @@ std::vector<string> files;
 int current_item = 0;
 int depthToShow = 0;
 
-PointSet2D *ps;
-InputOctree2D *octree;
 std::array< polyscope::CurveNetwork*, MAX_DEPTH > octreeGraph;
 
 polyscope::PointCloud *pc_projected;
@@ -48,58 +57,73 @@ polyscope::PointCloud *pc;
 int projected_points_slider = 0 ;
 
 void showAtDepth( int depth );
-void loadPointCloud();
 void callback();
+void generate3DPointCloud();
+void generate2DPointCloud();
 
 int main () {
     polyscope::init();
 
-    polyscope::view::style = polyscope::view::NavigateStyle::Planar;
-    ps = new PointSet<point2d>();
-    //loadPointCloud();
-    *ps = generate2dGaussian();
-    delete octree;
+    ps = new PointSet3D();
+    ps2d = new PointSet2D();
 
-    octree = new InputOctree2D( ps );
-    octree->fit( 7, 0 );
+    generate2DPointCloud();
+    generate3DPointCloud();
 
-    polyscope::view::resetCameraToHomeView();
-    auto octreePtr = std::make_shared<InputOctree2D>( *octree );
-
-    imguiFileSelection = new ImguiFileSelection<glm::vec2, statistics2d, point2d>( ps, octreePtr, std::string("../assets/") );
-
-    debug = new ImguiInputOctreeDebug( octreePtr );
-
-    deebug = new ImguiFittingDebug( octreePtr );
-
-    pc = pointSetToPolyscope<glm::vec2, point2d>("point cloud", ps);
     polyscope::state::userCallback = callback;
     polyscope::show();
 
     delete ps;
     delete octree;
+    delete octreeGui;
+    delete fittingGui;
+    delete imguiFileSelection;
+
+    delete ps2d;
+    delete quadtree;
+    delete octreeGui2d;
+    delete fittingGui2d;
+    delete imguiFileSelection2d;
 
     return 0;
 }
 
 void callback(){
-    ImGui::PushItemWidth( 199 );
+    ImGui::PushItemWidth( 200 );
 
-    if( ImGui::CollapsingHeader("file selection") ) imguiFileSelection->draw();
+    if (ImGui::RadioButton("3D", render3d)) {
+        render3d = true;
+        render2d = false;
 
-    if( ImGui::CollapsingHeader("Octree parameters") ) debug->draw();
+        //free navigation camera
+        polyscope::view::style = polyscope::view::NavigateStyle::Free;
+        generate3DPointCloud();
+    }
+    ImGui::SameLine();
+    if (ImGui::RadioButton("2D", render2d)) {
+        render3d = false;
+        render2d = true;
 
-    if( ImGui::CollapsingHeader("Fitting") ) deebug->draw();
+        //2D planar camera
+        polyscope::view::style = polyscope::view::NavigateStyle::Planar;
+        generate2DPointCloud();
+    }
 
-    //if(ImGui::SliderInt( "profondeur", &depthToShow, 0, MAX_DEPTH - 1 )) showAtDepth( depthToShow );
-    // if(ImGui::ListBox("files", &current_item, fileGetter, &files, files.size())){ path = files[current_item]; };
-    // if(ImGui::Button("load file")) loadPointCloud();
-    // if(ImGui::SliderInt( "projected_points", &projected_points_slider, 0, 10 )) 
-    // {
-    //     slide_points(pc, ps_projected, 10, projected_points_slider) ;
-    // }
+    if( ImGui::CollapsingHeader("file selection") ) {
+        if (render3d) imguiFileSelection->draw();
+        else imguiFileSelection2d->draw();
+    }
+
+    if( ImGui::CollapsingHeader("Octree parameters") ) {
+        if (render3d) octreeGui->draw();
+        else octreeGui2d->draw();
+    }
+
+    if( ImGui::CollapsingHeader("Fitting") ) {
+        if (render3d) fittingGui->draw();
+        else fittingGui2d->draw();
+    }
 }
-
 
 void showAtDepth( int depth ){
     for( int i = 0; i < MAX_DEPTH; i++ ){
@@ -108,12 +132,41 @@ void showAtDepth( int depth ){
     octreeGraph[ depth ]->setEnabled( true );
 }
 
-void loadPointCloud(){
+void generate3DPointCloud() {
+    //create and read 3D point cloud from file path
     ps->readOpenMesh( std::string( path ) );
-    delete octree;
 
-    octree = new InputOctree2D( ps );
+    //generate octree for newly read point cloud
+    delete octree;
+    octree = new InputOctree3D( ps );
     octree->fit( 7, 0 );
 
+    //init interface component pointers
+    auto octreePtr = std::make_shared<InputOctree3D>( *octree );
+    imguiFileSelection = new ImguiFileSelection<glm::vec3, statistics3d, point3d>( ps, octreePtr, std::string("../assets/") );
+    octreeGui = new ImguiInputOctreeDebug( octreePtr );
+    fittingGui = new ImguiFittingDebug( octreePtr );
+
+    //render point cloud in polyscope
+    pc = pointSetToPolyscope<glm::vec3, point3d>("point cloud", ps);
+
+    //set camera to point cloud front
+    polyscope::view::resetCameraToHomeView();
+}
+
+void generate2DPointCloud() {
+    //generating sampeled gaussian instead of loading from file
+    *ps2d = generate2dGaussian();
+
+    delete quadtree;
+    quadtree = new InputOctree2D( ps2d );
+    quadtree->fit( 7, 0 );
+
+    auto quadtreePtr = std::make_shared<InputOctree2D>( *quadtree );
+    imguiFileSelection2d = new ImguiFileSelection<glm::vec2, statistics2d, point2d>( ps2d, quadtreePtr, std::string("../assets/") );
+    octreeGui2d = new ImguiInputOctreeDebug( quadtreePtr );
+    fittingGui2d = new ImguiFittingDebug( quadtreePtr );
+
+    pc = pointSetToPolyscope<glm::vec2, point2d>("point cloud", ps2d);
     polyscope::view::resetCameraToHomeView();
 }
