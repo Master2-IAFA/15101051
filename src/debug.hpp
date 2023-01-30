@@ -17,17 +17,15 @@
 template<class VecType, class PointType>
 polyscope::PointCloud* pointSetToPolyscope(std::string name, PointSet<PointType> *ps);
 
-/**
- * @brief given min and max of a cube, returns vector of each point of the cube
- * @param min : min point of cube
- * @param max : max point of cube
+/** create a hypercube (square/cube) from its diagonal positions
+ * @param min first diagonal coordinate
+ * @param max second diagonal coordinate
+ * @return hypercube coordinates (4/8 coordinates)
  */
-std::vector<glm::vec3> build_cube_from_minmax(glm::vec3 min, glm::vec3 max);
+template< class VecType >
+std::vector<VecType> build_cube_from_minmax(VecType min, VecType max);
 
-
-/**
- * @brief generates small gaussian point cloud
- */
+/** generate a .ply file containing a sampeled 3D gaussian*/
 void generate_gaussian ();
 
 /**
@@ -60,8 +58,8 @@ AlgebraicSphere<VecType, statistics> projection (InputOctree<VecType, statistics
  * MOREOVER : It takes all of the point cloud and try to project all of its points into the octree, and creates a new point cloud (the projected one).
  *
  */
-polyscope::PointCloud * draw_traverseOctree_onePoint (Octree<statistics3d, glm::vec3> *oct, PointSet<point3d> *ps);
-
+template< class VecType, class StatType, class PointType >
+polyscope::PointCloud * draw_traverseOctree_onePoint(InputOctree<VecType, StatType, PointType> * oct, PointSet<point3d> *ps) ;
 
 void test_basic_polyscope ();
 

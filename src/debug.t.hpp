@@ -1,7 +1,12 @@
 #pragma once
 #include "debug.hpp"
 
-/** returns the number of different bits between two integers*/
+/** returns the number of different bits between two integers
+ *
+ * the number of bits is deduced from the greatest number. For
+ * example, if 2 and 5 are compared, we consider 3 bits (as 5
+ * needs 3 bits for binary encoding)
+*/
 inline int bitDiff (unsigned int n, unsigned int m) {
     int count = 0;
 
@@ -38,7 +43,6 @@ polyscope::PointCloud* pointSetToPolyscope(std::string name, PointSet<PointType>
     return pointCloud ;
 }
 
-//function that takes minmax of a cube a returns 8 coordinates of cube
 template< class VecType >
 std::vector<VecType> build_cube_from_minmax(VecType min, VecType max) {
     std::vector<VecType> cube ;
@@ -86,33 +90,28 @@ void generate_gaussian () {
 }
 
 template<class VecType>
-void slide_points(polyscope::PointCloud *pc_init, polyscope::PointCloud * pc_final, int nb_slider_max, int nb_slider)
-{
-  //get points pos in pc_init and pc_final
-  std::vector<VecType> final_pos_list = pc_final->points ;
-  std::vector<VecType> init_pos_list = pc_init->points ;
+void slide_points (polyscope::PointCloud *pc_init, polyscope::PointCloud * pc_final, int nb_slider_max, int nb_slider) {
+    //get points pos in pc_init and pc_final
+    std::vector<VecType> final_pos_list = pc_final->points ;
+    std::vector<VecType> init_pos_list = pc_init->points ;
 
-  std::vector<VecType> newPositions ;
-  
-  if (nb_slider_max == nb_slider)
-  {
-    pc_init->updatePointPositions(final_pos_list);
-  }
-  
-  else
-  {
-    for (int i = 0 ; i <  init_pos_list.size() ; ++i)
-    {
-      //difference between the 2 pos
-      VecType diff = final_pos_list.at(i) - init_pos_list.at(i) ;
-    
-      VecType new_pos = (float(nb_slider)/float(nb_slider_max)) * diff ;
-      newPositions.push_back(init_pos_list.at(i) + new_pos);
+    std::vector<VecType> newPositions ;
+
+    if (nb_slider_max == nb_slider)  {
+        pc_init->updatePointPositions(final_pos_list);
     }
-    pc_init->updatePointPositions(newPositions);
-  } 
-  //pc_init->updatePointPositions(final_pos_list);
- 
+
+    else  {
+        for (int i = 0 ; i <  init_pos_list.size() ; ++i) {
+            //difference between the 2 pos
+            VecType diff = final_pos_list.at(i) - init_pos_list.at(i) ;
+
+            VecType new_pos = (float(nb_slider)/float(nb_slider_max)) * diff ;
+            newPositions.push_back(init_pos_list.at(i) + new_pos);
+        }
+        pc_init->updatePointPositions(newPositions);
+    }
+    //pc_init->updatePointPositions(final_pos_list);
 }
 
 //-----------------------------VIZUALISE BB OF POINT CLOUD----------------------
@@ -187,24 +186,27 @@ void drawCube(std::string name, VecType min, VecType max) {
     //polyscope::init();
 
     // Add the curve network
-    polyscope::registerCurveNetwork(name, nodes, edges);
+    (min.length() == 3)?
+    polyscope::registerCurveNetwork(name, nodes, edges):
+    polyscope::registerCurveNetwork2D(name, nodes, edges);
 
     // visualize!
     //polyscope::show();
 }
 
 template<class VecType>
-void draw_diagonal(std::string name, VecType min, VecType max)
-{
-  std::vector<std::array<size_t, 2>> edges ;
-  std::vector<VecType> nodes ;
+void draw_diagonal(std::string name, VecType min, VecType max) {
+    std::vector<std::array<size_t, 2>> edges ;
+    std::vector<VecType> nodes ;
 
-  nodes.push_back(min) ;
-  nodes.push_back(max) ;
+    nodes.push_back(min) ;
+    nodes.push_back(max) ;
 
-  edges.push_back({0, 1});
+    edges.push_back({0, 1});
 
-  polyscope::registerCurveNetwork(name, nodes, edges);
+    (min.length() == 3)?
+    polyscope::registerCurveNetwork(name, nodes, edges):
+    polyscope::registerCurveNetwork2D(name, nodes, edges);
 }
 
 template<typename Data, typename VecType, typename OctreeType>
@@ -212,22 +214,28 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<BaseOctree<Dat
     std::vector<std::array<int, 2>> edges ;
     std::vector<VecType> nodes;
 
-    for(int i = 0; i < octree.size(); i++){
+    for(int i = 0; i < octree.size(); i++) {
+        //get min/max from each octree cell
         auto min = octree[i]->getMin();
         auto max = octree[i]->getMax();
+
+        //add hypercube coordinates from min/max to the octree
         auto cube = build_cube_from_minmax<VecType>( min , max );
         for(int j = 0; j < pow(2, min.length()); j++)
             nodes.push_back( cube[j] );
+
+        //create edges for each hypercube
         for (int j = 0;j < pow(2, min.length());++j) {
             for (int k = j + 1;k < pow(2, min.length());++k) {
-                //double temp = log(k - j) / log(2);
                 if (bitDiff(k, j) == 1) {
                     edges.push_back({j + pow(2, min.length()) * i, k + pow(2, min.length()) * i});
                 }
             }
         }
     }
-    return polyscope::registerCurveNetwork(name, nodes, edges);
+    return (octree[0]->getMax().length() == 3)?
+                polyscope::registerCurveNetwork(name, nodes, edges):
+                polyscope::registerCurveNetwork2D(name, nodes, edges);
 }
 
 PointSet<point2d> generate2dGaussian () {
@@ -251,42 +259,33 @@ PointSet<point2d> generate2dGaussian () {
     return pc;
 }
 
-/**
- * @brief This function calculates the traversed node and display only used nodes of the octree.
- *
- */
+/** This function calculates the traversed node and display only used nodes of the octree.*/
 template< class VecType, class StatType, class PointType >
 void _traverse_for_fake_blending (InputOctree<VecType, StatType, PointType> *current_node_octree, VecType& q, std::vector<std::array<int, 2>>* edges, std::vector<VecType>* nodes) {
-  if (!current_node_octree->hasChildren())
-    return;
-  auto children = current_node_octree->getChildren();
+    if (!current_node_octree->hasChildren())
+        return;
+    auto children = current_node_octree->getChildren();
 
-  auto cube = build_cube_from_minmax( current_node_octree->getMin(), current_node_octree->getMax());
-  int nodes_size = nodes->size();
+    auto cube = build_cube_from_minmax( current_node_octree->getMin(), current_node_octree->getMax());
+    int vecLength(current_node_octree->getMin().length());
 
-  for(int j = 0; j < 8; j++)
-      nodes->push_back( cube[j] );
+    int nodes_size = nodes->size();
 
-    edges->push_back({nodes_size,   nodes_size+1});
-    edges->push_back({nodes_size+2, nodes_size+3});
-    edges->push_back({nodes_size+4, nodes_size+5});
-    edges->push_back({nodes_size+6, nodes_size+7});
+    for(int j = 0; j < pow (2, vecLength); j++)
+        nodes->push_back( cube[j] );
 
-    edges->push_back({nodes_size,   nodes_size+2});
-    edges->push_back({nodes_size+1, nodes_size+3});
-    edges->push_back({nodes_size+4, nodes_size+6});
-    edges->push_back({nodes_size+5, nodes_size+7});
+    for (int j = 0;j < pow(2, vecLength);++j) {
+        for (int k = j + 1;k < pow(2, vecLength);++k) {
+            if (bitDiff(k, j) == 1) {
+                edges->push_back({j + nodes_size, k + nodes_size});
+            }
+        }
+    }
 
-    edges->push_back({nodes_size,   nodes_size+4});
-    edges->push_back({nodes_size+1, nodes_size+5});
-    edges->push_back({nodes_size+2, nodes_size+6});
-    edges->push_back({nodes_size+3, nodes_size+7});
-
-  for (int i = 0; i < 8; i++){
-      if (children[i]->is_InProtectionSphere( q))
-          _traverse_for_fake_blending(children[i], q, edges, nodes);
-  }
-
+    for (int i = 0; i < pow(2, vecLength); i++){
+        if (children[i]->is_InProtectionSphere( q))
+            _traverse_for_fake_blending(children[i], q, edges, nodes);
+    }
 }
 
 template<typename statistics, typename point, typename VecType, typename PointType>
@@ -304,53 +303,59 @@ AlgebraicSphere<VecType, statistics> projection (InputOctree<VecType, statistics
 
 template< class VecType, class StatType, class PointType >
 polyscope::PointCloud * draw_traverseOctree_onePoint(InputOctree<VecType, StatType, PointType> * oct, PointSet<point3d> *ps) {
+    std::vector<std::array<int, 2>> edges ;
+    std::vector<VecType> nodes;
 
-  std::vector<std::array<int, 2>> edges ;
-  std::vector<VecType> nodes;
+    VecType bb_min = oct->getMin();
+    VecType bb_max = oct->getMax();
 
-  VecType bb_min = oct->getMin();
-  VecType bb_max = oct->getMax();
+    VecType bb_mid = ( bb_min + bb_max ) / VecType( 2.0 );
+    float radius_protectionSphere = (glm::distance(bb_mid, bb_max) * oct->getProtectionSphere())/2;
 
-  VecType bb_mid = ( bb_min + bb_max ) / VecType( 2.0 );
-  float radius_protectionSphere = (glm::distance(bb_mid, bb_max) * oct->getProtectionSphere())/2;
+    //Creation of a random point into the bounding box.
+    VecType q = VecType(0.0f);
+    for (int i = 0;i < q.length();++i) {
+        q[i] = bb_mid[i] + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
+    }
 
-  //Creation of a random point into the bounding box.
-  float rand_x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
-  float rand_y = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
-  float rand_z = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/radius_protectionSphere));
-  VecType q = VecType(bb_mid.x+rand_x, bb_mid.y+rand_y, bb_mid.z+rand_z);
+    // This pair contains the information of the sphere where we're gonna project the point q : the center and its radius (.first, .second).
+    AlgebraicSphere<VecType, StatType> sphere = projection<StatType, PointType, VecType>(oct, rational_kernel, q);
 
-  // This pair contains the information of the sphere where we're gonna project the point q : the center and its radius (.first, .second).
-  AlgebraicSphere<VecType, statistics3d> sphere = projection<statistics3d, point3d, VecType>(oct, rational_kernel, q);
+    //CQFD
+    //display_sphere("sphere", sphere.first, sphere.second);
 
-  //CQFD
-  //display_sphere("sphere", sphere.first, sphere.second);
+    // Get the projected point.
+    VecType projectedPoint = sphere.project( q );
 
-  // Get the projected point.
-  VecType projectedPoint = sphere.project( q );
+    // Displaying it.
+    std::vector<VecType> pc_only_one_point;
+    pc_only_one_point.push_back(q);
+    pc_only_one_point.push_back(projectedPoint);
+    polyscope::PointCloud *pointCloud = (q.length() == 3)?
+                polyscope::registerPointCloud("just_a_simple_point", pc_only_one_point):
+                polyscope::registerPointCloud2D("just_a_simple_point", pc_only_one_point);
 
-  // Displaying it.
-  std::vector<VecType> pc_only_one_point;
-  pc_only_one_point.push_back(q);
-  pc_only_one_point.push_back(projectedPoint);
-  polyscope::PointCloud *pointCloud = polyscope::registerPointCloud("just_a_simple_point", pc_only_one_point);
-  pointCloud->setPointRadius(0.02f);
+    pointCloud->setPointRadius(0.02f);
 
-  // Display only nodes that we traverse.
-  _traverse_for_fake_blending(oct ,q ,&edges, &nodes);
-  polyscope::registerCurveNetwork("Traversing", nodes, edges);
+    // Display only nodes that we traverse.
+    _traverse_for_fake_blending(oct ,q ,&edges, &nodes);
+    (q.length() == 3)?
+    polyscope::registerCurveNetwork("Traversing", nodes, edges):
+    polyscope::registerCurveNetwork2D("Traversing", nodes, edges);
 
-  // Now, we compute the projection with the entire point cloud.
-  std::vector<VecType> pc_projected;
-  for (auto p : ps->getPoints()){
+    // Now, we compute the projection with the entire point cloud.
+    std::vector<VecType> pc_projected;
+    for (auto p : ps->getPoints()){
     VecType current_p = p.pos;
-    auto sphere = projection<statistics3d, point3d, VecType>(oct, rational_kernel, current_p);
+    auto sphere = projection<StatType, PointType, VecType>(oct, rational_kernel, current_p);
     VecType current_p_projected = sphere.project( current_p );
     pc_projected.push_back(current_p_projected);
-  }
-  polyscope::PointCloud *pointCloud_projected = polyscope::registerPointCloud("point_cloud_projected", pc_projected);
-  pointCloud_projected->setEnabled(false);
-  return pointCloud_projected;
+    }
+    polyscope::PointCloud *pointCloud_projected = (q.length() == 3)?
+                polyscope::registerPointCloud("point_cloud_projected", pc_projected):
+                polyscope::registerPointCloud2D("point_cloud_projected", pc_projected);
+    pointCloud_projected->setEnabled(false);
+    return pointCloud_projected;
 }
 
 template< class VecType >
@@ -414,8 +419,9 @@ void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, Poi
 
     drawCube<VecType>("Le cube", notre_node->getMin(), notre_node->getMax());
 
-    polyscope::PointCloud *pointCloud = polyscope::registerPointCloud( name, sphere_pos );
-    pointCloud = polyscope::registerPointCloud( name, sphere_pos );
+    polyscope::PointCloud *pointCloud = (m_center.length() == 3)?
+                polyscope::registerPointCloud( name, sphere_pos ):
+                polyscope::registerPointCloud2D( name, sphere_pos );
     pointCloud->setPointRadius(m_radius, false);
 }
 
