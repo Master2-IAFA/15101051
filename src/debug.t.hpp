@@ -1,6 +1,21 @@
 #pragma once
 #include "debug.hpp"
 
+/** returns the number of different bits between two integers*/
+inline int bitDiff (unsigned int n, unsigned int m) {
+    int count = 0;
+
+    do {
+        if (n % 2 != m % 2) {
+            ++count;
+        }
+        n /= 2;
+        m /= 2;
+    } while (n != 0 || m != 0);
+
+    return count;
+}
+
 template<class VecType, class PointType>
 polyscope::PointCloud* pointSetToPolyscope(std::string name, PointSet<PointType> *ps ){
     std::vector<PointType> points = ps->getPoints();
@@ -37,8 +52,8 @@ std::vector<VecType> build_cube_from_minmax(VecType min, VecType max) {
             else {
                 temp[j] = max[j];
             }
-            cube.emplace_back(temp);
         }
+        cube.emplace_back(temp);
     }
 
     return cube ;
@@ -163,8 +178,7 @@ void drawCube(std::string name, VecType min, VecType max) {
 
     for (int i = 0;i < pow(2, min.length());++i) {
         for (int j = i + 1;j < pow(2, min.length());++j) {
-            double temp = log(j - i) / log(2);
-            if (temp == (int)temp) {
+            if (bitDiff(i, j) == 1) {
                 edges.push_back({i, j});
             }
         }
@@ -195,33 +209,25 @@ void draw_diagonal(std::string name, VecType min, VecType max)
 
 template<typename Data, typename VecType, typename OctreeType>
 polyscope::CurveNetwork* drawOctree(std::string name, std::vector<BaseOctree<Data, VecType, OctreeType> *> octree){
+    std::vector<std::array<int, 2>> edges ;
+    std::vector<VecType> nodes;
 
-  std::vector<std::array<int, 2>> edges ;
-  std::vector<VecType> nodes;
-
-  for(int i = 0; i < octree.size(); i++){
-    auto min = octree[i]->getMin();
-    auto max = octree[i]->getMax();
-    auto cube = build_cube_from_minmax<VecType>( min , max );
-    for(int j = 0; j < 8; j++)
-      nodes.push_back( cube[j] );
-
-    edges.push_back({0 + 8 * i, 1 + 8 * i});
-    edges.push_back({2 + 8 * i, 3 + 8 * i});
-    edges.push_back({4 + 8 * i, 5 + 8 * i});
-    edges.push_back({6 + 8 * i, 7 + 8 * i});
-
-    edges.push_back({0 + 8 * i, 2 + 8 * i});
-    edges.push_back({1 + 8 * i, 3 + 8 * i});
-    edges.push_back({4 + 8 * i, 6 + 8 * i});
-    edges.push_back({5 + 8 * i, 7 + 8 * i});
-
-    edges.push_back({0 + 8 * i, 4 + 8 * i});
-    edges.push_back({1 + 8 * i, 5 + 8 * i});
-    edges.push_back({2 + 8 * i, 6 + 8 * i});
-    edges.push_back({3 + 8 * i, 7 + 8 * i});
-  }
-  return polyscope::registerCurveNetwork(name, nodes, edges);
+    for(int i = 0; i < octree.size(); i++){
+        auto min = octree[i]->getMin();
+        auto max = octree[i]->getMax();
+        auto cube = build_cube_from_minmax<VecType>( min , max );
+        for(int j = 0; j < pow(2, min.length()); j++)
+            nodes.push_back( cube[j] );
+        for (int j = 0;j < pow(2, min.length());++j) {
+            for (int k = j + 1;k < pow(2, min.length());++k) {
+                //double temp = log(k - j) / log(2);
+                if (bitDiff(k, j) == 1) {
+                    edges.push_back({j + pow(2, min.length()) * i, k + pow(2, min.length()) * i});
+                }
+            }
+        }
+    }
+    return polyscope::registerCurveNetwork(name, nodes, edges);
 }
 
 PointSet<point2d> generate2dGaussian () {
@@ -242,7 +248,6 @@ PointSet<point2d> generate2dGaussian () {
     }
 
     auto pc = PointSet<point2d>(ps);
-    std::cout << "4" << std::endl;
     return pc;
 }
 
@@ -348,15 +353,16 @@ polyscope::PointCloud * draw_traverseOctree_onePoint(InputOctree<VecType, StatTy
   return pointCloud_projected;
 }
 
-void display_sphere( std::string name, glm::vec3 center, float radius)
-{
-  std::vector<glm::vec3> sphere_pos;
+template< class VecType >
+void display_sphere( std::string name, VecType center, float radius) {
+    std::vector<VecType> sphere_pos;
 
-  sphere_pos.push_back( center );
+    sphere_pos.push_back( center );
 
-  polyscope::PointCloud *pointCloud = polyscope::registerPointCloud( name, sphere_pos );
-  pointCloud->setPointRadius(radius, false);
-
+    polyscope::PointCloud *pointCloud = (center.length() == 3)?
+              polyscope::registerPointCloud( name, sphere_pos ):
+              polyscope::registerPointCloud2D( name, sphere_pos );
+    pointCloud->setPointRadius(radius, false);
 }
 
 
@@ -423,15 +429,20 @@ void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, Poi
  */
 template< class VecType, class StatType >
 void point_and_stats_to_sphere (std::string point_name, std::string name, VecType point, VecType end, AlgebraicSphere<VecType, StatType> sphere){
-  std::vector<VecType> pos;
-  std::vector<VecType> pos_sphere;
+    std::vector<VecType> pos;
+    std::vector<VecType> pos_sphere;
 
-  pos.push_back(point);
-  pos.push_back(end);
-  pos_sphere.push_back(sphere.getCenter());
+    pos.push_back(point);
+    pos.push_back(end);
+    pos_sphere.push_back(sphere.getCenter());
 
-  polyscope::PointCloud *pc_point = polyscope::registerPointCloud(point_name , pos);
-  pc_point->setPointRadius(0.02);
-  polyscope::PointCloud *pc_sphere = polyscope::registerPointCloud(name , pos_sphere);
-  pc_sphere->setPointRadius(sphere.getRadius(), false);
+    polyscope::PointCloud *pc_point = (point.length() == 3)?
+                polyscope::registerPointCloud( point_name, pos ):
+                polyscope::registerPointCloud2D( point_name, pos );
+
+    pc_point->setPointRadius(0.02);
+    polyscope::PointCloud *pc_sphere = (point.length() == 3)?
+                polyscope::registerPointCloud( name, pos_sphere ):
+                polyscope::registerPointCloud2D( name, pos_sphere );
+    pc_sphere->setPointRadius(sphere.getRadius(), false);
 }
