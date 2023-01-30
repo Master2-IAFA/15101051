@@ -22,21 +22,15 @@
 #include "../Define.hpp"
 #include "../debug.t.hpp"
 
+template< class VecType, class StatType, class PointType >
 class ImguiFittingDebug{
     public:
-
-        ImguiFittingDebug( std::shared_ptr< InputOctree3D > inputOctree ): m_inputOctree( inputOctree ){}
-
+        ImguiFittingDebug( std::shared_ptr< InputOctree<VecType, StatType, PointType> > inputOctree ): m_inputOctree( inputOctree ){}
         void draw();
         
-
-
     private: 
-
         void drawFit();
-
         void slidePoints();
-
         float randomFloat(float a, float b);
         void samplePoints( int n );
         void fit();
@@ -45,14 +39,14 @@ class ImguiFittingDebug{
         float m_sliderStatut{ 0.0 };
         bool m_fitted{ false };
 
-        std::vector<glm::vec3> m_startPosition;
-        std::vector<glm::vec3> m_endPosition;
-        std::vector<glm::vec3> m_middlePosition;
+        std::vector<VecType> m_startPosition;
+        std::vector<VecType> m_endPosition;
+        std::vector<VecType> m_middlePosition;
 
         std::string m_pointCloud_name = "Random Points";
         polyscope::PointCloud *m_pointCloud;
 
-        std::shared_ptr< InputOctree3D > m_inputOctree;
+        std::shared_ptr< InputOctree<VecType, StatType, PointType> > m_inputOctree;
 
         //gaussian mixture
         bool m_gaussianKernel{ true };
@@ -61,7 +55,7 @@ class ImguiFittingDebug{
         float m_gaussianA{ 1.0 };
         float m_rationnalK{ 0.5 }; 
         float m_rationnalEpsilon{ 1.5 };
-        std::function< float( glm::vec3, glm::vec3 ) > m_kernel { [this]( glm::vec3 a, glm::vec3 b ){ return gaussian_mixture( a, b, m_gaussianK, m_gaussianA ); } };
+        std::function< float( VecType, VecType ) > m_kernel { [this]( VecType a, VecType b ){ return gaussian_mixture<VecType>( a, b, m_gaussianK, m_gaussianA ); } };
         
         ////////////////////////////////////////
 
@@ -69,12 +63,12 @@ class ImguiFittingDebug{
         void fit_One_Point();
         void slideSinglePoint();
         bool m_single_fitted{ false };
-        glm::vec3 m_single_point { glm::vec3(0.0f) };
-        glm::vec3 m_single_point_fitted;
+        VecType m_single_point { VecType(0.0f) };
+        VecType m_single_point_fitted;
 
         //Point moving between m_single_point(start pos) and m_single_point_fitted(ending pos);
-        glm::vec3 m_single_point_flying;
-        AlgebraicSphere3D m_sphere_single;
+        VecType m_single_point_flying;
+        AlgebraicSphere<VecType, StatType> m_sphere_single;
 
         float m_sliderStatut_single{ 0.0 };
 

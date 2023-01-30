@@ -1,6 +1,7 @@
 #include "ImguiInputOctreeDebug.hpp"
 
-void ImguiInputOctreeDebug::draw(){
+template< class VecType, class StatType, class PointType >
+void ImguiInputOctreeDebug<VecType, StatType, PointType>::draw(){
 
     if( ImGui::SliderInt( "Depth", &m_octreeDepth, 0, m_octreeMaxDepth - 1 ) ) drawOctreeAtDepth();
 
@@ -14,14 +15,16 @@ void ImguiInputOctreeDebug::draw(){
     drawSphereAtDepth();
 }
 
-void ImguiInputOctreeDebug::drawOctreeAtDepth(){
+template< class VecType, class StatType, class PointType >
+void ImguiInputOctreeDebug<VecType, StatType, PointType>::drawOctreeAtDepth(){
     for( int i = 0; i < m_octreeMaxDepth; i++ ){
         m_vectorOctree[ i ]->setEnabled( false );
     }
     m_vectorOctree[ m_octreeDepth ]->setEnabled( true );
 }
 
-void ImguiInputOctreeDebug::initVectorOctree(){
+template< class VecType, class StatType, class PointType >
+void ImguiInputOctreeDebug<VecType, StatType, PointType>::initVectorOctree(){
     for( auto o : m_vectorOctree ){
         o->remove();
     }
@@ -29,13 +32,14 @@ void ImguiInputOctreeDebug::initVectorOctree(){
     int maxDepth = m_inputOctree->getMaxDepth();
     for( int i = 0; i < maxDepth; i++ ){
         auto d = m_inputOctree->getAtDepth( i );
-        auto di = std::vector< BaseOctree3D< InputOctree3D >* >( d.begin(), d.end() );
+        auto di = std::vector< BaseOctree< StatType, VecType, InputOctree<VecType, StatType, PointType> >* >( d.begin(), d.end() );
         m_vectorOctree.push_back( drawOctree( std::to_string( i ), di ) );
         m_vectorOctree[ i ]->setEnabled( false );
     }
 }
 
-void ImguiInputOctreeDebug::fitOctree(){
+template< class VecType, class StatType, class PointType >
+void ImguiInputOctreeDebug<VecType, StatType, PointType>::fitOctree(){
     auto start = std::chrono::high_resolution_clock::now();
     m_inputOctree->fit( m_maxDepth, m_maxPoints );
     initVectorOctree();
@@ -49,7 +53,8 @@ void ImguiInputOctreeDebug::fitOctree(){
     * 
     * @brief Allow the user to see the algebraic sphere from stats of the given node (giving a depth and an idx of the node)
     */
-void ImguiInputOctreeDebug::drawSphereAtDepth(){
+template< class VecType, class StatType, class PointType >
+void ImguiInputOctreeDebug<VecType, StatType, PointType>::drawSphereAtDepth(){
 
     auto child = m_inputOctree->getAtDepth(m_depth_forSphere);
     int num_child = 0;
