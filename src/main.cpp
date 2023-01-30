@@ -28,9 +28,9 @@
 
 namespace fs = std::filesystem;
 
-ImguiInputOctreeDebug<glm::vec3, statistics3d, point3d> *debug;
-ImguiFittingDebug<glm::vec3, statistics3d, point3d> *deebug;
-ImguiFileSelection<glm::vec3, statistics3d, point3d> *imguiFileSelection;
+ImguiInputOctreeDebug<glm::vec2, statistics2d, point2d> *debug;
+ImguiFittingDebug<glm::vec2, statistics2d, point2d> *deebug;
+ImguiFileSelection<glm::vec2, statistics2d, point2d> *imguiFileSelection;
 
 std::string pathToDirectory{ "../assets/" };
 std::string path{ "../assets/gaussian.ply" };
@@ -38,8 +38,8 @@ std::vector<string> files;
 int current_item = 0;
 int depthToShow = 0;
 
-PointSet3D *ps;
-InputOctree3D *octree;
+PointSet2D *ps;
+InputOctree2D *octree;
 std::array< polyscope::CurveNetwork*, MAX_DEPTH > octreeGraph;
 
 polyscope::PointCloud *pc_projected;
@@ -54,18 +54,25 @@ void callback();
 int main () {
     polyscope::init();
 
-    ps = new PointSet<point3d>();
-    loadPointCloud();
+    polyscope::view::style = polyscope::view::NavigateStyle::Planar;
+    ps = new PointSet<point2d>();
+    //loadPointCloud();
+    *ps = generate2dGaussian();
+    delete octree;
 
-    auto octreePtr = std::make_shared<InputOctree3D>( *octree );
+    octree = new InputOctree2D( ps );
+    octree->fit( 7, 0 );
 
-    imguiFileSelection = new ImguiFileSelection<glm::vec3, statistics3d, point3d>( ps, octreePtr, std::string("../assets/") );
+    polyscope::view::resetCameraToHomeView();
+    auto octreePtr = std::make_shared<InputOctree2D>( *octree );
+
+    imguiFileSelection = new ImguiFileSelection<glm::vec2, statistics2d, point2d>( ps, octreePtr, std::string("../assets/") );
 
     debug = new ImguiInputOctreeDebug( octreePtr );
 
     deebug = new ImguiFittingDebug( octreePtr );
 
-    pc = pointSetToPolyscope<glm::vec3, point3d>("point cloud", ps);
+    pc = pointSetToPolyscope<glm::vec2, point2d>("point cloud", ps);
     polyscope::state::userCallback = callback;
     polyscope::show();
 
@@ -76,7 +83,7 @@ int main () {
 }
 
 void callback(){
-    ImGui::PushItemWidth( 300 );
+    ImGui::PushItemWidth( 199 );
 
     if( ImGui::CollapsingHeader("file selection") ) imguiFileSelection->draw();
 
@@ -105,7 +112,7 @@ void loadPointCloud(){
     ps->readOpenMesh( std::string( path ) );
     delete octree;
 
-    octree = new InputOctree3D( ps );
+    octree = new InputOctree2D( ps );
     octree->fit( 7, 0 );
 
     polyscope::view::resetCameraToHomeView();
