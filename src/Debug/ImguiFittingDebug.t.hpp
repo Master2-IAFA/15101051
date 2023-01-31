@@ -53,15 +53,22 @@ void ImguiFittingDebug<VecType, StatType, PointType>::slidePoints(){
     float k = m_sliderStatut / 1000.0f;
     std::cout << k << std::endl;
     std::vector< VecType > p;
+    p.resize( m_startPosition.size() );
     #pragma omp parallel for num_threads( 12 )
     for( int i = 0; i < m_middlePosition.size(); i++ ){
         VecType start = m_startPosition[ i ];
         VecType end = m_endPosition[ i ];
         auto direction =  glm::normalize( end - start );
         auto length = glm::length( end - start );
-        m_middlePosition[ i ] = m_startPosition[ i ] + k * ( end - start );
+        p[ i ] = m_startPosition[ i ] + k * ( end - start );
+
     }
-    m_pointCloud->updatePointPositions( m_middlePosition );
+
+    if( p[ 0 ].length() == 3 )
+        m_pointCloud->updatePointPositions( p );
+    else
+        m_pointCloud->updatePointPositions2D( p );
+
 }
 
 template< class VecType, class StatType, class PointType >

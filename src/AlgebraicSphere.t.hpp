@@ -57,8 +57,9 @@ VecType AlgebraicSphere< VecType, StatType >::project( VecType point ){
     // return projectedPoint;
 
     if( m_u4 < 0.0000000001 ){
-        auto dir = glm::normalize( m_u123 );
-        return point - VecType( glm::dot( point - ( m_center ), dir ) ) * dir;
+        auto n = -m_u123;
+        float lambda = m_u0 - glm::dot( point, n ) / glm::length2( n );
+        return point + VecType( lambda ) * n;
     }
 
     auto p = point - m_center;
