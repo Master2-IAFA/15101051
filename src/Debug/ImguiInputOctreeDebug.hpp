@@ -17,9 +17,10 @@
 #include "../Define.hpp"
 #include "../debug.t.hpp"
 
+template< class VecType, class StatType, class PointType >
 class ImguiInputOctreeDebug{
     public:
-        ImguiInputOctreeDebug( std::shared_ptr< InputOctree3D > inputOctree ): m_inputOctree( inputOctree ), m_octreeMaxDepth( inputOctree->getMaxDepth() ){
+        ImguiInputOctreeDebug( std::shared_ptr< InputOctree<VecType, StatType, PointType> > inputOctree ): m_inputOctree( inputOctree ), m_octreeMaxDepth( inputOctree->getMaxDepth() ){
             initVectorOctree();
         }
 
@@ -45,5 +46,5 @@ class ImguiInputOctreeDebug{
         float m_fitTime{ 0.0 };
         int m_depth_forSphere{ 0 };
         int m_idx_forSphere{ 0 };
-        std::shared_ptr< InputOctree3D > m_inputOctree;
+        std::shared_ptr< InputOctree<VecType, StatType, PointType> > m_inputOctree;
 };
