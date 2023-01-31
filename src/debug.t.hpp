@@ -30,16 +30,19 @@ polyscope::PointCloud* pointSetToPolyscope(std::string name, PointSet<PointType>
 
     #pragma omp parallel for
     for (int i = 0; i < points.size(); ++i) {
-        position[i] = points[i].pos;
-        normal[i] = points[i].norm;
+        position[i] = VecType( points[i].pos );
+        normal[i] = VecType( points[i].norm );
     }
-    polyscope::PointCloud* pointCloud;
-    if (points[0].pos.length() == 3)
-        pointCloud = polyscope::registerPointCloud(name, position);
-    else
-        pointCloud = polyscope::registerPointCloud2D(name, position);
-    pointCloud->addVectorQuantity("normal", normal);
 
+    polyscope::PointCloud* pointCloud;
+    if (points[0].pos.length() == 3){
+        pointCloud = polyscope::registerPointCloud(name, position);
+        pointCloud->addVectorQuantity("normal", normal);
+    }else{
+        pointCloud = polyscope::registerPointCloud2D(name, position);
+        pointCloud->addVectorQuantity2D("normal", normal);
+    }
+    
     return pointCloud ;
 }
 
@@ -233,6 +236,7 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<BaseOctree<Dat
             }
         }
     }
+
     return (octree[0]->getMax().length() == 3)?
                 polyscope::registerCurveNetwork(name, nodes, edges):
                 polyscope::registerCurveNetwork2D(name, nodes, edges);

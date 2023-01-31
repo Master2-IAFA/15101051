@@ -91,6 +91,8 @@ std::vector<OctreeType*> BaseOctree<Data, VecType, OctreeType>::getAtDepth(int d
     std::vector<OctreeType*> stack;
     stack.push_back( dynamic_cast<OctreeType*>(this) );
 
+    if( depth == 0 ) return stack;
+
     if( this->hasChildren() ){
         for( int i = 0; i < int(pow(2, m_dim)); i++ ){
             stack.push_back( m_children[i]  );

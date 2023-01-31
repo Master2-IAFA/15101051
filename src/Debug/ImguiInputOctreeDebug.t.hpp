@@ -29,7 +29,10 @@ void ImguiInputOctreeDebug<VecType, StatType, PointType>::initVectorOctree(){
         o->remove();
     }
     m_vectorOctree.clear();
+
+    
     int maxDepth = m_inputOctree->getMaxDepth();
+
     for( int i = 0; i < maxDepth; i++ ){
         auto d = m_inputOctree->getAtDepth( i );
         auto di = std::vector< BaseOctree< StatType, VecType, InputOctree<VecType, StatType, PointType> >* >( d.begin(), d.end() );
