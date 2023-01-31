@@ -66,19 +66,24 @@ void ImguiFittingDebug<VecType, StatType, PointType>::slidePoints(){
 
 template< class VecType, class StatType, class PointType >
 void ImguiFittingDebug<VecType, StatType, PointType>::fit(){
+
+    std::vector<VecType > normals;
+
     for( int i = 0; i < m_startPosition.size(); i++ ){
         AlgebraicSphere<VecType, StatType> sphere;
         PointType point;
         point.pos = VecType( m_startPosition[ i ] );
         point.norm = VecType( 0.0f );
         StatType stat = m_inputOctree->getBlendedStat( point,  [this]( VecType a, VecType b ){ return m_kernel( a, b );} );
-        //display_statistics( stat );
         sphere.fitSphere( stat, point.pos, [this]( VecType a, VecType b ){ return m_kernel( a, b ); });
         m_endPosition[ i ] = sphere.project( point.pos );
-        //normals.push_back( sphere.projectNormal( point.pos ) );
+        normals.push_back( sphere.projectNormal( point.pos ) );
     }
 
-    //polyscope::getPointCloud( m_pointCloud_name )->addVectorQuantity("normal", normals);
+    if( normals[ 0 ].length() == 3 )
+        polyscope::getPointCloud( m_pointCloud_name )->addVectorQuantity("normal", normals );
+    else
+        polyscope::getPointCloud( m_pointCloud_name )->addVectorQuantity2D( "normal", normals );
 
     m_fitted = true;
 }

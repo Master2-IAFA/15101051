@@ -56,7 +56,7 @@ VecType AlgebraicSphere< VecType, StatType >::project( VecType point ){
     // projectedPoint = projectedPoint * VecType( m_radius ) + m_center;
     // return projectedPoint;
 
-    if( m_u4 < 0.00000001 ){
+    if( m_u4 < 0.0000000001 ){
         auto dir = glm::normalize( m_u123 );
         return point - VecType( glm::dot( point - ( m_center ), dir ) ) * dir;
     }
@@ -71,6 +71,21 @@ VecType AlgebraicSphere< VecType, StatType >::project( VecType point ){
     auto q = VecType( m_radius / l ) * p;
 
     return m_center + q;
+}
+
+template< class VecType, class StatType >
+VecType AlgebraicSphere< VecType, StatType >::projectNormal( VecType point ){
+
+    VecType normal;
+
+    if( m_u4 < 0.0000000001 ){
+        normal = glm::normalize( m_u123 );
+        return normal;
+    }
+
+    normal = VecType( 2 * m_u4 ) * project( point ) + m_u123;
+    return normal;
+
 }
 
 template< class VecType, class StatType >
