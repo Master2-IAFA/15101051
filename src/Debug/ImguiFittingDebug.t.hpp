@@ -51,7 +51,7 @@ void ImguiFittingDebug<VecType, StatType, PointType>::drawFit(){
 template< class VecType, class StatType, class PointType >
 void ImguiFittingDebug<VecType, StatType, PointType>::slidePoints(){
     float k = m_sliderStatut / 1000.0f;
-    std::cout << k << std::endl;
+
     std::vector< VecType > p;
     p.resize( m_startPosition.size() );
     #pragma omp parallel for num_threads( 12 )
