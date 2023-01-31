@@ -75,10 +75,10 @@ void ImguiFittingDebug<VecType, StatType, PointType>::fit(){
         //display_statistics( stat );
         sphere.fitSphere( stat, point.pos, [this]( VecType a, VecType b ){ return m_kernel( a, b ); });
         m_endPosition[ i ] = sphere.project( point.pos );
-        normals.push_back( sphere.projectNormal( point.pos ) );
+        //normals.push_back( sphere.projectNormal( point.pos ) );
     }
 
-    polyscope::getPointCloud( m_pointCloud_name )->addVectorQuantity("normal", normals);
+    //polyscope::getPointCloud( m_pointCloud_name )->addVectorQuantity("normal", normals);
 
     m_fitted = true;
 }
