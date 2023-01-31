@@ -73,17 +73,11 @@ int main () {
     polyscope::state::userCallback = callback;
     polyscope::show();
 
-    delete ps;
     delete octree;
-    delete octreeGui;
-    delete fittingGui;
-    delete imguiFileSelection;
+    delete ps;
 
-    delete ps2d;
     delete quadtree;
-    delete octreeGui2d;
-    delete fittingGui2d;
-    delete imguiFileSelection2d;
+    delete ps2d;
 
     return 0;
 }
