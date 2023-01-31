@@ -22,6 +22,7 @@ class AlgebraicSphere{
          * @return VecType: the projected point
          */
         VecType project( VecType point );
+        VecType projectNormal( VecType point );
 
         inline VecType& getCenter() { return m_center; }
         inline double getRadius() { return m_radius; }

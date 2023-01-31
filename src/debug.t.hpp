@@ -174,12 +174,12 @@ void test_basic_polyscope () {
 
 template< class VecType >
 void drawCube(std::string name, VecType min, VecType max) {
-    std::vector<std::array<size_t, 2>> edges ;
+    std::vector<std::array<int, 2>> edges ;
 
     std::vector<VecType> nodes = build_cube_from_minmax<VecType>(min, max);
 
-    for (int i = 0;i < pow(2, min.length());++i) {
-        for (int j = i + 1;j < pow(2, min.length());++j) {
+    for (int i = 0;i < int(pow(2, min.length()));++i) {
+        for (int j = i + 1;j < int(pow(2, min.length()));++j) {
             if (bitDiff(i, j) == 1) {
                 edges.push_back({i, j});
             }
@@ -224,14 +224,14 @@ polyscope::CurveNetwork* drawOctree(std::string name, std::vector<BaseOctree<Dat
 
         //add hypercube coordinates from min/max to the octree
         auto cube = build_cube_from_minmax<VecType>( min , max );
-        for(int j = 0; j < pow(2, min.length()); j++)
+        for(int j = 0; j < int(pow(2, min.length())); j++)
             nodes.push_back( cube[j] );
 
         //create edges for each hypercube
-        for (int j = 0;j < pow(2, min.length());++j) {
-            for (int k = j + 1;k < pow(2, min.length());++k) {
+        for (int j = 0;j < int(pow(2, min.length()));++j) {
+            for (int k = j + 1;k < int(pow(2, min.length()));++k) {
                 if (bitDiff(k, j) == 1) {
-                    edges.push_back({j + pow(2, min.length()) * i, k + pow(2, min.length()) * i});
+                    edges.push_back({j + int(pow(2, min.length())) * i, k + int(pow(2, min.length())) * i});
                 }
             }
         }
