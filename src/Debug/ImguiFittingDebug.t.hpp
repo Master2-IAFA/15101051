@@ -58,10 +58,13 @@ void ImguiFittingDebug::slidePoints(){
         auto length = glm::length( end - start );
         m_middlePosition[ i ] = m_startPosition[ i ] + k * ( end - start );
     }
-    m_pointCloud = polyscope::registerPointCloud( m_pointCloud_name, m_middlePosition );
+    m_pointCloud->updatePointPositions( m_middlePosition );
 }
 
 void ImguiFittingDebug::fit(){
+
+    std::vector< glm::vec3 > normals;
+
     for( int i = 0; i < m_startPosition.size(); i++ ){
         AlgebraicSphere3D sphere;
         point3d point;
@@ -71,7 +74,10 @@ void ImguiFittingDebug::fit(){
         //display_statistics( stat );
         sphere.fitSphere( stat, point.pos, [this]( glm::vec3 a, glm::vec3 b ){ return m_kernel( a, b ); });
         m_endPosition[ i ] = sphere.project( point.pos );
+        normals.push_back( sphere.projectNormal( point.pos ) );
     }
+
+    polyscope::getPointCloud( m_pointCloud_name )->addVectorQuantity("normal", normals);
 
     m_fitted = true;
 }
