@@ -10,24 +10,17 @@ class AlgebraicSphere{
         AlgebraicSphere();
         ~AlgebraicSphere();
 
-        /**
-         * @brief Compute the Algebraic sphere parameters based on the given statistics
-        */
+        /** Compute the Algebraic sphere parameters based on the given statistics */
         void fitSphere( StatType stat, VecType point, std::function< float(VecType&, VecType&) >kernel );
 
-        /**
-         * @brief project a point on the sphere
+        /** project a point on the sphere
          * 
          * @param point: the point to project
          * @return VecType: the projected point
          */
         VecType project( VecType point );
-        VecType projectNormal( VecType point );
 
-        /**
-         * @brief compute the normal of the point
-         * 
-        */
+        /** compute the normal of the point */
        VecType projectNormal( VecType point );
 
         inline VecType& getCenter() { return m_center; }
