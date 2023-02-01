@@ -13,7 +13,7 @@ class AlgebraicSphere{
         /**
          * @brief Compute the Algebraic sphere parameters based on the given statistics
         */
-        void fitSphere( StatType stat, VecType point, std::function< float(VecType&, VecType&) >kernel );
+        void fitSphere( StatType stat, VecType point, std::function< float(VecType&, VecType&) >kernel);
 
         /**
          * @brief project a point on the sphere

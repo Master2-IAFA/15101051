@@ -21,7 +21,7 @@ void InputOctree< VecType, StatType, PointType>::fit( int max_depth, int max_poi
 
 
 template< class VecType, class StatType, class PointType >
-StatType InputOctree< VecType, StatType, PointType>::getBlendedStat( PointType point, std::function< float( VecType&, VecType& ) > kernel ){
+StatType InputOctree< VecType, StatType, PointType>::getBlendedStat( PointType point, std::function< float( VecType&, VecType& ) > kernel){
     StatType father_stats = this->getData();
     double sigma_n = father_stats.area;
     double sigma_nu;

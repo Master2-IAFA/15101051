@@ -57,11 +57,12 @@ class ImguiFittingDebug{
         //gaussian mixture
         bool m_gaussianKernel{ true };
         bool m_rationnalKernel{ false };
-        float m_gaussianK{ 1.0 }; 
+        int m_gaussianK{ 1 }; 
         float m_gaussianA{ 1.0 };
+        float m_gaussianSigma{ 5.0 };
         float m_rationnalK{ 0.5 }; 
         float m_rationnalEpsilon{ 1.5 };
-        std::function< float( glm::vec3, glm::vec3 ) > m_kernel { [this]( glm::vec3 a, glm::vec3 b ){ return gaussian_mixture( a, b, m_gaussianK, m_gaussianA ); } };
+        std::function< float( glm::vec3, glm::vec3 ) > m_kernel { [this]( glm::vec3 a, glm::vec3 b ){ return gaussian_mixture( a, b, m_gaussianK, m_gaussianA, m_gaussianSigma ); } };
         
         ////////////////////////////////////////
 

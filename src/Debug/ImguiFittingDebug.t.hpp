@@ -11,7 +11,7 @@ void ImguiFittingDebug::draw(){
     if( ImGui::RadioButton( "Gaussian_Kernel", m_gaussianKernel ) ){
         m_gaussianKernel = true;
         m_rationnalKernel = false;
-        m_kernel = [this]( glm::vec3 a, glm::vec3 b ){ return gaussian_mixture( a, b, m_gaussianK, m_gaussianA ); };
+        m_kernel = [this]( glm::vec3 a, glm::vec3 b ){ return gaussian_mixture( a, b, m_gaussianK, m_gaussianA, m_gaussianSigma); };
     }
     ImGui::SameLine();
     if( ImGui::RadioButton( "Rationnal Kernel", !m_gaussianKernel ) ){
@@ -21,13 +21,12 @@ void ImguiFittingDebug::draw(){
     }
 
     if( m_gaussianKernel ){
-        ImGui::SliderFloat( "K", &m_gaussianK, 0.0, 5.0 );
-        ImGui::SameLine();
-        ImGui::SliderFloat( "A", &m_gaussianA, 0.0, 5.0 );
+        ImGui::SliderInt( "k", &m_gaussianK, 1, 100 );
+        ImGui::SliderFloat( "a", &m_gaussianA, 1.0001, 100.0 );
+        ImGui::SliderFloat ("sigma", &m_gaussianSigma, 0.0, 100.0);
     }else{
-        ImGui::SliderFloat( "K", &m_rationnalK, 0.0, 5.0 );
-        ImGui::SameLine();
-        ImGui::SliderFloat( "Epsilon", &m_rationnalEpsilon, 0.0, 5.0 );
+        ImGui::SliderFloat( "k", &m_rationnalK, 0.0, 100.0 );
+        ImGui::SliderFloat( "Epsilon", &m_rationnalEpsilon, 0.0, 100.0 );
     }
 
     if( ImGui::Button( "fit" ) ) fit();
@@ -71,6 +70,7 @@ void ImguiFittingDebug::fit(){
         //display_statistics( stat );
         sphere.fitSphere( stat, point.pos, [this]( glm::vec3 a, glm::vec3 b ){ return m_kernel( a, b ); });
         m_endPosition[ i ] = sphere.project( point.pos );
+        std::cout << "Position of that point ? : " << m_endPosition[ i ][0] << " , " << m_endPosition[ i ][1] << " , " << m_endPosition[ i ][2] << std::endl;
     }
 
     m_fitted = true;
