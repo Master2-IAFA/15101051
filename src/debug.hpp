@@ -105,6 +105,16 @@ void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, Poi
 /**
  * @author Léo 
  * 
+ * @brief It displays the traversed nodes of the octree.
+ * @param name name of the displayed curve.
+ * @param q point that we want to use.
+ */
+template< class VecType >
+void draw_traversed_octree (std::shared_ptr< InputOctree3D > * oct, VecType q, std::string name);
+
+/**
+ * @author Léo 
+ * 
  * @brief This function takes a point and its fitted algebraic sphere to display the point, the sphere and its projection. 
  * @param name name of the displayed sphere.
  * @param point point that we want to fit a sphere.
@@ -112,3 +122,4 @@ void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, Poi
  */
 template< class VecType, class StatType >
 void point_and_stats_to_sphere ( std::string point_name, std::string name, VecType point, VecType end, AlgebraicSphere<VecType, StatType> sphere);
+

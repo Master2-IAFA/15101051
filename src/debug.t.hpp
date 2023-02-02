@@ -321,7 +321,7 @@ void _traverse_for_fake_blending (InputOctree<VecType, StatType, PointType> *cur
     edges->push_back({nodes_size+3, nodes_size+7});
 
   for (int i = 0; i < 8; i++){
-      if (children[i]->is_InProtectionSphere( q))
+      if (children[i]->isInProtectionSphere( q))
           _traverse_for_fake_blending(children[i], q, edges, nodes);
   }
 
@@ -459,7 +459,23 @@ void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, Poi
 /**
  * @author Léo 
  * 
+ * @brief It displays the traversed nodes of the octree.
+ * @param name name of the displayed curve.
+ * @param q point that we want to use.
+ */
+template< class VecType >
+void draw_traversed_octree (std::shared_ptr< InputOctree3D > oct, VecType q, std::string name){
+  std::vector<std::array<int, 2>> edges ;
+  std::vector<glm::vec3> nodes;
+  _traverse_for_fake_blending(oct.get() ,q ,&edges, &nodes);
+  polyscope::registerCurveNetwork(name, nodes, edges);
+}
+
+/**
+ * @author Léo 
+ * 
  * @brief This function takes a point and its fitted algebraic sphere to display the point, the sphere and its projection. 
+ *        Moreover, it displays the current traversed nodes.
  * @param name name of the displayed sphere.
  * @param point point that we want to fit a sphere.
  * @param sphere fitted sphere.
@@ -478,3 +494,4 @@ void point_and_stats_to_sphere (std::string point_name, std::string name, VecTyp
   polyscope::PointCloud *pc_sphere = polyscope::registerPointCloud(name , pos_sphere);
   pc_sphere->setPointRadius(sphere.getRadius(), false);
 }
+

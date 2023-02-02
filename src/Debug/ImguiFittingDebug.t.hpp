@@ -114,6 +114,7 @@ void ImguiFittingDebug::samplePoints( int n ){
 void ImguiFittingDebug::fit_One_Point() {
     auto point_name = "fitted_point";
     auto name = "algebraic_sphere_for_point";
+    auto name_traversed_octree = "traversed_octree";
 
     ImGui::Text("Tests with only one point.");
 
@@ -137,12 +138,14 @@ void ImguiFittingDebug::fit_One_Point() {
     if (m_single_fitted){
         
         point_and_stats_to_sphere (point_name, name, m_single_point_flying, m_single_point_fitted, m_sphere_single);
+        draw_traversed_octree (m_inputOctree, m_single_point, name_traversed_octree);
 
         if( ImGui::SliderFloat( "slide ", &m_sliderStatut_single, 0.0f, 1000.0f) ) slideSinglePoint();
 
         if (ImGui::Button("Delete single fit")) {
             polyscope::removePointCloud(point_name);
             polyscope::removePointCloud(name);
+            polyscope::removeCurveNetwork(name_traversed_octree);
             m_single_fitted = false;
         }
     }

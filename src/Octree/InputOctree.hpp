@@ -21,7 +21,7 @@ class InputOctree: public BaseOctree< StatType, VecType, InputOctree< VecType, S
              BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >( 0, pointSet->getBoundingBox().first.pos, pointSet->getBoundingBox().second.pos ),
              m_pointSet( pointSet )
              {
-                m_protectionSphere = std::make_shared< float >( 1.3 );
+                m_protectionSphere = std::make_shared< float >( 1.4 );
              }
 
         /**

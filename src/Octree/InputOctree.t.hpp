@@ -13,6 +13,7 @@ void InputOctree< VecType, StatType, PointType>::fit( int max_depth, int max_poi
         statisticsAdd( &root_stats, p );
     }
     this->setData( root_stats );
+
     this->subDivide();
 
     recursiveFit( max_depth, &points );
@@ -112,6 +113,7 @@ void InputOctree< VecType, StatType, PointType>::recursiveFit( int depth, std::v
             children[i]->setData( stat );
             children[i]->recursiveFit( depth - 1, &children_points );
         }
+
     }
 }
 /**
