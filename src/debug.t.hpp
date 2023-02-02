@@ -466,7 +466,7 @@ void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, Poi
 template< class VecType >
 void draw_traversed_octree (std::shared_ptr< InputOctree3D > oct, VecType q, std::string name){
   std::vector<std::array<int, 2>> edges ;
-  std::vector<glm::vec3> nodes;
+  std::vector<VecType> nodes;
   _traverse_for_fake_blending(oct.get() ,q ,&edges, &nodes);
   polyscope::registerCurveNetwork(name, nodes, edges);
 }

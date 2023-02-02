@@ -116,7 +116,9 @@ void ImguiFittingDebug::fit_One_Point() {
     auto name = "algebraic_sphere_for_point";
     auto name_traversed_octree = "traversed_octree";
 
-    ImGui::Text("Tests with only one point.");
+    if ( m_inputOctree->getMin().length() != 3 ) return;
+
+    ImGui::Text("Tests with only one 3D point.");
 
     if (ImGui::Button( "Randomize and fit" )) {
         m_single_fitted = false;
