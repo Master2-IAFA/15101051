@@ -123,3 +123,13 @@ void draw_traversed_octree (std::shared_ptr< InputOctree3D > * oct, VecType q, s
 template< class VecType, class StatType >
 void point_and_stats_to_sphere ( std::string point_name, std::string name, VecType point, VecType end, AlgebraicSphere<VecType, StatType> sphere);
 
+/**
+ * @author Lou
+ */
+template< class VecType >
+void draw_protection_sphere(VecType min, VecType max, float lambda );
+
+/**
+ * @author Léo
+ */
+void unDraw_protection_sphere();

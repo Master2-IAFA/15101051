@@ -495,3 +495,26 @@ void point_and_stats_to_sphere (std::string point_name, std::string name, VecTyp
   pc_sphere->setPointRadius(sphere.getRadius(), false);
 }
 
+/**
+ * @author Lou
+ */
+template< class VecType >
+void draw_protection_sphere(VecType min, VecType max, float lambda )
+{
+  drawCube("Protection_cube", min, max);
+  float radius_protectionSphere = (glm::distance(min, max) / 2.0) * lambda;
+  VecType center_protectionSphere = min + ((max - min)/2.0f) ;
+  display_sphere( "Protection_sphere", center_protectionSphere, radius_protectionSphere) ;
+  polyscope::getPointCloud( "Protection_sphere" )->setTransparency(0.5f);
+
+
+}
+
+/**
+ * @author Léo
+ */
+void unDraw_protection_sphere()
+{
+  polyscope::removeCurveNetwork( "Protection_cube" );
+  polyscope::removePointCloud( "Protection_sphere" );
+}

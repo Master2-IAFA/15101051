@@ -8,6 +8,21 @@ void ImguiFittingDebug::draw(){
     ImGui::SameLine();
     if( ImGui::Button( "sample random points" ) ) samplePoints( m_numberOfPoints );
 
+    ImGui::SliderFloat( "lambda", &m_protectionSphere, 1.0, 2.0 );
+
+    ImGui::SameLine();
+
+    if (!m_protection_sphere_visible){
+        if (ImGui::Button ("Show root's sphere")){
+            draw_protection_sphere(m_inputOctree->getMin(), m_inputOctree->getMax(), m_protectionSphere );
+        }
+    }
+    else {
+        if (ImGui::Button ("Hide root's sphere")){
+            unDraw_protection_sphere();
+        }
+    }
+
     if( ImGui::RadioButton( "Gaussian_Kernel", m_gaussianKernel ) ){
         m_gaussianKernel = true;
         m_rationnalKernel = false;
@@ -66,11 +81,12 @@ void ImguiFittingDebug::fit(){
         point3d point;
         point.pos = glm::vec3( m_startPosition[ i ] );
         point.norm = glm::vec3( 0, 0, 0 );
+        m_inputOctree->setProtectionSphere(m_protectionSphere) ;
         statistics3d stat = m_inputOctree->getBlendedStat( point,  [this]( glm::vec3 a, glm::vec3 b ){ return m_kernel( a, b );} );
-        //display_statistics( stat );
+
         sphere.fitSphere( stat, point.pos, [this]( glm::vec3 a, glm::vec3 b ){ return m_kernel( a, b ); });
         m_endPosition[ i ] = sphere.project( point.pos );
-        std::cout << "Position of that point ? : " << m_endPosition[ i ][0] << " , " << m_endPosition[ i ][1] << " , " << m_endPosition[ i ][2] << std::endl;
+        // std::cout << "Position of that point ? : " << m_endPosition[ i ][0] << " , " << m_endPosition[ i ][1] << " , " << m_endPosition[ i ][2] << std::endl;
     }
 
     m_fitted = true;

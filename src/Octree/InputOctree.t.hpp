@@ -16,6 +16,8 @@ void InputOctree< VecType, StatType, PointType>::fit( int max_depth, int max_poi
 
     this->subDivide();
 
+    // Draw the protection sphere of the root node
+
     recursiveFit( max_depth, &points );
 
 }
