@@ -11,9 +11,15 @@ template< class VecType, class StatType >
 void AlgebraicSphere< VecType, StatType >::fitSphere( StatType stat, VecType point, std::function< float( VecType&, VecType& ) > kernel ){
 
     VecType meanPosition = VecType( stat.position );
-    meanPosition /= VecType( static_cast<float>(stat.area) );
+
+    if (stat.area != 0){
+        meanPosition /= VecType( static_cast<float>(stat.area) );
+    }
 
     float weight_wi = kernel( point, meanPosition );
+    std::cout << "weight : " << weight_wi << weight_wi << std::endl;
+
+
 
     VecType pi = weight_wi * stat.position;
     VecType ni = weight_wi * stat.normal;
@@ -31,19 +37,6 @@ void AlgebraicSphere< VecType, StatType >::fitSphere( StatType stat, VecType poi
     num = glm::dot( pi, m_u123 ) + m_u4 * norm;
     m_u0 = - num / area;
 
-    // float num = stat.pdn - ( glm::dot( stat.position, stat.normal ) / stat.area );
-    // float den = stat.norm - ( glm::dot( stat.position, stat.position ) / stat.area );
-
-    // m_u4 = 0.5 * ( num / den );
-
-    // m_u123 = ( stat.normal - VecType( 2.0 * m_u4 ) * stat.position ) / VecType( stat.area );
-
-    // m_u0 = - ( glm::dot( m_u123, stat.position ) + m_u4 * stat.norm ) / stat.area;
-
-    // std::cout << "u4: " << m_u4 << std::endl;
-    // std::cout << "u123: " << m_u123.x << " " << m_u123.y << " " << m_u123.z << std::endl;
-    // std::cout << "u0: " << m_u0 << std::endl;
-
     this->computeCenter();
     this->computeRadius();
 }
@@ -56,20 +49,27 @@ VecType AlgebraicSphere< VecType, StatType >::project( VecType point ){
     // projectedPoint = projectedPoint * VecType( m_radius ) + m_center;
     // return projectedPoint;
 
-    if( m_u4 < 0.0000000001 ){
-        auto n = -m_u123;
-        float lambda = m_u0 - glm::dot( point, n ) / glm::length2( n );
-        return point + VecType( lambda ) * n;
+    if( m_u4 < 0.00000001 && m_u4 > -0.00000001){
+        auto dir = glm::normalize( m_u123 );
+        std::cout << "Si nan, c'est peut être de la que ça vient PLAN (projection dans algrebraic sphere)" << std::endl;
+        return point - VecType( glm::dot( point - ( m_center ), dir ) ) * dir;
     }
 
     auto p = point - m_center;
     auto l = glm::length( p );
     
     // Case where l is equal to 0, if we don't test it, we'll have a division by 0.
-    if (l == 0)
+    if (l == 0){
+        std::cout << "Si nan, c'est peut être de la que ça vient l = 0 (projection dans algrebraic sphere)" << std::endl;
         return m_center;
+    }
     
     auto q = VecType( m_radius / l ) * p;
+
+    std::cout << "=================" << std::endl;
+    std::cout << "m_radius : " << m_radius << std::endl;
+    std::cout << "l = " << l << std::endl;
+    std::cout << "q = " << q[0] << ", " << q[1] << ", " << q[2] << std::endl;
 
     return m_center + q;
 }

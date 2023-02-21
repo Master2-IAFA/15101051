@@ -38,10 +38,10 @@ class InputOctree: public BaseOctree< StatType, VecType, InputOctree< VecType, S
          * @brief Compute the blended stat over the octree given a point
          * 
          * @param point 
-         * @param kernel 
+         * @param kernel
          * @return StatType 
          */
-        StatType getBlendedStat( PointType point, std::function< float( VecType&, VecType& ) > kernel );
+        StatType getBlendedStat( PointType point, std::function< float( VecType&, VecType& ) > kernel);
 
         bool isInProtectionSphere( VecType point );
 

@@ -263,7 +263,6 @@ PointSet<point2d> generate2dGaussian () {
     return pc;
 }
 
-/** This function calculates the traversed node and display only used nodes of the octree.*/
 template< class VecType, class StatType, class PointType >
 void _traverse_for_fake_blending (InputOctree<VecType, StatType, PointType> *current_node_octree, VecType& q, std::vector<std::array<int, 2>>* edges, std::vector<VecType>* nodes) {
     if (!current_node_octree->hasChildren())
@@ -287,7 +286,7 @@ void _traverse_for_fake_blending (InputOctree<VecType, StatType, PointType> *cur
     }
 
     for (int i = 0; i < pow(2, vecLength); i++){
-        if (children[i]->is_InProtectionSphere( q))
+        if (children[i]->isInProtectionSphere( q))
             _traverse_for_fake_blending(children[i], q, edges, nodes);
     }
 }
@@ -374,16 +373,6 @@ void display_sphere( std::string name, VecType center, float radius) {
     pointCloud->setPointRadius(radius, false);
 }
 
-
-/**
- * @author Léo 
- * 
- * @brief This function take an octree, a depth and an idx for the node at the given depth and show its algebraic sphere. 
- * @param name name of the displayed sphere.
- * @param oct 
- * @param depth Depth of the node we want
- * @param num_child Num of the node for the given depth
- */
 template< class VecType, class StatType, class PointType >
 void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, PointType> * oct, int depth, int num_child){  
     auto octree_depth_three = oct->getAtDepth (depth);
@@ -429,14 +418,17 @@ void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, Poi
     pointCloud->setPointRadius(m_radius, false);
 }
 
-/**
- * @author Léo 
- * 
- * @brief This function takes a point and its fitted algebraic sphere to display the point, the sphere and its projection. 
- * @param name name of the displayed sphere.
- * @param point point that we want to fit a sphere.
- * @param sphere fitted sphere.
- */
+template< class VecType, class StatType, class PointType >
+void draw_traversed_octree (std::shared_ptr< InputOctree<VecType, StatType, PointType > > oct, VecType q, std::string name){
+    std::vector<std::array<int, 2>> edges ;
+    std::vector<VecType> nodes;
+    _traverse_for_fake_blending(oct.get() ,q ,&edges, &nodes);
+    if (q.length() == 3) 
+        polyscope::registerCurveNetwork(name, nodes, edges);
+    else
+        polyscope::registerCurveNetwork2D(name, nodes, edges);
+}
+
 template< class VecType, class StatType >
 void point_and_stats_to_sphere (std::string point_name, std::string name, VecType point, VecType end, AlgebraicSphere<VecType, StatType> sphere){
     std::vector<VecType> pos;
@@ -455,4 +447,20 @@ void point_and_stats_to_sphere (std::string point_name, std::string name, VecTyp
                 polyscope::registerPointCloud( name, pos_sphere ):
                 polyscope::registerPointCloud2D( name, pos_sphere );
     pc_sphere->setPointRadius(sphere.getRadius(), false);
+}
+
+template< class VecType >
+void draw_protection_sphere(VecType min, VecType max, float lambda )
+{
+  drawCube("Protection_cube", min, max);
+  float radius_protectionSphere = (glm::distance(min, max) / 2.0) * lambda;
+  VecType center_protectionSphere = min + ((max - min)/2.0f) ;
+  display_sphere( "Protection_sphere", center_protectionSphere, radius_protectionSphere) ;
+  polyscope::getPointCloud( "Protection_sphere" )->setTransparency(0.5f);
+}
+
+void unDraw_protection_sphere()
+{
+  polyscope::removeCurveNetwork( "Protection_cube" );
+  polyscope::removePointCloud( "Protection_sphere" );
 }

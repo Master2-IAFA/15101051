@@ -13,7 +13,10 @@ void InputOctree< VecType, StatType, PointType>::fit( int max_depth, int max_poi
         statisticsAdd( &root_stats, p );
     }
     this->setData( root_stats );
+
     this->subDivide();
+
+    // Draw the protection sphere of the root node
 
     recursiveFit( max_depth, &points );
 
@@ -21,7 +24,7 @@ void InputOctree< VecType, StatType, PointType>::fit( int max_depth, int max_poi
 
 
 template< class VecType, class StatType, class PointType >
-StatType InputOctree< VecType, StatType, PointType>::getBlendedStat( PointType point, std::function< float( VecType&, VecType& ) > kernel ){
+StatType InputOctree< VecType, StatType, PointType>::getBlendedStat( PointType point, std::function< float( VecType&, VecType& ) > kernel){
     StatType father_stats = this->getData();
     double sigma_n = father_stats.area;
     double sigma_nu;
@@ -109,9 +112,18 @@ void InputOctree< VecType, StatType, PointType>::recursiveFit( int depth, std::v
         }
 
         if (hasPoint) {
+        //     // TEST EN METTANT UNE DENSITE AUX NOEUDS;
+        //     InputOctree< VecType, StatType, PointType> * father_test = this;
+        //     while (father_test->getDepth() != 0) 
+        //         father_test = father_test->m_father;
+
+        //     stat.area /= father_test->getData().area;
+        //     // FIN TEST EN METTANT UNE DENSITE AUX NOEUDS;
+
             children[i]->setData( stat );
             children[i]->recursiveFit( depth - 1, &children_points );
         }
+
     }
 }
 /**

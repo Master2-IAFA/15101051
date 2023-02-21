@@ -9,10 +9,25 @@ void ImguiFittingDebug<VecType, StatType, PointType>::draw(){
     ImGui::SameLine();
     if( ImGui::Button( "sample random points" ) ) samplePoints( m_numberOfPoints );
 
+    ImGui::SliderFloat( "lambda", &m_protectionSphere, 1.0, 2.0 );
+
+    ImGui::SameLine();
+
+    if (!m_protection_sphere_visible){
+        if (ImGui::Button ("Show root's sphere")){
+            draw_protection_sphere(m_inputOctree->getMin(), m_inputOctree->getMax(), m_protectionSphere );
+        }
+    }
+    else {
+        if (ImGui::Button ("Hide root's sphere")){
+            unDraw_protection_sphere();
+        }
+    }
+
     if( ImGui::RadioButton( "Gaussian_Kernel", m_gaussianKernel ) ){
         m_gaussianKernel = true;
         m_rationnalKernel = false;
-        m_kernel = [this]( VecType a, VecType b ){ return gaussian_mixture( a, b, m_gaussianK, m_gaussianA ); };
+        m_kernel = [this]( VecType a, VecType b ){ return gaussian_mixture( a, b, m_gaussianK, m_gaussianA, m_gaussianSigma ); };
     }
     ImGui::SameLine();
     if( ImGui::RadioButton( "Rationnal Kernel", !m_gaussianKernel ) ){
@@ -22,13 +37,12 @@ void ImguiFittingDebug<VecType, StatType, PointType>::draw(){
     }
 
     if( m_gaussianKernel ){
-        ImGui::SliderFloat( "K", &m_gaussianK, 0.0, 5.0 );
-        ImGui::SameLine();
-        ImGui::SliderFloat( "A", &m_gaussianA, 0.0, 5.0 );
+        ImGui::SliderInt( "k", &m_gaussianK, 1, 100 );
+        ImGui::SliderFloat( "a", &m_gaussianA, 1.0001, 100.0 );
+        ImGui::SliderFloat ("sigma", &m_gaussianSigma, 0.0, 100.0);
     }else{
-        ImGui::SliderFloat( "K", &m_rationnalK, 0.0, 5.0 );
-        ImGui::SameLine();
-        ImGui::SliderFloat( "Epsilon", &m_rationnalEpsilon, 0.0, 5.0 );
+        ImGui::SliderFloat( "k", &m_rationnalK, 0.0, 100.0 );
+        ImGui::SliderFloat( "Epsilon", &m_rationnalEpsilon, 0.0, 100.0 );
     }
 
     if( ImGui::Button( "fit" ) ) fit();
@@ -81,6 +95,7 @@ void ImguiFittingDebug<VecType, StatType, PointType>::fit(){
         PointType point;
         point.pos = VecType( m_startPosition[ i ] );
         point.norm = VecType( 0.0f );
+        m_inputOctree->setProtectionSphere(m_protectionSphere) ;
         StatType stat = m_inputOctree->getBlendedStat( point,  [this]( VecType a, VecType b ){ return m_kernel( a, b );} );
         sphere.fitSphere( stat, point.pos, [this]( VecType a, VecType b ){ return m_kernel( a, b ); });
         m_endPosition[ i ] = sphere.project( point.pos );
@@ -142,6 +157,7 @@ template< class VecType, class StatType, class PointType >
 void ImguiFittingDebug<VecType, StatType, PointType>::fit_One_Point() {
     auto point_name = "fitted_point";
     auto name = "algebraic_sphere_for_point";
+    auto name_traversed_octree = "traversed_octree";
 
     ImGui::Text("Tests with only one point.");
 
@@ -167,12 +183,14 @@ void ImguiFittingDebug<VecType, StatType, PointType>::fit_One_Point() {
     if (m_single_fitted){
         
         point_and_stats_to_sphere (point_name, name, m_single_point_flying, m_single_point_fitted, m_sphere_single);
+        draw_traversed_octree (m_inputOctree, m_single_point, name_traversed_octree);
 
         if( ImGui::SliderFloat( "slide ", &m_sliderStatut_single, 0.0f, 1000.0f) ) slideSinglePoint();
 
         if (ImGui::Button("Delete single fit")) {
             polyscope::removePointCloud(point_name);
             polyscope::removePointCloud(name);
+            polyscope::removeCurveNetwork(name_traversed_octree);
             m_single_fitted = false;
         }
     }
