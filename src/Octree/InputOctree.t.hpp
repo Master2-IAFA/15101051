@@ -110,6 +110,14 @@ void InputOctree< VecType, StatType, PointType>::recursiveFit( int depth, std::v
         }
 
         if (hasPoint) {
+        //     // TEST EN METTANT UNE DENSITE AUX NOEUDS;
+        //     InputOctree< VecType, StatType, PointType> * father_test = this;
+        //     while (father_test->getDepth() != 0) 
+        //         father_test = father_test->m_father;
+
+        //     stat.area /= father_test->getData().area;
+        //     // FIN TEST EN METTANT UNE DENSITE AUX NOEUDS;
+
             children[i]->setData( stat );
             children[i]->recursiveFit( depth - 1, &children_points );
         }
