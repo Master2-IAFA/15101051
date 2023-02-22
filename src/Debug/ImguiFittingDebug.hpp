@@ -36,6 +36,7 @@ class ImguiFittingDebug{
         void fit();
 
         int m_numberOfPoints = 10;
+        bool m_protection_sphere_visible = false;
         float m_sliderStatut{ 0.0 };
         bool m_fitted{ false };
 
@@ -51,11 +52,13 @@ class ImguiFittingDebug{
         //gaussian mixture
         bool m_gaussianKernel{ true };
         bool m_rationnalKernel{ false };
-        float m_gaussianK{ 1.0 }; 
+        int m_gaussianK{ 1 }; 
         float m_gaussianA{ 1.0 };
+        float m_gaussianSigma{ 5.0 };
         float m_rationnalK{ 0.5 }; 
         float m_rationnalEpsilon{ 1.5 };
-        std::function< float( VecType, VecType ) > m_kernel { [this]( VecType a, VecType b ){ return gaussian_mixture<VecType>( a, b, m_gaussianK, m_gaussianA ); } };
+        float m_protectionSphere{ 1.3 };
+        std::function< float( VecType, VecType ) > m_kernel { [this]( VecType a, VecType b ){ return gaussian_mixture<VecType>( a, b, m_gaussianK, m_gaussianA, m_gaussianSigma ); } };
         
         ////////////////////////////////////////
 

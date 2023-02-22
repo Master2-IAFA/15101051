@@ -41,7 +41,7 @@ public:
     * @return true
     * @return false
     */
-    bool hasChildren () { return !(m_children[0] == nullptr); }
+    bool hasChildren () { return !(m_children.size() == 0); }
 
     /***** setters ******/
     void setFather ( OctreeType* _father ) { m_father = _father; }
