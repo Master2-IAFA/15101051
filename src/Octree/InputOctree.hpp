@@ -67,6 +67,7 @@ class InputOctree: public BaseOctree< StatType, VecType, InputOctree< VecType, S
 
         std::shared_ptr< float > m_protectionSphere;
         PointSet<PointType> *m_pointSet;
+        std::vector<PointType> m_points;
     
     
     //let the BaseOctree class call the private constructor

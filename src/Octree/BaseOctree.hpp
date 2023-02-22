@@ -46,7 +46,6 @@ public:
     /***** setters ******/
     void setFather ( OctreeType* _father ) { m_father = _father; }
     inline void setData ( Data& _data ) { m_data = _data; }
-    inline void setPoints (std::vector<VecType> _points) { m_points = _points; }
 
     /***** getters ******/
     inline const Data& getData () const { return m_data; }
@@ -55,7 +54,6 @@ public:
     inline const int getDepth () const { return m_depth; }
     inline std::vector<OctreeType*>& getChildren () { return m_children; }
     inline const int getDim () const { return m_dim; }
-    inline std::vector<VecType> getPoints () { return m_points; }
     inline int getMaxDepth();
 
 private:
@@ -72,7 +70,6 @@ protected:
     VecType m_min ;
     VecType m_max ;
     Data m_data;
-    std::vector<VecType> m_points;
 
     /**
      * ambiant space dimension (2 or 3)

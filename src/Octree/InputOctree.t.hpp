@@ -33,8 +33,8 @@ StatType InputOctree< VecType, StatType, PointType>::getBlendedStat( PointType p
     if ( ! this->hasChildren() ){
         float weight = 0.0f;
         // Accumulate statistics over points in the leaf.
-        for (VecType p : this->getPoints()){
-            weight += kernel(point.pos, p);
+        for (VecType p : m_points){
+            weight += kernel(point.pos, p.pos);
         }
         return weighted_statistics(father_stats, weight);
     }
@@ -84,10 +84,8 @@ template< class VecType, class StatType, class PointType >
 void InputOctree< VecType, StatType, PointType>::recursiveFit( int depth, std::vector<PointType> *points ){
 
     if ( depth == 0 ){
-        std::vector<VecType> vecTypePoints;
         for (auto p : *points)
-            vecTypePoints.emplace_back(p.pos);
-        this->setPoints(vecTypePoints) ;
+            m_points.push_back( p );
         this->getChildren()[0] = nullptr;
         return;
     }

@@ -138,7 +138,7 @@ void ImguiFittingDebug<VecType, StatType, PointType>::samplePoints( int n ){
         m_startPosition[i] = VecType(0.0f);
         for (int j = 0;j < vecLength;++j) {
             m_startPosition[i][j] = randomFloat( m_inputOctree->getMin()[j], m_inputOctree->getMax()[j] );
-            m_middlePosition[i][j] = randomFloat( m_inputOctree->getMin()[j], m_inputOctree->getMax()[j] );
+            m_middlePosition[i][j] = m_startPosition[i][j];
         }
     }
     if (vecLength == 3)
