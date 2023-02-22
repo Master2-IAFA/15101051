@@ -22,46 +22,70 @@ void InputOctree< VecType, StatType, PointType>::fit( int max_depth, int max_poi
 
 }
 
+void func( float x, float &val ){
+
+    if( x >= 1.0 ){
+        val = 1.0f;
+    }else{
+        val = std::exp( - std::exp( 1.0f / ( x - 1.0f ) ) / ( x * x ) );
+    }
+
+}
+
 
 template< class VecType, class StatType, class PointType >
 StatType InputOctree< VecType, StatType, PointType>::getBlendedStat( PointType point, std::function< float( VecType&, VecType& ) > kernel){
-    StatType father_stats = this->getData();
-    double sigma_n = father_stats.area;
-    double sigma_nu;
 
-    // If node is a leaf :
-    if ( ! this->hasChildren() ){
-        float weight = 0.0f;
-        // Accumulate statistics over points in the leaf.
-        for (auto p : m_points){
-            weight += kernel(point.pos, p.pos);
+    if( this->m_data.area == 0 ){
+        return this->m_data;
+    }
+
+    StatType stat;
+    auto t = this->m_data.position / VecType(this->m_data.area);
+    float w = kernel(t, point.pos);
+
+    //if leaf
+    if( !this->hasChildren() ) {
+
+        if (this->m_data.area > 0) {
+            for( auto p : m_points ){
+                StatType pStat;
+                statisticsAdd( &pStat, p );
+                pStat = weighted_statistics( pStat, kernel( p.pos, point.pos ) );
+                stat = sum_statistics( stat, pStat );
+            }
         }
-        return weighted_statistics(father_stats, weight);
-    }
-    // float sigma_n_toFloat = round(sigma_n * pow(10, 7)) / pow(10, 7);
-    sigma_n = ( sigma_n == 0? 1 : sigma_n );
-    VecType averagePosition = father_stats.position / ((float)sigma_n);
-    float weight_averagePos = kernel (point.pos, averagePosition);
+        return stat;
 
-    // Case q isn't in the node
-    if (! this->isInProtectionSphere(point.pos) ){
-        return weighted_statistics(father_stats, weight_averagePos);
-    }
-    // Let's blend statistics between n and its children
-    StatType node_stats;
-    auto children = this->getChildren();
+    //q is sufficiently far from the node
+    }else if( signedDistanceToProtectionSphere( point.pos ) >= 0 ){
 
-    for (auto child : children){
-        double weight_area = (child->getData().area)/sigma_n;
-        float gamma = this->gamma_maj( child, point.pos );
-        float weight = weight_averagePos * weight_area * gamma;
-        StatType child_stats = child->getBlendedStat(point, kernel);
-        node_stats = sum_statistics(node_stats, weighted_statistics(child_stats, (1-gamma)));
-        node_stats = sum_statistics(node_stats, weighted_statistics(father_stats, weight));
+        stat = weighted_statistics( this->m_data, w );
+        return stat;
+
+    }else{
+
+        float distanceToNode = fabs(signedDistanceToProtectionSphere(point.pos));
+
+        for (auto child: this->m_children) {
+            float distanceToChild = fabs(child->signedDistanceToProtectionSphere(point.pos));
+            float wChild = distanceToChild / (distanceToChild - distanceToNode);
+            float Yu;
+            func(wChild, Yu);
+            float valParent = 1.0f - Yu;
+
+            auto leftStat = weighted_statistics(child->getBlendedStat(point, kernel), 1.0 - Yu);
+
+            float areaW = child->getData().area / this->m_data.area;
+            auto rightStat = weighted_statistics(this->getData(), areaW * Yu * w);
+
+            stat = sum_statistics(stat, leftStat);
+            stat = sum_statistics(stat, rightStat);
+        }
+
+        return stat;
     }
-    // std::cout << "==========================" << std::endl;
-    // display_statistics(node_stats);
-    return node_stats;
+
 }
 
 template< class VecType, class StatType, class PointType >
@@ -77,7 +101,7 @@ float InputOctree< VecType, StatType, PointType>::signedDistanceToProtectionSphe
 
 template< class VecType, class StatType, class PointType >
 bool InputOctree< VecType, StatType, PointType>::isInProtectionSphere( VecType point ){
-    return (!(signedDistanceToProtectionSphere ( point ) > 0));
+    return signedDistanceToProtectionSphere(point) <= 0;
 }
 
 template< class VecType, class StatType, class PointType >
