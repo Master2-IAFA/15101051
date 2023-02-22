@@ -5,11 +5,13 @@
 template< class VecType, class StatType, class PointType >
 void ImguiFittingDebug<VecType, StatType, PointType>::draw(){
 
-    ImGui::SliderInt("nb points", &m_numberOfPoints, 10, 50000 );
+    ImGui::SliderInt("nb points", &m_numberOfPoints, 10, 100000 );
     ImGui::SameLine();
     if( ImGui::Button( "sample random points" ) ) samplePoints( m_numberOfPoints );
 
-    ImGui::SliderFloat( "lambda", &m_protectionSphere, 1.0, 2.0 );
+    if( ImGui::SliderFloat( "lambda", &m_protectionSphere, 1.0, 2.0 ) ){
+        m_inputOctree->setProtectionSphere( m_protectionSphere );
+    }
 
     ImGui::SameLine();
 
@@ -46,6 +48,22 @@ void ImguiFittingDebug<VecType, StatType, PointType>::draw(){
     }
 
     if( ImGui::Button( "fit" ) ) fit();
+    ImGui::SameLine();
+    ImGui::Text( m_fitTime.c_str() );
+
+    ImGui::SliderInt( "iteration", &m_iterNB, 1, 20 );
+    if( ImGui::Button( "iterative fit" ) ){
+        auto start = std::chrono::high_resolution_clock::now();
+        for( int i = 0; i < m_iterNB - 1; i++ ){
+            fit(); swapPositions();
+            std::cout << "done" << std::endl;
+        }
+        fit();
+        auto stop = std::chrono::high_resolution_clock::now();
+        m_iterTime = std::to_string( std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count() ) + " Ms - " + std::to_string( m_iterNB ) + " iterations";
+    }
+    ImGui::SameLine();
+    ImGui::Text( m_iterTime.c_str() );
 
     if( m_fitted ) drawFit();
 
@@ -85,21 +103,25 @@ void ImguiFittingDebug<VecType, StatType, PointType>::slidePoints(){
 
 }
 
+
 template< class VecType, class StatType, class PointType >
 void ImguiFittingDebug<VecType, StatType, PointType>::fit(){
 
-    std::vector<VecType > normals;
+    auto start = std::chrono::high_resolution_clock::now();
 
+    std::vector<VecType > normals( m_startPosition.size() );
+
+    #pragma omp parallel for
     for( int i = 0; i < m_startPosition.size(); i++ ){
         AlgebraicSphere<VecType, StatType> sphere;
         PointType point;
         point.pos = VecType( m_startPosition[ i ] );
         point.norm = VecType( 0.0f );
-        m_inputOctree->setProtectionSphere(m_protectionSphere) ;
+        //m_inputOctree->setProtectionSphere(m_protectionSphere) ;
         StatType stat = m_inputOctree->getBlendedStat( point,  [this]( VecType a, VecType b ){ return m_kernel( a, b );} );
         sphere.fitSphere( stat, point.pos, [this]( VecType a, VecType b ){ return m_kernel( a, b ); });
         m_endPosition[ i ] = sphere.project( point.pos );
-        normals.push_back( sphere.projectNormal( point.pos ) );
+        normals[ i ] = sphere.projectNormal( point.pos );
     }
 
     if( normals[ 0 ].length() == 3 )
@@ -108,6 +130,9 @@ void ImguiFittingDebug<VecType, StatType, PointType>::fit(){
         polyscope::getPointCloud( m_pointCloud_name )->addVectorQuantity2D( "normal", normals );
 
     m_fitted = true;
+
+    auto stop = std::chrono::high_resolution_clock::now();
+    m_fitTime = std::to_string( std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count() ) + " Ms";
 }
 
 template< class VecType, class StatType, class PointType >
@@ -206,4 +231,9 @@ void ImguiFittingDebug<VecType, StatType, PointType>::slideSinglePoint(){
     auto direction =  glm::normalize( end - start );
     auto length = glm::length( end - start );
     m_single_point_flying = m_single_point + k * ( end - start );
+}
+
+template<class VecType, class StatType, class PointType>
+void ImguiFittingDebug<VecType, StatType, PointType>::swapPositions() {
+    std::swap( m_startPosition, m_endPosition );
 }

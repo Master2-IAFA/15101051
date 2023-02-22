@@ -22,7 +22,6 @@ BaseOctree<Data, VecType, OctreeType>::BaseOctree( int _depth, VecType _min, Vec
 template<class Data, typename VecType, typename OctreeType>
 BaseOctree<Data, VecType, OctreeType>::~BaseOctree(){
     m_father = nullptr;
-    m_points.clear();
     //delete _data;
     for(int i = 0; i < int(pow( 2, m_dim )); i++){
         delete m_children[i];

@@ -17,7 +17,7 @@ void AlgebraicSphere< VecType, StatType >::fitSphere( StatType stat, VecType poi
     }
 
     float weight_wi = kernel( point, meanPosition );
-    std::cout << "weight : " << weight_wi << weight_wi << std::endl;
+    //std::cout << "weight : " << weight_wi << weight_wi << std::endl;
 
 
 
@@ -51,7 +51,7 @@ VecType AlgebraicSphere< VecType, StatType >::project( VecType point ){
 
     if( m_u4 < 0.00000001 && m_u4 > -0.00000001){
         auto dir = glm::normalize( m_u123 );
-        std::cout << "Si nan, c'est peut être de la que ça vient PLAN (projection dans algrebraic sphere)" << std::endl;
+        //std::cout << "Si nan, c'est peut être de la que ça vient PLAN (projection dans algrebraic sphere)" << std::endl;
         return point - VecType( glm::dot( point - ( m_center ), dir ) ) * dir;
     }
 
@@ -60,16 +60,16 @@ VecType AlgebraicSphere< VecType, StatType >::project( VecType point ){
     
     // Case where l is equal to 0, if we don't test it, we'll have a division by 0.
     if (l == 0){
-        std::cout << "Si nan, c'est peut être de la que ça vient l = 0 (projection dans algrebraic sphere)" << std::endl;
+        //std::cout << "Si nan, c'est peut être de la que ça vient l = 0 (projection dans algrebraic sphere)" << std::endl;
         return m_center;
     }
     
     auto q = VecType( m_radius / l ) * p;
 
-    std::cout << "=================" << std::endl;
-    std::cout << "m_radius : " << m_radius << std::endl;
-    std::cout << "l = " << l << std::endl;
-    std::cout << "q = " << q[0] << ", " << q[1] << ", " << q[2] << std::endl;
+    //std::cout << "=================" << std::endl;
+    //std::cout << "m_radius : " << m_radius << std::endl;
+    //std::cout << "l = " << l << std::endl;
+    //std::cout << "q = " << q[0] << ", " << q[1] << ", " << q[2] << std::endl;
 
     return m_center + q;
 }

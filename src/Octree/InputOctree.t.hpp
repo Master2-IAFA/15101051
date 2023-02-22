@@ -33,7 +33,7 @@ StatType InputOctree< VecType, StatType, PointType>::getBlendedStat( PointType p
     if ( ! this->hasChildren() ){
         float weight = 0.0f;
         // Accumulate statistics over points in the leaf.
-        for (VecType p : m_points){
+        for (auto p : m_points){
             weight += kernel(point.pos, p.pos);
         }
         return weighted_statistics(father_stats, weight);

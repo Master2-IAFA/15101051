@@ -5,7 +5,7 @@ void ImguiInputOctreeDebug<VecType, StatType, PointType>::draw(){
 
     if( ImGui::SliderInt( "Depth", &m_octreeDepth, 0, m_octreeMaxDepth - 1 ) ) drawOctreeAtDepth();
 
-    ImGui::SliderInt( "Max depth", &m_maxDepth, 1, 10 );
+    ImGui::SliderInt( "Max depth", &m_maxDepth, 1, 15 );
     ImGui::SliderInt( "Max Point", &m_maxPoints, 1, 100);
 
     if( ImGui::Button("Fit") ) fitOctree();

@@ -33,12 +33,19 @@ class ImguiFittingDebug{
         void slidePoints();
         float randomFloat(float a, float b);
         void samplePoints( int n );
+
+        void swapPositions();
+
         void fit();
+        std::string m_fitTime{ "" };
 
         int m_numberOfPoints = 10;
         bool m_protection_sphere_visible = false;
         float m_sliderStatut{ 0.0 };
         bool m_fitted{ false };
+
+        int m_iterNB{ 1 };
+        std::string m_iterTime{ "" };
 
         std::vector<VecType> m_startPosition;
         std::vector<VecType> m_endPosition;
@@ -76,3 +83,5 @@ class ImguiFittingDebug{
         float m_sliderStatut_single{ 0.0 };
 
 };
+
+
