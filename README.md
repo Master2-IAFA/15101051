@@ -24,7 +24,7 @@ The software has been compiled and tested on Ubuntu 22.04 and Windows 11.
 
 The following image shows the customized polyscope gui.
 
-![MLoDscope GUI](gui.jpg)
+![MLoDscope GUI](doc/gui.jpg)
 
 the 3D - 2D radio buttons allow the user to change the rendering mode.
 
