@@ -150,6 +150,26 @@ void generate2dGaussian (int nbSamples, int direction) {
     file.close();
 }
 
+template< class VecType >
+std::vector<VecType> build_cube_from_minmax(VecType min, VecType max) {
+    std::vector<VecType> cube ;
+
+    for ( int i = 0 ; i < int(pow( 2, min.length() )) ; ++i ) {
+        VecType temp = VecType(0);
+        for ( int j = 0 ; j < min.length() ; ++j ) {
+            if ( (i / int(pow( 2, j ))) % 2 == 0 ) {
+                temp[j] = min[j];
+            }
+            else {
+                temp[j] = max[j];
+            }
+        }
+        cube.emplace_back(temp);
+    }
+
+    return cube ;
+}
+
 inline int bitDiff (unsigned int n, unsigned int m) {
     int count = 0;
 

@@ -14,14 +14,6 @@
 template<class VecType, class PointType>
 polyscope::PointCloud* pointSetToPolyscope(std::string name, PointSet<PointType> *ps);
 
-/** create a hypercube (square/cube) from its diagonal positions
- * @param min first diagonal coordinate
- * @param max second diagonal coordinate
- * @return hypercube coordinates (4/8 coordinates)
- */
-template< class VecType >
-std::vector<VecType> build_cube_from_minmax(VecType min, VecType max);
-
 /** given min and max of cube, draws cube on polyscope
  * @param [in] name : name of polyscope window
  * @param [in] min : min point of cube

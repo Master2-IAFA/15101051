@@ -29,26 +29,6 @@ polyscope::PointCloud* pointSetToPolyscope(std::string name, PointSet<PointType>
     return pointCloud ;
 }
 
-template< class VecType >
-std::vector<VecType> build_cube_from_minmax(VecType min, VecType max) {
-    std::vector<VecType> cube ;
-
-    for ( int i = 0 ; i < int(pow( 2, min.length() )) ; ++i ) {
-        VecType temp = VecType(0);
-        for ( int j = 0 ; j < min.length() ; ++j ) {
-            if ( (i / int(pow( 2, j ))) % 2 == 0 ) {
-                temp[j] = min[j];
-            }
-            else {
-                temp[j] = max[j];
-            }
-        }
-        cube.emplace_back(temp);
-    }
-
-    return cube ;
-}
-
 template<class VecType>
 void slide_points (polyscope::PointCloud *pc_init, polyscope::PointCloud * pc_final, int nb_slider_max, int nb_slider) {
     //get points pos in pc_init and pc_final
@@ -141,7 +121,7 @@ template< class VecType, class StatType, class PointType >
 void draw_traversed_octree (std::shared_ptr< InputOctree<VecType, StatType, PointType > > oct, VecType q, std::string name){
     std::vector<std::array<int, 2>> edges ;
     std::vector<VecType> nodes;
-    oct.get()->getTraversedNodes(q ,&edges, &nodes);
+    (oct.get())->getTraversedNodes(q ,&edges, &nodes);
     if (q.length() == 3) 
         polyscope::registerCurveNetwork(name, nodes, edges);
     else

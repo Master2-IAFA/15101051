@@ -75,3 +75,11 @@ void generate2dGaussian (int nbSamples, int direction);
  * @author linda
 */
 int bitDiff (unsigned int n, unsigned int m);
+
+/** create a hypercube (square/cube) from its diagonal positions
+ * @param min first diagonal coordinate
+ * @param max second diagonal coordinate
+ * @return hypercube coordinates (4/8 coordinates)
+ */
+template< class VecType >
+std::vector<VecType> build_cube_from_minmax(VecType min, VecType max);

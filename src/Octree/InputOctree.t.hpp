@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../utils.hpp"
 #include "../utils.t.hpp"
 #include "InputOctree.hpp"
 

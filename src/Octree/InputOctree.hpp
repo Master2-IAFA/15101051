@@ -49,8 +49,8 @@ class InputOctree: public BaseOctree< StatType, VecType, InputOctree< VecType, S
 
         inline void setProtectionSphere( float protectionSphere ){ *m_protectionSphere = protectionSphere; }
         inline float getProtectionSphere(){ return *m_protectionSphere; }
+        void getTraversedNodes (VecType& q, std::vector<std::array<int, 2>>* edges, std::vector<VecType>* nodes);
 
-    
     private:
 
         //private Constructor that are used by the BaseOctree class ( in subdivide function )
@@ -62,7 +62,6 @@ class InputOctree: public BaseOctree< StatType, VecType, InputOctree< VecType, S
         InputOctree( int _depth, VecType _min, VecType _max): BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >( _depth, _min, _max ){}
 
         void recursiveFit( int depth, std::vector<PointType> *points );
-        void getTraversedNodes (VecType& q, std::vector<std::array<int, 2>>* edges, std::vector<VecType>* nodes);
         float gamma_maj ( InputOctree<VecType, StatType, PointType> *child, VecType q );
 
         std::shared_ptr< float > m_protectionSphere;
