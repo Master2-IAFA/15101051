@@ -1,5 +1,9 @@
 #include "OctreeGui.hpp"
 
+#include <chrono>
+#include <memory>
+#include <iostream>
+
 template< class VecType, class StatType, class PointType >
 void OctreeGui<VecType, StatType, PointType>::draw(){
 
@@ -114,4 +118,34 @@ void OctreeGui<VecType, StatType, PointType>::node_stats_to_sphere ( std::string
                 polyscope::registerPointCloud( name, sphere_pos ):
                 polyscope::registerPointCloud2D( name, sphere_pos );
     pointCloud->setPointRadius(m_radius, false);
+}
+
+template< class VecType, class StatType, class PointType >
+polyscope::CurveNetwork* OctreeGui<VecType, StatType, PointType>::drawOctree(std::string name, std::vector<BaseOctree<StatType, VecType, InputOctree< VecType, StatType, PointType >> *> octree) {
+    std::vector<std::array<int, 2>> edges ;
+    std::vector<VecType> nodes;
+
+    for(int i = 0; i < octree.size(); i++) {
+        //get min/max from each octree cell
+        auto min = octree[i]->getMin();
+        auto max = octree[i]->getMax();
+
+        //add hypercube coordinates from min/max to the octree
+        auto cube = build_cube_from_minmax<VecType>( min , max );
+        for(int j = 0; j < int(pow(2, min.length())); j++)
+            nodes.push_back( cube[j] );
+
+        //create edges for each hypercube
+        for (int j = 0;j < int(pow(2, min.length()));++j) {
+            for (int k = j + 1;k < int(pow(2, min.length()));++k) {
+                if (bitDiff(k, j) == 1) {
+                    edges.push_back({j + int(pow(2, min.length())) * i, k + int(pow(2, min.length())) * i});
+                }
+            }
+        }
+    }
+
+    return (octree[0]->getMax().length() == 3)?
+                polyscope::registerCurveNetwork(name, nodes, edges):
+                polyscope::registerCurveNetwork2D(name, nodes, edges);
 }

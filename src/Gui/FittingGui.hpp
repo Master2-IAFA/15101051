@@ -19,9 +19,6 @@
 
 #include "../kernels.t.hpp"
 
-#include "../Define.hpp"
-#include "../debug.t.hpp"
-
 template< class VecType, class StatType, class PointType >
 class FittingGui{
     public:
@@ -49,6 +46,22 @@ class FittingGui{
          * @param [in] sphere fitted sphere.
          */
         void point_and_stats_to_sphere ( std::string point_name, std::string name, VecType point, VecType end, AlgebraicSphere<VecType, StatType> sphere);
+        
+        /** get node boxes that where traversed for fitting \p q
+         * @todo complete description
+        */
+        void getTraversedNodes (InputOctree<VecType, StatType, PointType> *current_node_octree, VecType& q, std::vector<std::array<int, 2>>* edges, std::vector<VecType>* nodes);
+
+        /** It displays the traversed nodes of the octree.
+         * @author Léo 
+         * @param [in] name name of the displayed curve.
+         * @param [in] q point that we want to use.
+         */
+        void draw_traversed_octree (std::shared_ptr< InputOctree<VecType, StatType, PointType > > oct, VecType q, std::string name);
+
+        /** displays sphere on polyscope according to its radius and center */
+        void display_sphere( std::string name, VecType center, float radius) ;
+
     private:
         int m_numberOfPoints = 10;
         bool m_protection_sphere_visible = false;

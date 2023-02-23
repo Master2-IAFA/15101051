@@ -1,9 +1,5 @@
 #pragma once
 
-#include <chrono>
-#include <memory>
-#include <iostream>
-
 #include "polyscope/messages.h"
 #include "polyscope/point_cloud.h"
 #include "polyscope/pick.h"
@@ -13,9 +9,6 @@
 #include "../Octree/InputOctree.t.hpp"
 #include "../AlgebraicSphere.t.hpp"
 #include "../PointSet.t.hpp"
-
-#include "../Define.hpp"
-#include "../debug.t.hpp"
 
 template< class VecType, class StatType, class PointType >
 class OctreeGui{
@@ -46,6 +39,8 @@ class OctreeGui{
          * @author Léo
          */
         void drawSphereAtDepth();
+
+        polyscope::CurveNetwork* drawOctree(std::string name, std::vector<BaseOctree<StatType, VecType, InputOctree< VecType, StatType, PointType >> *> octree);
 
     private:
         std::vector< polyscope::CurveNetwork * > m_vectorOctree;

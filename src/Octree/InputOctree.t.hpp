@@ -143,31 +143,3 @@ float InputOctree< VecType, StatType, PointType>::gamma_maj (InputOctree<VecType
     float u = (distance_to_child / (distance_to_child - distance_to_node));
     return exp(-exp(1.0/(u-1.0)) / pow(u,2));
 }
-
-template< class VecType, class StatType, class PointType >
-void InputOctree< VecType, StatType, PointType>::getTraversedNodes (VecType& q, std::vector<std::array<int, 2>>* edges, std::vector<VecType>* nodes) {
-    if (!this->hasChildren())
-        return;
-    auto children = this->getChildren();
-
-    auto cube = build_cube_from_minmax( this->getMin(), this->getMax());
-    int vecLength(this->getMin().length());
-
-    int nodes_size = nodes->size();
-
-    for(int j = 0; j < pow (2, vecLength); j++)
-        nodes->push_back( cube[j] );
-
-    for (int j = 0;j < pow(2, vecLength);++j) {
-        for (int k = j + 1;k < pow(2, vecLength);++k) {
-            if (bitDiff(k, j) == 1) {
-                edges->push_back({j + nodes_size, k + nodes_size});
-            }
-        }
-    }
-
-    for (int i = 0; i < pow(2, vecLength); i++){
-        if (children[i]->isInProtectionSphere( q))
-            children[i]->getTraversedNodes(q, edges, nodes);
-    }
-}

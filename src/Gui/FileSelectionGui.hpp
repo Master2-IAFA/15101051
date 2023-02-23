@@ -19,9 +19,6 @@
 
 #include "../kernels.t.hpp"
 
-#include "../Define.hpp"
-#include "../debug.t.hpp"
-
 namespace fs = std::filesystem;
 
 template< class VecType, class StatType, class PointType >

@@ -3,6 +3,9 @@
 #include "AlgebraicSphere.t.hpp"
 #include "Octree/InputOctree.t.hpp"
 
+#include "polyscope/polyscope.h"
+#include "polyscope/point_cloud.h"
+
 typedef struct {
   // P_alpha
   glm::vec3 position = glm::vec3 (0.0f);
@@ -35,6 +38,10 @@ typedef struct  {
     glm::vec2 norm;
 } point2d;
 
+/** PROJECTION OPERATOR */
+template<typename statistics, typename point, typename VecType, typename PointType>
+AlgebraicSphere<VecType, statistics> projection (InputOctree<VecType, statistics, PointType> *octree, float (*kernel)(VecType&,VecType&) ,VecType& q);
+
 /** this function prints the informations contained in this stats.*/
 template <typename statistics> 
 void display_statistics (statistics stats);
@@ -50,10 +57,6 @@ statistics sum_statistics (const statistics& a, const statistics& b);
 /** This function returns the statistics given in input, multiplied by the factor w. */
 template<typename statistics>
 statistics weighted_statistics (statistics stats, float w);
-
-template<typename statistics, typename point, typename VecType, typename PointType>
-AlgebraicSphere<VecType, statistics> projection (InputOctree<VecType, statistics, PointType> *octree, float (*kernel)(VecType&,VecType&) ,VecType& q);
-
 /** generate a .ply file containing a sampeled 3D gaussian
  * @author linda
 */
@@ -83,3 +86,14 @@ int bitDiff (unsigned int n, unsigned int m);
  */
 template< class VecType >
 std::vector<VecType> build_cube_from_minmax(VecType min, VecType max);
+
+/** given min and max of cube, draws cube on polyscope
+ * @param [in] name : name of polyscope window
+ * @param [in] min : min point of cube
+ * @param [in] max : max point of cube
+ */
+template<class VecType>
+void drawCube(std::string name, VecType min, VecType max);
+
+template<class VecType, class PointType>
+polyscope::PointCloud* pointSetToPolyscope(std::string name, PointSet<PointType> *ps);

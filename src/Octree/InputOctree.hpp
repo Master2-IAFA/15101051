@@ -4,7 +4,6 @@
 
 #include "BaseOctree.t.hpp"
 #include "../PointSet.t.hpp"
-//#include "../utils.t.hpp"
 
 /**
  * @brief The inputOctree, is an octree that fit to a pointSet and compute statistics in each node
@@ -49,8 +48,7 @@ class InputOctree: public BaseOctree< StatType, VecType, InputOctree< VecType, S
 
         inline void setProtectionSphere( float protectionSphere ){ *m_protectionSphere = protectionSphere; }
         inline float getProtectionSphere(){ return *m_protectionSphere; }
-        void getTraversedNodes (VecType& q, std::vector<std::array<int, 2>>* edges, std::vector<VecType>* nodes);
-
+    
     private:
 
         //private Constructor that are used by the BaseOctree class ( in subdivide function )

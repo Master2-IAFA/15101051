@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FittingGui.hpp"
+#include "../utils.t.hpp"
 
 template< class VecType, class StatType, class PointType >
 void FittingGui<VecType, StatType, PointType>::draw(){
@@ -231,4 +232,55 @@ void FittingGui<VecType, StatType, PointType>::point_and_stats_to_sphere (std::s
                 polyscope::registerPointCloud( name, pos_sphere ):
                 polyscope::registerPointCloud2D( name, pos_sphere );
     pc_sphere->setPointRadius(sphere.getRadius(), false);
+}
+
+template< class VecType, class StatType, class PointType >
+void FittingGui<VecType, StatType, PointType>::getTraversedNodes (InputOctree<VecType, StatType, PointType> *current_node_octree, VecType& q, std::vector<std::array<int, 2>>* edges, std::vector<VecType>* nodes) {
+    if (!current_node_octree->hasChildren())
+        return;
+    auto children = current_node_octree->getChildren();
+
+    auto cube = build_cube_from_minmax( current_node_octree->getMin(), current_node_octree->getMax());
+    int vecLength(current_node_octree->getMin().length());
+
+    int nodes_size = nodes->size();
+
+    for(int j = 0; j < pow (2, vecLength); j++)
+        nodes->push_back( cube[j] );
+
+    for (int j = 0;j < pow(2, vecLength);++j) {
+        for (int k = j + 1;k < pow(2, vecLength);++k) {
+            if (bitDiff(k, j) == 1) {
+                edges->push_back({j + nodes_size, k + nodes_size});
+            }
+        }
+    }
+
+    for (int i = 0; i < pow(2, vecLength); i++){
+        if (children[i]->isInProtectionSphere( q))
+            getTraversedNodes(children[i], q, edges, nodes);
+    }
+}
+
+template< class VecType, class StatType, class PointType >
+void FittingGui<VecType, StatType, PointType>::draw_traversed_octree (std::shared_ptr< InputOctree<VecType, StatType, PointType > > oct, VecType q, std::string name){
+    std::vector<std::array<int, 2>> edges ;
+    std::vector<VecType> nodes;
+    getTraversedNodes(oct.get() ,q ,&edges, &nodes);
+    if (q.length() == 3) 
+        polyscope::registerCurveNetwork(name, nodes, edges);
+    else
+        polyscope::registerCurveNetwork2D(name, nodes, edges);
+}
+
+template< class VecType, class StatType, class PointType >
+void FittingGui<VecType, StatType, PointType>::display_sphere( std::string name, VecType center, float radius) {
+    std::vector<VecType> sphere_pos;
+
+    sphere_pos.push_back( center );
+
+    polyscope::PointCloud *pointCloud = (center.length() == 3)?
+              polyscope::registerPointCloud( name, sphere_pos ):
+              polyscope::registerPointCloud2D( name, sphere_pos );
+    pointCloud->setPointRadius(radius, false);
 }

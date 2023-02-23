@@ -2,6 +2,8 @@
 #include "utils.hpp"
 #include "kernels.t.hpp"
 
+#include "polyscope/curve_network.h"
+
 template<typename statistics, typename point>
 void statisticsAdd(statistics *stat, point p) {
     // sigma
@@ -182,4 +184,51 @@ inline int bitDiff (unsigned int n, unsigned int m) {
     } while (n != 0 || m != 0);
 
     return count;
+}
+
+template< class VecType >
+void drawCube(std::string name, VecType min, VecType max) {
+    //cube nodes
+    std::vector<VecType> nodes = build_cube_from_minmax<VecType>(min, max);
+
+    //generate cube edges
+    std::vector<std::array<int, 2>> edges ;
+    for (int i = 0;i < int(pow(2, min.length()));++i) {
+        for (int j = i + 1;j < int(pow(2, min.length()));++j) {
+            if (bitDiff(i, j) == 1) {
+                edges.push_back({i, j});
+            }
+        }
+    }
+
+    // Add the curve network
+    (min.length() == 3)?
+    polyscope::registerCurveNetwork(name, nodes, edges):
+    polyscope::registerCurveNetwork2D(name, nodes, edges);
+}
+
+template<class VecType, class PointType>
+polyscope::PointCloud* pointSetToPolyscope(std::string name, PointSet<PointType> *ps ){
+    std::vector<PointType> points = ps->getPoints();
+
+    std::vector<VecType> position ( points.size() );
+    std::vector<VecType> normal ( points.size() );
+
+    #pragma omp parallel for
+    for (int i = 0; i < points.size(); ++i) {
+        position[i] = VecType( points[i].pos );
+        normal[i] = VecType( points[i].norm );
+    }
+
+    polyscope::PointCloud* pointCloud;
+    if (points[0].pos.length() == 3) {
+        pointCloud = polyscope::registerPointCloud(name, position);
+        pointCloud->addVectorQuantity("normal", normal);
+    }
+    else {
+        pointCloud = polyscope::registerPointCloud2D(name, position);
+        pointCloud->addVectorQuantity2D("normal", normal);
+    }
+    
+    return pointCloud;
 }
