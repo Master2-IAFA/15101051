@@ -3,6 +3,7 @@ project("Point_cloud")
 cmake_minimum_required(VERSION 2.8)
 cmake_policy(SET CMP0043 NEW)
 
+set(default_build_type "Release")
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
@@ -31,6 +32,7 @@ file(GLOB_RECURSE om_sources "*.cc" ${open_mesh_sources})
 add_definitions(-DOM_STATIC_BUILD)
 
 find_package(Doxygen)
+find_package(OpenMP)
 
 if (DOXYGEN_FOUND)
     # set input and output files
@@ -59,4 +61,4 @@ FILE(GLOB_RECURSE folder_header ${CMAKE_SOURCE_DIR}/src/*.hpp)
 
 add_executable(PointCloud ${folder_source} ${om_sources} ${folder_header} ${om_headers})
 
-target_link_libraries(PointCloud polyscope)
+target_link_libraries(PointCloud polyscope OpenMP::OpenMP_CXX)

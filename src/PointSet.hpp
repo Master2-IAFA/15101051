@@ -3,7 +3,6 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <polyscope/polyscope.h>
 #include <glm/glm.hpp>
 
 using std::vector;

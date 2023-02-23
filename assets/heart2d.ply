@@ -1,0 +1,45 @@
+ply
+format ascii 1.0
+element vertex 16
+property float x
+property float y
+property float z
+property float nx
+property float ny
+property float nz
+element edge 16
+property int vertex1
+property int vertex2
+end_header
+ 0 -3 0  0     -1     0
+ 1 -2 0  0.707 -0.707 0
+ 2 -1 0  0.707 -0.707 0
+ 3  0 0  1      0     0
+ 3  1 0  1      0     0
+ 3  2 0  0.707  0.707 0
+ 2  3 0  0      1     0
+ 1  2 0 -0.707  0.707 0
+ 0  1 0  0      1     0
+-1  2 0  0.707  0.707 0
+-2  3 0  0      1     0
+-3  2 0 -0.707  0.707 0
+-3  1 0 -1      0     0
+-3  0 0 -1      0     0
+-2 -1 0 -0.707 -0.707 0
+-1 -2 0 -0.707 -0.707 0
+0 1
+1 2
+2 3
+3 4
+4 5
+5 6
+6 7
+7 8
+8 9
+9 10
+10 11
+11 12
+12 13
+13 14
+14 15
+15 0
