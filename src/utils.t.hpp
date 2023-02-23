@@ -1,4 +1,3 @@
-        if (hasPoint) {
 #pragma once
 #include "utils.hpp"
 

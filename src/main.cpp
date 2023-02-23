@@ -71,8 +71,6 @@ int main () {
     generate3DPointCloud();
 
     polyscope::state::userCallback = callback;
-    pointSetToPolyscope("point cloud", ps);
-
     polyscope::show();
 
     delete octree;

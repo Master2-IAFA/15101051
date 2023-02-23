@@ -1,4 +1,5 @@
-# Chef-d'oeuvre M2 IAFA : Moving level-of-detail surfaces
+# 15101051
+Moving level-of-detail surfaces
 
 ## Dependencies
 
@@ -13,4 +14,4 @@ $ cd 150101051
 $ mkdir build && cd build
 $ cmake .. 
 $ make -j 8
-
+```

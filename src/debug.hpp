@@ -3,7 +3,6 @@
 #include <iostream>
 #include <omp.h>
 #include <string>
-
 #include "polyscope/polyscope.h"
 #include "polyscope/point_cloud.h"
 #include "polyscope/curve_network.h"
