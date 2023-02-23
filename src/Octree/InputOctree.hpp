@@ -5,45 +5,34 @@
 #include "BaseOctree.t.hpp"
 #include "../PointSet.t.hpp"
 
-/**
- * @brief The inputOctree, is an octree that fit to a pointSet and compute statistics in each node
+/** The inputOctree, is an octree that fits to a pointSet and computes statistics in each node
  * 
- * @tparam VecType 
- * @tparam StatType 
- * @tparam PointType 
+ * @tparam VecType glm::vec3 or vec2
+ * @tparam StatType octree label type (aligns with VecType)
+ * @tparam PointType pointset type (aligns with VecType)
  */
 template< class VecType, class StatType, class PointType >
 class InputOctree: public BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >{
-
     public:
         InputOctree( PointSet<PointType> *pointSet ):
-             BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >( 0, pointSet->getBoundingBox().first.pos, pointSet->getBoundingBox().second.pos ),
-             m_pointSet( pointSet )
-             {
+            BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >( 0, pointSet->getBoundingBox().first.pos, pointSet->getBoundingBox().second.pos ),
+            m_pointSet( pointSet ) {
                 m_protectionSphere = std::make_shared< float >( 2.0 );
-             }
+            }
 
-        /**
-         * @brief fit the octree on the given pointSet
+        /** fit the octree on the given pointSet
          * @todo implement the max_points constraint
-         * @warning the max_points constraint is not implemented yet!
-         * @param pointSet 
-         * @param max_depth the maximum depth of the octree
-         * @param max_points the max number of points per leaf
+         * @param [in] max_depth the maximum depth of the octree
+         * @param [in] max_points the max number of points per leaf
          */
         void fit( int max_depth, int max_points );
 
-        /**
-         * @brief Compute the blended stat over the octree given a point
-         * 
-         * @param point 
-         * @param kernel
-         * @return StatType 
-         */
+        /**  Compute the blended stat over the octree given a point */
         StatType getBlendedStat( PointType point, std::function< float( VecType&, VecType& ) > kernel);
 
         bool isInProtectionSphere( VecType point );
 
+        /** (euclidian distance between \p point and node center) - radius x protectionSphereCoeff */
         float signedDistanceToProtectionSphere( VecType point );
 
         inline void setProtectionSphere( float protectionSphere ){ *m_protectionSphere = protectionSphere; }
@@ -54,8 +43,7 @@ class InputOctree: public BaseOctree< StatType, VecType, InputOctree< VecType, S
         //private Constructor that are used by the BaseOctree class ( in subdivide function )
         InputOctree( InputOctree< VecType, StatType, PointType > *father, int _depth, VecType _min, VecType _max): 
             BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >( father, _depth, _min, _max ),
-            m_protectionSphere( father->m_protectionSphere )
-            {}
+            m_protectionSphere( father->m_protectionSphere ) {}
 
         InputOctree( int _depth, VecType _min, VecType _max): BaseOctree< StatType, VecType, InputOctree< VecType, StatType, PointType > >( _depth, _min, _max ){}
 

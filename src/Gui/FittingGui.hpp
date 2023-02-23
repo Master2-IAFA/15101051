@@ -23,6 +23,7 @@ template< class VecType, class StatType, class PointType >
 class FittingGui{
     public:
         FittingGui( std::shared_ptr< InputOctree<VecType, StatType, PointType> > inputOctree ): m_inputOctree( inputOctree ){}
+        
         void draw();
         
     private: 
@@ -34,7 +35,6 @@ class FittingGui{
         void swapPositions();
 
         void fit();
-        std::string m_fitTime{ "" };
 
         /** @author Lou */
         void draw_protection_sphere(VecType min, VecType max, float lambda );
@@ -52,7 +52,11 @@ class FittingGui{
         void point_and_stats_to_sphere ( std::string point_name, std::string name, VecType point, VecType end, AlgebraicSphere<VecType, StatType> sphere);
         
         /** get node boxes that where traversed for fitting \p q
-         * @todo complete description
+         * @author Léo
+         * @param [in] current_node_octree traversed octree
+         * @param [in] q fitted point
+         * @param [out] nodes traversed cubes' vertices
+         * @param [out] edges traversed cubes' edges
         */
         void getTraversedNodes (InputOctree<VecType, StatType, PointType> *current_node_octree, VecType& q, std::vector<std::array<int, 2>>* edges, std::vector<VecType>* nodes);
 
@@ -66,6 +70,10 @@ class FittingGui{
         /** displays sphere on polyscope according to its radius and center */
         void display_sphere( std::string name, VecType center, float radius) ;
 
+        // Test fitting with only one point
+        void fit_One_Point();
+        void slideSinglePoint();
+
     private:
         int m_numberOfPoints = 10;
         bool m_protection_sphere_visible = false;
@@ -74,6 +82,7 @@ class FittingGui{
 
         int m_iterNB{ 1 };
         std::string m_iterTime{ "" };
+        std::string m_fitTime{ "" };
 
         std::vector<VecType> m_startPosition;
         std::vector<VecType> m_endPosition;
@@ -97,9 +106,6 @@ class FittingGui{
             return gaussian_mixture<VecType>( a, b, m_gaussianK, m_gaussianA, m_gaussianSigma ); 
         } };
 
-        // Test fitting with only one point
-        void fit_One_Point();
-        void slideSinglePoint();
         bool m_single_fitted{ false };
         VecType m_single_point { VecType(0.0f) };
         VecType m_single_point_fitted;

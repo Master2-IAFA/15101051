@@ -57,6 +57,7 @@ statistics sum_statistics (const statistics& a, const statistics& b);
 /** This function returns the statistics given in input, multiplied by the factor w. */
 template<typename statistics>
 statistics weighted_statistics (statistics stats, float w);
+
 /** generate a .ply file containing a sampeled 3D gaussian
  * @author linda
 */
@@ -95,5 +96,9 @@ std::vector<VecType> build_cube_from_minmax(VecType min, VecType max);
 template<class VecType>
 void drawCube(std::string name, VecType min, VecType max);
 
+/** converts the point cloud \p ps to a polyscope drawable one
+ * @param [in] name point cloud name in the GUI
+ * @param [in] ps point cloud to render
+ */
 template<class VecType, class PointType>
 polyscope::PointCloud* pointSetToPolyscope(std::string name, PointSet<PointType> *ps);

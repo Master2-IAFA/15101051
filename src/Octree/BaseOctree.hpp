@@ -5,10 +5,17 @@
 #include <cmath>
 
 /** class that represent an octree define by an aabb box.
- *        an octree can contain other octrees (8)
- *        an octree can also contain arbitrary data
  * 
- * @tparam Data: the type of data the octree can take.
+ *  an octree is defined recursively: an octree is either a leaf 
+ *  that has no children or it is comprised of 8 children that are 
+ *  octrees themselves
+ * 
+ *  a octree has a label of arbitraty type
+ * 
+ * @note actually, the term "Octree" has meaning only when talking about
+ * 3D data. In 2D, we talk about "Quadtrees"
+ * 
+ * @tparam Data: Node label type, typically statistics
  */
 template<typename Data, typename VecType, typename OctreeType>
 class BaseOctree{
@@ -45,6 +52,7 @@ public:
     inline int getMaxDepth();
 
 private:
+    /** fetch all nodes that are at depth \p depth */
     std::vector<OctreeType*> pGetAtDepth(int depth, std::vector<OctreeType*> vector);
     void init();
 
