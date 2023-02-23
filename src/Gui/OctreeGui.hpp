@@ -18,26 +18,36 @@
 #include "../debug.t.hpp"
 
 template< class VecType, class StatType, class PointType >
-class ImguiInputOctreeDebug{
+class OctreeGui{
     public:
-        ImguiInputOctreeDebug( std::shared_ptr< InputOctree<VecType, StatType, PointType> > inputOctree ): m_inputOctree( inputOctree ), m_octreeMaxDepth( inputOctree->getMaxDepth() ){
+        OctreeGui( std::shared_ptr< InputOctree<VecType, StatType, PointType> > inputOctree ): m_inputOctree( inputOctree ), m_octreeMaxDepth( inputOctree->getMaxDepth() ){
             initVectorOctree();
         }
 
         void draw();
     
     private:
-
         void initVectorOctree();
         void drawOctreeAtDepth();
         void fitOctree();
-        /**
+
+        /** This function take an octree, a depth and an idx for the node at the
+         *  given depth and show its algebraic sphere. 
          * @author Léo 
-         * 
-         * @brief Allow the user to see the algebraic sphere from stats of the given node (giving a depth and an idx of the node)
+         * @param name name of the displayed sphere.
+         * @param oct 
+         * @param depth Depth of the node we want
+         * @param num_child Num of the node for the given depth
+         */
+        void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, PointType> * oct, int depth, int num_child);
+
+        /** Allow the user to see the algebraic sphere from stats of the given node
+         *  (giving a depth and an idx of the node)
+         * @author Léo
          */
         void drawSphereAtDepth();
 
+    private:
         std::vector< polyscope::CurveNetwork * > m_vectorOctree;
         int m_octreeDepth{ 0 };
         int m_octreeMaxDepth{ 0 };

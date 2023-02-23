@@ -1,7 +1,7 @@
-#include "ImguiInputOctreeDebug.hpp"
+#include "OctreeGui.hpp"
 
 template< class VecType, class StatType, class PointType >
-void ImguiInputOctreeDebug<VecType, StatType, PointType>::draw(){
+void OctreeGui<VecType, StatType, PointType>::draw(){
 
     if( ImGui::SliderInt( "Depth", &m_octreeDepth, 0, m_octreeMaxDepth - 1 ) ) drawOctreeAtDepth();
 
@@ -16,7 +16,7 @@ void ImguiInputOctreeDebug<VecType, StatType, PointType>::draw(){
 }
 
 template< class VecType, class StatType, class PointType >
-void ImguiInputOctreeDebug<VecType, StatType, PointType>::drawOctreeAtDepth(){
+void OctreeGui<VecType, StatType, PointType>::drawOctreeAtDepth(){
     for( int i = 0; i < m_octreeMaxDepth; i++ ){
         m_vectorOctree[ i ]->setEnabled( false );
     }
@@ -24,7 +24,7 @@ void ImguiInputOctreeDebug<VecType, StatType, PointType>::drawOctreeAtDepth(){
 }
 
 template< class VecType, class StatType, class PointType >
-void ImguiInputOctreeDebug<VecType, StatType, PointType>::initVectorOctree(){
+void OctreeGui<VecType, StatType, PointType>::initVectorOctree(){
     for( auto o : m_vectorOctree ){
         o->remove();
     }
@@ -42,7 +42,7 @@ void ImguiInputOctreeDebug<VecType, StatType, PointType>::initVectorOctree(){
 }
 
 template< class VecType, class StatType, class PointType >
-void ImguiInputOctreeDebug<VecType, StatType, PointType>::fitOctree(){
+void OctreeGui<VecType, StatType, PointType>::fitOctree(){
     auto start = std::chrono::high_resolution_clock::now();
     m_inputOctree->fit( m_maxDepth, m_maxPoints );
     initVectorOctree();
@@ -51,13 +51,12 @@ void ImguiInputOctreeDebug<VecType, StatType, PointType>::fitOctree(){
     m_fitTime = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
 }
 
-/**
- * @author Léo 
-    * 
-    * @brief Allow the user to see the algebraic sphere from stats of the given node (giving a depth and an idx of the node)
-    */
+/** Allow the user to see the algebraic sphere from stats of 
+* the given node (giving a depth and an idx of the node)
+* @author Léo 
+*/
 template< class VecType, class StatType, class PointType >
-void ImguiInputOctreeDebug<VecType, StatType, PointType>::drawSphereAtDepth(){
+void OctreeGui<VecType, StatType, PointType>::drawSphereAtDepth(){
 
     auto child = m_inputOctree->getAtDepth(m_depth_forSphere);
     int num_child = 0;
@@ -70,4 +69,49 @@ void ImguiInputOctreeDebug<VecType, StatType, PointType>::drawSphereAtDepth(){
     if (ImGui::Button("Show sphere")) {
         node_stats_to_sphere("Debug_the_node", m_inputOctree.get(), m_depth_forSphere, m_idx_forSphere);
     }
+}
+
+template< class VecType, class StatType, class PointType >
+void OctreeGui<VecType, StatType, PointType>::node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, PointType> * oct, int depth, int num_child){  
+    auto octree_depth_three = oct->getAtDepth (depth);
+
+    auto notre_node = (depth == 0)?oct:octree_depth_three.at(num_child);
+    auto stat = notre_node->getData();
+
+    float weight_wi = 1.0f;
+
+    VecType pi = weight_wi * stat.position;
+    VecType ni = weight_wi * stat.normal;
+    float area = weight_wi * stat.area;
+    float pi_ni = weight_wi * stat.pdn;
+    float norm = weight_wi * stat.norm;
+
+    float num = pi_ni - glm::dot( pi, ni )/area;
+    float denom = norm - ( glm::dot( pi, pi ) / area );
+    float m_u4 = ( num / denom ) / 2;
+
+    VecType num_vec = ni - VecType( 2.0 ) * VecType( m_u4 ) * pi ;
+    VecType m_u123 = num_vec / area;
+
+    auto num_2 = glm::dot( pi, m_u123 ) + m_u4 * norm;
+    float m_u0 = - num_2 / area;
+
+    float b = 1.0f / m_u4;
+    VecType m_center = -0.5f * m_u123 * b;
+
+    b = m_u0 / m_u4;
+    auto cTc = glm::dot( m_center, m_center );
+    double r = sqrt( cTc - b );
+    float m_radius = std::max( 0.0 , r );
+
+    std::vector<VecType> sphere_pos;
+
+    sphere_pos.push_back( m_center );
+
+    drawCube<VecType>("Le cube", notre_node->getMin(), notre_node->getMax());
+
+    polyscope::PointCloud *pointCloud = (m_center.length() == 3)?
+                polyscope::registerPointCloud( name, sphere_pos ):
+                polyscope::registerPointCloud2D( name, sphere_pos );
+    pointCloud->setPointRadius(m_radius, false);
 }

@@ -20,27 +20,16 @@ public:
 
     virtual ~BaseOctree ();
 
-    /**
-    * @brief split the octree into 8 childrens, and link it as their father.
-    */
+    /** split the octree into 8 childrens, and link it as their father. */
     virtual void subDivide ();
 
-    /**
-    * @brief get all the octrees at the given depth
-    */
+    /** get all the octrees at the given depth */
     std::vector<OctreeType*> getAtDepth ( int depth );
 
-    /**
-    * @brief check if the given point is inside the octree using it's min/max points
-    */
+    /** check if the given point is inside the octree using it's min/max points */
     bool isPointIn ( VecType p );
 
-    /**
-    * @brief return if the octree has children
-    *
-    * @return true
-    * @return false
-    */
+    /** return if the octree has children */
     bool hasChildren () { return !(m_children.size() == 0); }
 
     /***** setters ******/
@@ -63,19 +52,25 @@ private:
     void init();
 
 protected:
-    /**
-     * nullptr for root
-     */
+    /** nullptr for root */
     OctreeType* m_father { nullptr };
     std::vector<OctreeType*> m_children;
+
+    /** maximum depth */
     int m_depth { 0 };
+
+    /** node's bounding box min position value */
     VecType m_min ;
+    
+    /** node's bounding box max position value */
     VecType m_max ;
+
+    /** typically, m_data countains node statistics */
     Data m_data;
+
+    /** points that are spacially countained in the nod e*/
     std::vector<VecType> m_points;
 
-    /**
-     * ambiant space dimension (2 or 3)
-     */
+    /** ambiant space dimension (2 or 3) */
     int m_dim;
 };

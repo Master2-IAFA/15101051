@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ImguiFittingDebug.hpp"
+#include "FittingGui.hpp"
 
 template< class VecType, class StatType, class PointType >
-void ImguiFittingDebug<VecType, StatType, PointType>::draw(){
+void FittingGui<VecType, StatType, PointType>::draw(){
 
     ImGui::SliderInt("nb points", &m_numberOfPoints, 10, 50000 );
     ImGui::SameLine();
@@ -58,12 +58,12 @@ void ImguiFittingDebug<VecType, StatType, PointType>::draw(){
 }
 
 template< class VecType, class StatType, class PointType >
-void ImguiFittingDebug<VecType, StatType, PointType>::drawFit(){
+void FittingGui<VecType, StatType, PointType>::drawFit(){
     if( ImGui::SliderFloat( "slide ", &m_sliderStatut, 0.0f, 1000.0f) ) slidePoints();
 }
 
 template< class VecType, class StatType, class PointType >
-void ImguiFittingDebug<VecType, StatType, PointType>::slidePoints(){
+void FittingGui<VecType, StatType, PointType>::slidePoints(){
     float k = m_sliderStatut / 1000.0f;
 
     std::vector< VecType > p;
@@ -86,7 +86,7 @@ void ImguiFittingDebug<VecType, StatType, PointType>::slidePoints(){
 }
 
 template< class VecType, class StatType, class PointType >
-void ImguiFittingDebug<VecType, StatType, PointType>::fit(){
+void FittingGui<VecType, StatType, PointType>::fit(){
 
     std::vector<VecType > normals;
 
@@ -111,7 +111,7 @@ void ImguiFittingDebug<VecType, StatType, PointType>::fit(){
 }
 
 template< class VecType, class StatType, class PointType >
-float ImguiFittingDebug<VecType, StatType, PointType>::randomFloat( float a, float b ){
+float FittingGui<VecType, StatType, PointType>::randomFloat( float a, float b ){
     float random = ((float) rand()) / (float) RAND_MAX;
     float diff = b - a;
     float r = random * diff;
@@ -120,8 +120,7 @@ float ImguiFittingDebug<VecType, StatType, PointType>::randomFloat( float a, flo
 
 
 template< class VecType, class StatType, class PointType >
-void ImguiFittingDebug<VecType, StatType, PointType>::samplePoints( int n ){
-
+void FittingGui<VecType, StatType, PointType>::samplePoints( int n ) {
     m_fitted = false;
     m_middlePosition.clear();
     m_endPosition.clear();
@@ -141,20 +140,13 @@ void ImguiFittingDebug<VecType, StatType, PointType>::samplePoints( int n ){
             m_middlePosition[i][j] = randomFloat( m_inputOctree->getMin()[j], m_inputOctree->getMax()[j] );
         }
     }
-    if (vecLength == 3)
-        m_pointCloud = polyscope::registerPointCloud( m_pointCloud_name, m_middlePosition );
-    else
-        m_pointCloud = polyscope::registerPointCloud2D( m_pointCloud_name, m_middlePosition );
+    m_pointCloud = (vecLength == 3)?
+        polyscope::registerPointCloud( m_pointCloud_name, m_middlePosition ):
+        polyscope::registerPointCloud2D( m_pointCloud_name, m_middlePosition );
 }
 
-/**
- * @author Léo
- * 
- * @brief This function allows the user to test the fitting process with only one point. It shows you the point, the projected point and the algebraic sphere. 
- * 
- */
 template< class VecType, class StatType, class PointType >
-void ImguiFittingDebug<VecType, StatType, PointType>::fit_One_Point() {
+void FittingGui<VecType, StatType, PointType>::fit_One_Point() {
     auto point_name = "fitted_point";
     auto name = "algebraic_sphere_for_point";
     auto name_traversed_octree = "traversed_octree";
@@ -174,14 +166,12 @@ void ImguiFittingDebug<VecType, StatType, PointType>::fit_One_Point() {
         point.pos = m_single_point;
         point.norm = VecType( 0 );
         StatType stat = m_inputOctree->getBlendedStat( point,  [this]( VecType a, VecType b ){ return m_kernel( a, b );} );
-        //display_statistics( stat );
         m_sphere_single.fitSphere( stat, point.pos, [this]( VecType a, VecType b ){ return m_kernel( a, b ); });
         m_single_point_fitted = m_sphere_single.project( point.pos );
         m_single_fitted = true;
     }
     
-    if (m_single_fitted){
-        
+    if (m_single_fitted) {
         point_and_stats_to_sphere (point_name, name, m_single_point_flying, m_single_point_fitted, m_sphere_single);
         draw_traversed_octree (m_inputOctree, m_single_point, name_traversed_octree);
 
@@ -198,7 +188,7 @@ void ImguiFittingDebug<VecType, StatType, PointType>::fit_One_Point() {
 }
 
 template< class VecType, class StatType, class PointType >
-void ImguiFittingDebug<VecType, StatType, PointType>::slideSinglePoint(){
+void FittingGui<VecType, StatType, PointType>::slideSinglePoint(){
     float k = m_sliderStatut_single / 1000.0f;
     std::vector< VecType > p;
     VecType start = m_single_point;
@@ -206,4 +196,39 @@ void ImguiFittingDebug<VecType, StatType, PointType>::slideSinglePoint(){
     auto direction =  glm::normalize( end - start );
     auto length = glm::length( end - start );
     m_single_point_flying = m_single_point + k * ( end - start );
+}
+
+template< class VecType, class StatType, class PointType >
+void FittingGui<VecType, StatType, PointType>::draw_protection_sphere(VecType min, VecType max, float lambda ) {
+    drawCube("Protection_cube", min, max);
+    float radius_protectionSphere = (glm::distance(min, max) / 2.0) * lambda;
+    VecType center_protectionSphere = min + ((max - min)/2.0f) ;
+    display_sphere( "Protection_sphere", center_protectionSphere, radius_protectionSphere) ;
+    polyscope::getPointCloud( "Protection_sphere" )->setTransparency(0.5f);
+}
+
+template< class VecType, class StatType, class PointType >
+void FittingGui<VecType, StatType, PointType>::unDraw_protection_sphere() {
+    polyscope::removeCurveNetwork( "Protection_cube" );
+    polyscope::removePointCloud( "Protection_sphere" );
+}
+
+template< class VecType, class StatType, class PointType >
+void FittingGui<VecType, StatType, PointType>::point_and_stats_to_sphere (std::string point_name, std::string name, VecType point, VecType end, AlgebraicSphere<VecType, StatType> sphere){
+    std::vector<VecType> pos;
+    std::vector<VecType> pos_sphere;
+
+    pos.push_back(point);
+    pos.push_back(end);
+    pos_sphere.push_back(sphere.getCenter());
+
+    polyscope::PointCloud *pc_point = (point.length() == 3)?
+                polyscope::registerPointCloud( point_name, pos ):
+                polyscope::registerPointCloud2D( point_name, pos );
+
+    pc_point->setPointRadius(0.02);
+    polyscope::PointCloud *pc_sphere = (point.length() == 3)?
+                polyscope::registerPointCloud( name, pos_sphere ):
+                polyscope::registerPointCloud2D( name, pos_sphere );
+    pc_sphere->setPointRadius(sphere.getRadius(), false);
 }
