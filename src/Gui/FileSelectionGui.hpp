@@ -19,15 +19,12 @@
 
 #include "../kernels.t.hpp"
 
-#include "../Define.hpp"
-#include "../debug.t.hpp"
-
 namespace fs = std::filesystem;
 
 template< class VecType, class StatType, class PointType >
-class ImguiFileSelection{
+class FileSelectionGui{
     public:
-        ImguiFileSelection( PointSet<PointType> *pointSet, std::shared_ptr< InputOctree< VecType, StatType, PointType > > inputOctree, std::string pathToDirectory ): 
+        FileSelectionGui( PointSet<PointType> *pointSet, std::shared_ptr< InputOctree< VecType, StatType, PointType > > inputOctree, std::string pathToDirectory ): 
             m_pointSet( pointSet ),
             m_pathToDirectory( pathToDirectory ),
             m_inputOctree( inputOctree )

@@ -17,10 +17,9 @@
 #include "PointSet.t.hpp"
 #include "Define.hpp"
 
-#include "Debug/ImguiInputOctreeDebug.t.hpp"
-#include "Debug/ImguiFittingDebug.t.hpp"
-#include "Debug/ImguiFileSelection.t.hpp"
-#include "ImguiDebug.t.hpp"
+#include "Gui/OctreeGui.t.hpp"
+#include "Gui/FittingGui.t.hpp"
+#include "Gui/FileSelectionGui.t.hpp"
 
 #define MAX_DEPTH 7
 
@@ -29,13 +28,13 @@ namespace fs = std::filesystem;
 bool render2d = false;
 bool render3d = true;
 
-ImguiInputOctreeDebug<glm::vec3, statistics3d, point3d> *octreeGui;
-ImguiFittingDebug<glm::vec3, statistics3d, point3d> *fittingGui;
-ImguiFileSelection<glm::vec3, statistics3d, point3d> *imguiFileSelection;
+OctreeGui<glm::vec3, statistics3d, point3d> *octreeGui;
+FittingGui<glm::vec3, statistics3d, point3d> *fittingGui;
+FileSelectionGui<glm::vec3, statistics3d, point3d> *imguiFileSelection;
 
-ImguiInputOctreeDebug<glm::vec2, statistics2d, point2d> *octreeGui2d;
-ImguiFittingDebug<glm::vec2, statistics2d, point2d> *fittingGui2d;
-ImguiFileSelection<glm::vec2, statistics2d, point2d> *imguiFileSelection2d;
+OctreeGui<glm::vec2, statistics2d, point2d> *octreeGui2d;
+FittingGui<glm::vec2, statistics2d, point2d> *fittingGui2d;
+FileSelectionGui<glm::vec2, statistics2d, point2d> *imguiFileSelection2d;
 
 PointSet3D *ps;
 InputOctree3D *octree;
@@ -45,6 +44,7 @@ InputOctree2D *quadtree;
 
 std::string pathToDirectory{ "../assets/" };
 std::string path{ "../assets/gaussian.ply" };
+std::string path2d{ "../assets/gaussian2dup.ply" };
 std::vector<string> files;
 int current_item = 0;
 int depthToShow = 0;
@@ -137,9 +137,9 @@ void generate3DPointCloud() {
 
     //init interface component pointers
     auto octreePtr = std::make_shared<InputOctree3D>( *octree );
-    imguiFileSelection = new ImguiFileSelection<glm::vec3, statistics3d, point3d>( ps, octreePtr, std::string("../assets/") );
-    octreeGui = new ImguiInputOctreeDebug( octreePtr );
-    fittingGui = new ImguiFittingDebug( octreePtr );
+    imguiFileSelection = new FileSelectionGui<glm::vec3, statistics3d, point3d>( ps, octreePtr, std::string("../assets/") );
+    octreeGui = new OctreeGui( octreePtr );
+    fittingGui = new FittingGui( octreePtr );
 
     //render point cloud in polyscope
     pc = pointSetToPolyscope<glm::vec3, point3d>("point cloud", ps);
@@ -150,16 +150,16 @@ void generate3DPointCloud() {
 
 void generate2DPointCloud() {
     //generating sampeled gaussian instead of loading from file
-    *ps2d = generate2dGaussian();
+    ps2d->readOpenMesh( path2d );
 
     delete quadtree;
     quadtree = new InputOctree2D( ps2d );
     quadtree->fit( 7, 0 );
 
     auto quadtreePtr = std::make_shared<InputOctree2D>( *quadtree );
-    imguiFileSelection2d = new ImguiFileSelection<glm::vec2, statistics2d, point2d>( ps2d, quadtreePtr, std::string("../assets/") );
-    octreeGui2d = new ImguiInputOctreeDebug( quadtreePtr );
-    fittingGui2d = new ImguiFittingDebug( quadtreePtr );
+    imguiFileSelection2d = new FileSelectionGui<glm::vec2, statistics2d, point2d>( ps2d, quadtreePtr, std::string("../assets/") );
+    octreeGui2d = new OctreeGui( quadtreePtr );
+    fittingGui2d = new FittingGui( quadtreePtr );
 
     pc = pointSetToPolyscope<glm::vec2, point2d>("point cloud", ps2d);
     polyscope::view::resetCameraToHomeView();

@@ -1,10 +1,9 @@
 #pragma once
 #include "utils.hpp"
+#include "kernels.t.hpp"
 
-/**
- * @brief This function updates the given stats with the information of the given point.
- *
- */
+#include "polyscope/curve_network.h"
+
 template<typename statistics, typename point>
 void statisticsAdd(statistics *stat, point p) {
     // sigma
@@ -20,9 +19,6 @@ void statisticsAdd(statistics *stat, point p) {
     }
 }
 
-/**
- * @brief this function prints the informations contained in this stats.
- */
 template <typename statistics> 
 void display_statistics (statistics stats){
     if (stats.position.length() == 2) {
@@ -38,9 +34,6 @@ void display_statistics (statistics stats){
     std::cout << "Pdn : " << stats.pdn << std::endl;
 }
 
-/**
- * @brief This function computes the summation of two given statistics.
- */
 template <typename statistics>
 statistics sum_statistics (const statistics& a, const statistics& b){
     statistics sum_stats;
@@ -52,9 +45,6 @@ statistics sum_statistics (const statistics& a, const statistics& b){
     return sum_stats;
 }
 
-/**
- * @brief This function returns the statistics given in input, multiplied by the factor w.
- */
 template<typename statistics>
 statistics weighted_statistics (statistics stats, float w) {
     statistics w_stats;
@@ -64,4 +54,181 @@ statistics weighted_statistics (statistics stats, float w) {
     w_stats.area = stats.area * w;
     w_stats.pdn = stats.pdn * w;
     return w_stats;
+}
+
+template<typename statistics, typename point, typename VecType, typename PointType>
+AlgebraicSphere<VecType, statistics> projection (InputOctree<VecType, statistics, PointType> *octree, float (*kernel)(VecType&,VecType&) ,VecType& q){
+    statistics stats = cumul_stats (octree, kernel, q);
+    //std::pair<VecType, float> sphere = fit_algebraic_sphere(stats, q, kernel);
+    AlgebraicSphere<VecType, statistics> sphere;
+    sphere.fitSphere( stats, q, kernel );
+    return sphere;
+    // point new_q;
+    // new_q.pos = VecType(0.0f);
+    // new_q.norm = VecType(0.0f);
+    // return new_q;
+}
+
+void generate_gaussian () {
+    std::ofstream file ("gaussian.ply");
+
+    file << "ply" << std::endl;
+    file << "format ascii 1.0" << std::endl;
+    file << "element vertex " << 50 * 50 << std::endl;
+    file << "property float x" << std::endl;
+    file << "property float y" << std::endl;
+    file << "property float z" << std::endl;
+    file << "property float nx" << std::endl;
+    file << "property float ny" << std::endl;
+    file << "property float nz" << std::endl;
+    file << "end_header" << std::endl;
+
+    for(float i = 0; i < 50; i++) {
+        for( float j = 0; j < 50; j++) {
+            float x = (i - 25) / 25.0f;
+            float y = (j - 25) / 25.0f;
+            file << i/50.0f << " " << exp(-(x*x) - (y*y)) << " " << j/50.0f
+                 << " " <<  2 * x * exp(-(x*x) - (y*y)) << " " <<   j/50.0f << " " <<  2 * y * exp(-(x*x) - (y*y))
+                 << std::endl;
+        }
+    }
+    file.close();
+}
+
+void generate2dGaussian (int nbSamples, int direction) {
+    std::string filename = "gaussian2d";
+    switch(direction) {
+        case 0: { filename += "left.ply"; break; }
+        case 1: { filename += "down.ply"; break; }
+        case 2: { filename += "right.ply"; break; }
+        case 3: { filename += "up.ply"; break; }
+        default: { return; }
+    }
+
+    std::ofstream file (filename);
+
+    file << "ply" << std::endl;
+    file << "format ascii 1.0" << std::endl;
+    file << "element vertex " << nbSamples << std::endl;
+    file << "property float x" << std::endl;
+    file << "property float y" << std::endl;
+    file << "property float z" << std::endl;
+    file << "property float nx" << std::endl;
+    file << "property float ny" << std::endl;
+    file << "property float nz" << std::endl;
+    file << "end_header" << std::endl;
+
+    for (float i = 0; i < nbSamples; ++i) {
+        float size = nbSamples;
+        float x = (i - size / 2) / (size / 2);
+        switch(direction) {
+            case 0: {
+                file << - exp(-(x*x)) << " " <<  i / nbSamples << " " <<  0.0f << " " 
+                    << - i / nbSamples << " " <<  2 * x * exp(-(x*x)) << " "  <<  0.0f
+                    << std::endl;
+                break;
+            }
+            case 1: {
+                file << i / nbSamples << " " << - exp(-(x*x)) << " " << 0.0f << " " 
+                    <<  2 * x * exp(-(x*x)) << " " << - i / nbSamples << " " <<  0.0f
+                    << std::endl;
+                break;
+            }
+            case 2: {
+                file << exp(-(x*x)) << " " << i / nbSamples << " " <<  0.0f << " " 
+                    <<  i / nbSamples << " " << 2 * x * exp(-(x*x)) << " "  <<  0.0f
+                    << std::endl;
+                break;
+            }
+            case 3: {
+                file << i / nbSamples << " " << exp(-(x*x)) << " " << 0.0f << " " 
+                    <<  2 * x * exp(-(x*x)) << " " << i / nbSamples << " " <<  0.0f
+                    << std::endl;
+                break;
+            }
+        }
+    }
+
+    file.close();
+}
+
+template< class VecType >
+std::vector<VecType> build_cube_from_minmax(VecType min, VecType max) {
+    std::vector<VecType> cube ;
+
+    for ( int i = 0 ; i < int(pow( 2, min.length() )) ; ++i ) {
+        VecType temp = VecType(0);
+        for ( int j = 0 ; j < min.length() ; ++j ) {
+            if ( (i / int(pow( 2, j ))) % 2 == 0 ) {
+                temp[j] = min[j];
+            }
+            else {
+                temp[j] = max[j];
+            }
+        }
+        cube.emplace_back(temp);
+    }
+
+    return cube ;
+}
+
+inline int bitDiff (unsigned int n, unsigned int m) {
+    int count = 0;
+
+    do {
+        if (n % 2 != m % 2) {
+            ++count;
+        }
+        n /= 2;
+        m /= 2;
+    } while (n != 0 || m != 0);
+
+    return count;
+}
+
+template< class VecType >
+void drawCube(std::string name, VecType min, VecType max) {
+    //cube nodes
+    std::vector<VecType> nodes = build_cube_from_minmax<VecType>(min, max);
+
+    //generate cube edges
+    std::vector<std::array<int, 2>> edges ;
+    for (int i = 0;i < int(pow(2, min.length()));++i) {
+        for (int j = i + 1;j < int(pow(2, min.length()));++j) {
+            if (bitDiff(i, j) == 1) {
+                edges.push_back({i, j});
+            }
+        }
+    }
+
+    // Add the curve network
+    (min.length() == 3)?
+    polyscope::registerCurveNetwork(name, nodes, edges):
+    polyscope::registerCurveNetwork2D(name, nodes, edges);
+}
+
+template<class VecType, class PointType>
+polyscope::PointCloud* pointSetToPolyscope(std::string name, PointSet<PointType> *ps ){
+    std::vector<PointType> points = ps->getPoints();
+
+    std::vector<VecType> position ( points.size() );
+    std::vector<VecType> normal ( points.size() );
+
+    #pragma omp parallel for
+    for (int i = 0; i < points.size(); ++i) {
+        position[i] = VecType( points[i].pos );
+        normal[i] = VecType( points[i].norm );
+    }
+
+    polyscope::PointCloud* pointCloud;
+    if (points[0].pos.length() == 3) {
+        pointCloud = polyscope::registerPointCloud(name, position);
+        pointCloud->addVectorQuantity("normal", normal);
+    }
+    else {
+        pointCloud = polyscope::registerPointCloud2D(name, position);
+        pointCloud->addVectorQuantity2D("normal", normal);
+    }
+    
+    return pointCloud;
 }

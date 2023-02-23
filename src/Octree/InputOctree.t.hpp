@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../utils.hpp"
+#include "../utils.t.hpp"
 #include "InputOctree.hpp"
 
 template< class VecType, class StatType, class PointType >
@@ -124,10 +126,7 @@ void InputOctree< VecType, StatType, PointType>::recursiveFit( int depth, std::v
 
     }
 }
-/**
- * @brief EQUATION 7 DANS LE PAPIER
- * 
- */
+/** equation 7 in the paper */
 template< class VecType, class StatType, class PointType >
 float InputOctree< VecType, StatType, PointType>::gamma_maj (InputOctree<VecType, StatType, PointType> *child, VecType q){
     float distance_to_node = this->signedDistanceToProtectionSphere( q ); //signedDistanceToSphere(node, q);
