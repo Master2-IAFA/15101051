@@ -68,7 +68,7 @@ void OctreeGui<VecType, StatType, PointType>::drawSphereAtDepth(){
         num_child = child.size();
     ImGui::Text("Display the algebraic sphere of a given node.");
     ImGui::SliderInt("Depth of the octree", &m_depth_forSphere, 0, m_maxDepth);
-    ImGui::SliderInt("Idx of the octree", &m_idx_forSphere, 0, num_child);
+    ImGui::SliderInt("Idx of the octree", &m_idx_forSphere, 0, num_child - 1);
 
     if (ImGui::Button("Show sphere")) {
         node_stats_to_sphere("Debug_the_node", m_inputOctree.get(), m_depth_forSphere, m_idx_forSphere);
