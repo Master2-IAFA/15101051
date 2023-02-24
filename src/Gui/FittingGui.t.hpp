@@ -48,18 +48,14 @@ void FittingGui<VecType, StatType, PointType>::draw(){
         ImGui::SliderFloat( "Epsilon", &m_rationnalEpsilon, 0.0, 100.0 );
     }
 
-    if( ImGui::Button( "fit" ) ) fit();
+    if( ImGui::Button( "fit" ) ) fit( m_startPosition, m_endPosition );
     ImGui::SameLine();
     ImGui::Text( m_fitTime.c_str() );
 
     ImGui::SliderInt( "iteration", &m_iterNB, 1, 20 );
     if( ImGui::Button( "iterative fit" ) ){
         auto start = std::chrono::high_resolution_clock::now();
-        for( int i = 0; i < m_iterNB - 1; i++ ){
-            fit(); swapPositions();
-            std::cout << "done" << std::endl;
-        }
-        fit();
+        fitNTimes( m_iterNB );
         auto stop = std::chrono::high_resolution_clock::now();
         m_iterTime = std::to_string( std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count() ) + " Ms - " + std::to_string( m_iterNB ) + " iterations";
     }
@@ -106,22 +102,21 @@ void FittingGui<VecType, StatType, PointType>::slidePoints(){
 
 
 template< class VecType, class StatType, class PointType >
-void FittingGui<VecType, StatType, PointType>::fit(){
+void FittingGui<VecType, StatType, PointType>::fit( std::vector<VecType> const start, std::vector<VecType> &end ){
 
-    auto start = std::chrono::high_resolution_clock::now();
+    auto startT = std::chrono::high_resolution_clock::now();
 
-    std::vector<VecType > normals( m_startPosition.size() );
+    std::vector<VecType > normals( start.size() );
 
-    #pragma omp parallel for
-    for( int i = 0; i < m_startPosition.size(); i++ ){
+    #pragma omp parallel for default(none) shared(start, end, normals)
+    for( int i = 0; i < start.size(); i++ ){
         AlgebraicSphere<VecType, StatType> sphere;
         PointType point;
-        point.pos = VecType( m_startPosition[ i ] );
+        point.pos = VecType( start[ i ] );
         point.norm = VecType( 0.0f );
-        //m_inputOctree->setProtectionSphere(m_protectionSphere) ;
         StatType stat = m_inputOctree->getBlendedStat( point,  [this]( VecType a, VecType b ){ return m_kernel( a, b );} );
         sphere.fitSphere( stat, point.pos, [this]( VecType a, VecType b ){ return m_kernel( a, b ); });
-        m_endPosition[ i ] = sphere.project( point.pos );
+        end[ i ] = sphere.project( point.pos );
         normals[ i ] = sphere.projectNormal( point.pos );
     }
 
@@ -133,7 +128,23 @@ void FittingGui<VecType, StatType, PointType>::fit(){
     m_fitted = true;
 
     auto stop = std::chrono::high_resolution_clock::now();
-    m_fitTime = std::to_string( std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count() ) + " Ms";
+    m_fitTime = std::to_string( std::chrono::duration_cast<std::chrono::milliseconds>(stop - startT).count() ) + " Ms";
+}
+
+template< class VecType, class StatType, class PointType >
+void FittingGui<VecType, StatType, PointType>::fitNTimes( int n ){
+
+    for( int i = 0; i < n / 2; i++ ){
+        fit( m_startPosition, m_endPosition );
+        fit( m_endPosition, m_startPosition );
+    }
+
+    if( n % 2 != 0 ){
+        fit( m_startPosition, m_endPosition );
+    }else{
+        std::swap( m_startPosition, m_endPosition );
+    }
+
 }
 
 template< class VecType, class StatType, class PointType >

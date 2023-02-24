@@ -34,7 +34,14 @@ class FittingGui{
 
         void swapPositions();
 
-        void fit();
+        /**
+         * @brief project the points
+         * @param start the vector with the points to project
+         * @param end the vector that will contain the projected point
+         */
+        void fit( std::vector<VecType> const start, std::vector<VecType> &end );
+
+        void fitNTimes( int n );
 
         /** @author Lou */
         void draw_protection_sphere(VecType min, VecType max, float lambda );
