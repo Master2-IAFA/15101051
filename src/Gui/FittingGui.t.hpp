@@ -158,7 +158,6 @@ void FittingGui<VecType, StatType, PointType>::samplePoints( int n ) {
 
     int vecLength = m_inputOctree->getMin().length();
 
-    #pragma omp parallel for
     for( int i = 0; i < n; ++i ) {
         m_startPosition[i] = VecType(0.0f);
         for (int j = 0;j < vecLength;++j) {
