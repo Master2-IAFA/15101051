@@ -15,13 +15,13 @@ class AlgebraicSphere{
 
         /** project a point on the sphere
          * 
-         * @param point: the point to project
+         * @param [in] point: the point to project
          * @return VecType: the projected point
          */
         VecType project( VecType point );
 
         /** compute the normal of the point */
-       VecType projectNormal( VecType point );
+        VecType projectNormal( VecType point );
 
         inline VecType& getCenter() { return m_center; }
         inline double getRadius() { return m_radius; }

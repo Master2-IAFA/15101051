@@ -11,6 +11,7 @@ void OctreeGui<VecType, StatType, PointType>::draw(){
 
     ImGui::SliderInt( "Max depth", &m_maxDepth, 1, 10 );
     ImGui::SliderInt( "Max Point", &m_maxPoints, 1, 100);
+    ImGui::SliderInt( "Bounding box length(%)", &m_bb_length, 100, 200);
 
     if( ImGui::Button("Fit") ) fitOctree();
     ImGui::SameLine();
@@ -34,7 +35,6 @@ void OctreeGui<VecType, StatType, PointType>::initVectorOctree(){
     }
     m_vectorOctree.clear();
 
-    
     int maxDepth = m_inputOctree->getMaxDepth();
 
     for( int i = 0; i < maxDepth; i++ ){
@@ -45,12 +45,36 @@ void OctreeGui<VecType, StatType, PointType>::initVectorOctree(){
     }
 }
 
+/** widens the octree root box according to the given percentage, 
+ * fits the octree on the point set and draws the octree (hidden drawing,
+ * displayable through the GUI) */
 template< class VecType, class StatType, class PointType >
-void OctreeGui<VecType, StatType, PointType>::fitOctree(){
+void OctreeGui<VecType, StatType, PointType>::fitOctree() {
+    //computation time start
     auto start = std::chrono::high_resolution_clock::now();
+
+    //widen octree's bounding box to the given percentage
+    // get min/max
+    VecType min = m_inputOctree->getInitialMin();
+    VecType max = m_inputOctree->getInitialMax();
+
+    // get the 100% bounding box diagonal length
+    float dist = glm::distance(max, min);
+
+    // get percentage and compute added quantity to both sides of the box
+    float bb_coeff = (m_bb_length - 100) / 200.0;
+
+    m_inputOctree->setMin(min - VecType( bb_coeff * dist ));
+    m_inputOctree->setMax(max + VecType( bb_coeff * dist ));
+
+    // octree fitting
     m_inputOctree->fit( m_maxDepth, m_maxPoints );
+
+    // octree drawing
     initVectorOctree();
     m_octreeMaxDepth = m_inputOctree->getMaxDepth();
+
+    //computation time end
     auto stop = std::chrono::high_resolution_clock::now();
     m_fitTime = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
 }

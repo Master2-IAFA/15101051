@@ -7,8 +7,6 @@
 #include "polyscope/polyscope.h"
 
 #include "../Octree/InputOctree.t.hpp"
-#include "../AlgebraicSphere.t.hpp"
-#include "../PointSet.t.hpp"
 
 template< class VecType, class StatType, class PointType >
 class OctreeGui{
@@ -27,10 +25,10 @@ class OctreeGui{
         /** This function take an octree, a depth and an idx for the node at the
          *  given depth and show its algebraic sphere. 
          * @author Léo 
-         * @param name name of the displayed sphere.
-         * @param oct 
-         * @param depth Depth of the node we want
-         * @param num_child Num of the node for the given depth
+         * @param [in] name name of the displayed sphere.
+         * @param [in] oct 
+         * @param [in] depth Depth of the node we want
+         * @param [in] num_child Num of the node for the given depth
          */
         void node_stats_to_sphere ( std::string name, InputOctree<VecType, StatType, PointType> * oct, int depth, int num_child);
 
@@ -51,5 +49,6 @@ class OctreeGui{
         float m_fitTime{ 0.0 };
         int m_depth_forSphere{ 0 };
         int m_idx_forSphere{ 0 };
+        int m_bb_length { 100 };
         std::shared_ptr< InputOctree<VecType, StatType, PointType> > m_inputOctree;
 };

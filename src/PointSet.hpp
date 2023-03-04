@@ -27,7 +27,7 @@ public:
      * @note if no normals are found, all normals are set to (1, 0, 0). erases former data and replaces with new read one
      * @warning dependency to OpenMesh library
      * @author linda
-     * @param filename file path (absolute or relative from src folder)
+     * @param [in] filename file path (absolute or relative from src folder)
      */
     void readOpenMesh (string filename);
 

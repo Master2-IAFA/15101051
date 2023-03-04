@@ -37,7 +37,13 @@ class InputOctree: public BaseOctree< StatType, VecType, InputOctree< VecType, S
 
         inline void setProtectionSphere( float protectionSphere ){ *m_protectionSphere = protectionSphere; }
         inline float getProtectionSphere(){ return *m_protectionSphere; }
-    
+
+        /** used to widen octree root bounding box in a consistent, non cumulative way*/
+        inline const VecType getInitialMin () const { return m_pointSet->getBoundingBox().first.pos; }
+
+        /** used to widen octree root bounding box in a consistent, non cumulative way*/
+        inline const VecType getInitialMax () const { return m_pointSet->getBoundingBox().second.pos; }
+
     private:
 
         //private Constructor that are used by the BaseOctree class ( in subdivide function )

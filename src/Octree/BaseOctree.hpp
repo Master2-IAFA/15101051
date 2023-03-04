@@ -30,17 +30,20 @@ public:
     virtual void subDivide ();
 
     /** get all the octrees at the given depth */
-    std::vector<OctreeType*> getAtDepth ( int depth );
+    inline std::vector<OctreeType*> getAtDepth ( int depth );
 
     /** check if the given point is inside the octree using it's min/max points */
-    bool isPointIn ( VecType p );
+    inline bool isPointIn ( VecType p );
 
     /** return if the octree has children */
-    bool hasChildren () { return !(m_children.size() == 0); }
+    inline bool hasChildren () { return !(m_children.size() == 0); }
 
     /***** setters ******/
-    void setFather ( OctreeType* _father ) { m_father = _father; }
+    inline void setFather ( OctreeType* _father ) { m_father = _father; }
     inline void setData ( Data& _data ) { m_data = _data; }
+    //min_max setters used for idening the bounding box
+    inline void setMin ( const VecType _min ) { m_min = _min; }
+    inline void setMax ( const VecType _max ) { m_max = _max; }
 
     /***** getters ******/
     inline const Data& getData () const { return m_data; }
@@ -51,7 +54,7 @@ public:
     inline const int getDim () const { return m_dim; }
     inline int getMaxDepth();
 
-private:
+protected:
     /** fetch all nodes that are at depth \p depth */
     std::vector<OctreeType*> pGetAtDepth(int depth, std::vector<OctreeType*> vector);
     void init();
