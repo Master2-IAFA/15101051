@@ -10,7 +10,7 @@ void FittingGui<VecType, StatType, PointType>::draw(){
     ImGui::SameLine();
     if( ImGui::Button( "sample random points" ) ) samplePoints( m_numberOfPoints );
 
-    if( ImGui::SliderFloat( "lambda", &m_protectionSphere, 1.0, 2.0 ) ){
+    if( ImGui::SliderFloat( "lambda", &m_protectionSphere, 1.0, 5.0 ) ){
         m_inputOctree->setProtectionSphere( m_protectionSphere );
     }
 
@@ -30,13 +30,17 @@ void FittingGui<VecType, StatType, PointType>::draw(){
     if( ImGui::RadioButton( "Gaussian_Kernel", m_gaussianKernel ) ){
         m_gaussianKernel = true;
         m_rationnalKernel = false;
-        m_kernel = [this]( VecType a, VecType b ){ return gaussian_mixture( a, b, m_gaussianK, m_gaussianA, m_gaussianSigma ); };
+        m_kernel = [this]( VecType a, VecType b ){ 
+            return gaussian_mixture( a, b, m_gaussianK, m_gaussianA, m_gaussianSigma ); 
+        };
     }
     ImGui::SameLine();
     if( ImGui::RadioButton( "Rationnal Kernel", !m_gaussianKernel ) ){
         m_gaussianKernel = false;
         m_rationnalKernel = true;
-        m_kernel = [this]( VecType a, VecType b ){ return rational_kernel( a, b, m_rationnalK, m_rationnalEpsilon ); };
+        m_kernel = [this]( VecType a, VecType b ){ 
+            return rational_kernel( a, b, m_rationnalK, m_rationnalEpsilon );
+        };
     }
 
     if( m_gaussianKernel ){
@@ -57,7 +61,8 @@ void FittingGui<VecType, StatType, PointType>::draw(){
         auto start = std::chrono::high_resolution_clock::now();
         fitNTimes( m_iterNB );
         auto stop = std::chrono::high_resolution_clock::now();
-        m_iterTime = std::to_string( std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count() ) + " Ms - " + std::to_string( m_iterNB ) + " iterations";
+        m_iterTime = std::to_string( std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count() ) 
+        + " Ms - " + std::to_string( m_iterNB ) + " iterations";
     }
     ImGui::SameLine();
     ImGui::Text( m_iterTime.c_str() );
@@ -114,7 +119,7 @@ void FittingGui<VecType, StatType, PointType>::fit( std::vector<VecType> const s
         PointType point;
         point.pos = VecType( start[ i ] );
         point.norm = VecType( 0.0f );
-        StatType stat = m_inputOctree->getBlendedStat( point,  [this]( VecType a, VecType b ){ return m_kernel( a, b );} );
+        StatType stat = m_inputOctree->getBlendedStat( point,  [this]( VecType a, VecType b ){ return m_kernel( a, b );} ); 
         sphere.fitSphere( stat, point.pos, [this]( VecType a, VecType b ){ return m_kernel( a, b ); });
         end[ i ] = sphere.project( point.pos );
         normals[ i ] = sphere.projectNormal( point.pos );
@@ -134,7 +139,7 @@ void FittingGui<VecType, StatType, PointType>::fit( std::vector<VecType> const s
 template< class VecType, class StatType, class PointType >
 void FittingGui<VecType, StatType, PointType>::fitNTimes( int n ){
 
-    for( int i = 0; i < n / 2; i++ ){
+    for( int i = 0; i < n / 2; ++i ){
         fit( m_startPosition, m_endPosition );
         fit( m_endPosition, m_startPosition );
     }
@@ -171,7 +176,7 @@ void FittingGui<VecType, StatType, PointType>::samplePoints( int n ) {
 
     for( int i = 0; i < n; ++i ) {
         m_startPosition[i] = VecType(0.0f);
-        for (int j = 0;j < vecLength;++j) {
+        for ( int j = 0; j < vecLength; ++j ) {
             m_startPosition[i][j] = randomFloat( m_inputOctree->getMin()[j], m_inputOctree->getMax()[j] );
             m_middlePosition[i][j] = m_startPosition[i][j];
         }
@@ -201,7 +206,9 @@ void FittingGui<VecType, StatType, PointType>::fit_One_Point() {
         PointType point;
         point.pos = m_single_point;
         point.norm = VecType( 0 );
-        StatType stat = m_inputOctree->getBlendedStat( point,  [this]( VecType a, VecType b ){ return m_kernel( a, b );} );
+        StatType stat = m_inputOctree->getBlendedStat( point,  [this]( VecType a, VecType b ){ 
+            return m_kernel( a, b );
+        } );
         m_sphere_single.fitSphere( stat, point.pos, [this]( VecType a, VecType b ){ return m_kernel( a, b ); });
         m_single_point_fitted = m_sphere_single.project( point.pos );
         m_single_fitted = true;

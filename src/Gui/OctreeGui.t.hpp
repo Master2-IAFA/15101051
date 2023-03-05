@@ -9,7 +9,7 @@ void OctreeGui<VecType, StatType, PointType>::draw(){
 
     if( ImGui::SliderInt( "Depth", &m_octreeDepth, 0, m_octreeMaxDepth - 1 ) ) drawOctreeAtDepth();
 
-    ImGui::SliderInt( "Max depth", &m_maxDepth, 1, 10 );
+    ImGui::SliderInt( "Max depth", &m_maxDepth, 1, 20 );
     ImGui::SliderInt( "Max Point", &m_maxPoints, 1, 100);
     ImGui::SliderInt( "Bounding box length(%)", &m_bb_length, 100, 200);
 
