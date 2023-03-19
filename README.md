@@ -56,4 +56,14 @@ Warning : running a fit requires sampeled points!
 - Clear Random Pc : removes the sampeled points
 - Randomize and fit : generates one point sample inside the bounding box, fits its algebraic sphere and projects it on it. The point, the sphere and the traversed octree nodes are, then, displayed
 #### Fitting parameters
-TODO details on kernels
+
+Two kernels are available. Kernels are use to determine the influence of the points ( or nodes ) from the point cloud on the point *q* being projected, based on their respective distances.
+
+The first kernel is a Gaussian Mixture: $\sum_i \sigma_{i}^{-3} e^{-||q-p||^2\over 2 \sigma_{i}^2}$ which has 3 parameters
+ - *k*, the number of Gaussian
+ - *sigma*, the sigma value of the first Gaussian
+ - *a*, a scale factor for sigma apply on each gaussian ( $\sigma_{i} = a^i * sigma$ )
+ 
+ The second one is a rational kernel: $(||q-p||^2+\epsilon)^{-k \over 2 }$ which has 2 parameters
+  - $\epsilon$, if epsilon equals 0, it will result in an interpolating surface
+  - *k*
